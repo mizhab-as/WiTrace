@@ -266,3 +266,4 @@ This project is open-source. Please refer to the [LICENSE](LICENSE) file for det
 <div align="center">
   <sub>Built with 📡 WiFi signals and 🐍 Python</sub>
 </div>
+.
