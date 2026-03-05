@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi CSI Presence Detection</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .status-display {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .status-label {
+            font-size: 0.9em;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .status-value {
+            font-size: 3.5em;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .loading {
+            background: linear-gradient(90deg, #999 25%, #bbb 50%, #999 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .chart-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .chart-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 30px;
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .connection-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .connected {
+            background: #4CAF50;
+        }
+
+        .disconnected {
+            background: #f44336;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            .status-value {
+                font-size: 2em;
+            }
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📡 WiFi CSI Presence Detection</h1>
+            <p>Real-time room occupancy monitoring</p>
+        </div>
+
+        <div class="status-display">
+            <div class="status-label">Current Status</div>
+            <div class="status-value loading" id="statusValue">INITIALIZING...</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Current Variance</div>
+                <div class="stat-value" id="currentVar">--</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg Energy</div>
+                <div class="stat-value" id="avgEnergy">--</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Data Points</div>
+                <div class="stat-value" id="dataPoints">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Calibration</div>
+                <div class="stat-value" id="calibStatus">--</div>
+            </div>
+        </div>
+
+        <div class="chart-section">
+            <div class="chart-title">CSI Variance Over Time</div>
+            <div class="chart-container">
+                <canvas id="chart"></canvas>
+            </div>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #4CAF50;"></div>
+                    <span id="legendEmpty">Empty Room (Var &lt; --)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #2196F3;"></div>
+                    <span id="legendPerson">Person Detected (-- to --)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #F44336;"></div>
+                    <span id="legendMulti">Multiple People (Var ≥ --)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-section" id="patternMatchSection" style="display: none;">
+            <div class="chart-title">🧠 Pattern Matching</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Confidence</div>
+                    <div class="stat-value" id="confidence">--</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Empty Match</div>
+                    <div class="stat-value" id="scoreEmpty">--</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Occupied Match</div>
+                    <div class="stat-value" id="scoreOccupied">--</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Multi Match</div>
+                    <div class="stat-value" id="scoreMulti">--</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="connection-status">
+        <div class="status-dot disconnected" id="connectionDot"></div>
+        <span id="connectionText">Connecting...</span>
+    </div>
+
+    <script>
+        let chart = null;
+        let reconnectAttempts = 0;
+
+        function initChart() {
+            const ctx = document.getElementById('chart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'CSI Variance',
+                        data: [],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 0,
+                        pointHoverRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: { display: true, text: 'Time (seconds)' }
+                        },
+                        y: {
+                            display: true,
+                            beginAtZero: true,
+                            title: { display: true, text: 'Variance' },
+                            min: 0,
+                            max: 15
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateDisplay(data) {
+            const statusEl = document.getElementById('statusValue');
+            statusEl.textContent = data.status;
+            statusEl.style.background = data.status_color;
+            statusEl.classList.remove('loading');
+
+            if (data.variance && data.variance.length > 0) {
+                const currentVar = data.variance[data.variance.length - 1];
+                const avgEnergy = data.energy.reduce((a, b) => a + b, 0) / data.energy.length;
+                
+                document.getElementById('currentVar').textContent = currentVar.toFixed(2);
+                document.getElementById('avgEnergy').textContent = avgEnergy.toFixed(2);
+                document.getElementById('dataPoints').textContent = data.variance.length;
+            }
+
+            if (data.thresholds) {
+                const personThreshold = data.thresholds.person.toFixed(2);
+                const multiThreshold = data.thresholds.multi.toFixed(2);
+                
+                document.getElementById('legendEmpty').textContent = `Empty Room (Var < ${personThreshold})`;
+                document.getElementById('legendPerson').textContent = `Person Detected (${personThreshold} to ${multiThreshold})`;
+                document.getElementById('legendMulti').textContent = `Multiple People (Var ≥ ${multiThreshold})`;
+            }
+
+            document.getElementById('calibStatus').textContent = data.is_calibrated ? '✅ Ready' : '⏳ Loading';
+
+            if (data.detection_confidence !== undefined && data.detection_scores) {
+                document.getElementById('patternMatchSection').style.display = 'block';
+                document.getElementById('confidence').textContent = `${data.detection_confidence}%`;
+                
+                if (data.detection_scores.empty !== undefined) {
+                    document.getElementById('scoreEmpty').textContent = `${data.detection_scores.empty}%`;
+                }
+                if (data.detection_scores.occupied !== undefined) {
+                    document.getElementById('scoreOccupied').textContent = `${data.detection_scores.occupied}%`;
+                }
+                if (data.detection_scores.multi !== undefined) {
+                    document.getElementById('scoreMulti').textContent = `${data.detection_scores.multi}%`;
+                }
+            }
+
+            const connectionDot = document.getElementById('connectionDot');
+            const connectionText = document.getElementById('connectionText');
+            
+            if (data.is_connected) {
+                connectionDot.classList.remove('disconnected');
+                connectionDot.classList.add('connected');
+                connectionText.textContent = 'Connected';
+            } else {
+                connectionDot.classList.add('disconnected');
+                connectionDot.classList.remove('connected');
+                connectionText.textContent = 'Disconnected';
+            }
+
+            if (!chart) initChart();
+
+            if (data.variance && data.variance.length > 0 && chart) {
+                chart.data.labels = data.timestamps.map((t, i) => (i % 10 === 0) ? t.toFixed(1) : '');
+                chart.data.datasets[0].data = data.variance;
+                chart.update('none');
+            }
+        }
+
+        function pollData() {
+            fetch('/api/data')
+                .then(response => {
+                    if (!response.ok) throw new Error('Network error');
+                    return response.json();
+                })
+                .then(data => {
+                    updateDisplay(data);
+                    reconnectAttempts = 0;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    reconnectAttempts++;
+                });
+
+            setTimeout(pollData, 100);
+        }
+
+        window.addEventListener('DOMContentLoaded', pollData);
+    </script>
+</body>
+</html>

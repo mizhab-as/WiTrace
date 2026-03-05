@@ -3,7 +3,7 @@ set(CMAKE_HOST_SYSTEM_NAME "Darwin")
 set(CMAKE_HOST_SYSTEM_VERSION "24.5.0")
 set(CMAKE_HOST_SYSTEM_PROCESSOR "arm64")
 
-include("/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/toolchain/toolchain-esp32.cmake")
+include("/Users/mizhabas/esp/esp-idf/tools/cmake/toolchain-esp32.cmake")
 
 set(CMAKE_SYSTEM "Generic")
 set(CMAKE_SYSTEM_NAME "Generic")
