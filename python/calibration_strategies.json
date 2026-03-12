@@ -1,0 +1,47 @@
+{
+  "recommended": "ratio",
+  "timestamp": "2026-03-09",
+  "strategies": {
+    "inverted": {
+      "description": "Uses inverse thresholds (empty > occupied)",
+      "empty_upper": 9.054619467236087,
+      "occupied_upper": 11.062309887385446,
+      "multi_upper": 12.066155097460125
+    },
+    "percentile": {
+      "description": "Based on 5th and 95th percentiles",
+      "person": 8.946377411650886,
+      "multi": 9.367806217220322
+    },
+    "ratio": {
+      "description": "Based on variance ratios (scale-independent)",
+      "occupied_ratio": 5.178769481777721,
+      "multi_ratio": 4.424844482430941,
+      "threshold_ratio_1": 3.0893847408888604,
+      "threshold_ratio_2": 7.202710473156497
+    },
+    "energy": {
+      "description": "Based on mean energy values",
+      "person": 9.821956454213723,
+      "multi": 9.5971741852122
+    },
+    "conservative": {
+      "description": "Uses maximum thresholds for best separation",
+      "person": 11.39692495741034,
+      "multi": 12.631370230956437
+    }
+  },
+  "implementation_notes": {
+    "inverted": "Use if your empty state truly has higher variance than occupied",
+    "percentile": "Safe choice - uses statistical percentile boundaries",
+    "ratio": "Best for variable environments - uses relative changes",
+    "energy": "Simple and direct - works well with stable data",
+    "conservative": "Most cautious - maximizes separability at cost of precision"
+  },
+  "how_to_use": {
+    "step_1": "Choose recommended strategy above",
+    "step_2": "Apply thresholds in pattern_detector.py or app.py",
+    "step_3": "Run live calibration if needed (app.py web interface)",
+    "step_4": "Monitor accuracy and adjust if necessary"
+  }
+}
