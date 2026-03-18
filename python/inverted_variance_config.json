@@ -1,0 +1,40 @@
+{
+  "filtering": {
+    "savgol_window": 19,
+    "savgol_polyorder": 3,
+    "outlier_multiplier": 1.0,
+    "percentile_cutoff": [
+      10,
+      90
+    ],
+    "apply_median_filter": true,
+    "median_window": 5
+  },
+  "pattern_detection": {
+    "window_frames": 150,
+    "window_step": 30,
+    "min_frames": 100,
+    "min_confidence": 50.0,
+    "min_margin": 2.0,
+    "min_binary_margin": 1.5
+  },
+  "thresholds": {
+    "use_inverted_strategy": true,
+    "empty_upper": 9.0,
+    "occupied_upper": 11.0,
+    "multi_upper": 12.0,
+    "use_ratio_fallback": true,
+    "ratio_threshold_1": 3.09,
+    "ratio_threshold_2": 7.2
+  },
+  "detection_logic": {
+    "use_pattern_matching": true,
+    "use_variance_fallback": true,
+    "use_rate_of_change": true,
+    "hysteresis_counts": {
+      "empty": 2,
+      "occupied": 3,
+      "multi": 3
+    }
+  }
+}

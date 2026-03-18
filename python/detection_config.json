@@ -1,0 +1,33 @@
+{
+  "description": "Window-based detection configuration - analyzes entire windows of CSI data",
+  "detection_window_seconds": 7.0,
+  "detection_window_seconds_desc": "Size of CSI data window to analyze (seconds). Larger = more stable patterns.",
+  "detection_update_interval": 5.0,
+  "detection_update_interval_desc": "How often (seconds) to run pattern detection on accumulated window.",
+  "min_frames_for_detection": 50,
+  "min_frames_for_detection_desc": "Minimum CSI frames required in window before running detection.",
+  "recommendations": {
+    "quick_response": {
+      "detection_window_seconds": 5.0,
+      "detection_update_interval": 3.0,
+      "description": "Faster updates, less stable - good for testing"
+    },
+    "balanced": {
+      "detection_window_seconds": 7.0,
+      "detection_update_interval": 5.0,
+      "description": "Good balance between stability and responsiveness (current default)"
+    },
+    "very_stable": {
+      "detection_window_seconds": 10.0,
+      "detection_update_interval": 7.0,
+      "description": "Maximum stability, slower to respond to changes"
+    }
+  },
+  "how_it_works": [
+    "1. Continuously collect CSI signatures and energy values",
+    "2. Every 'detection_update_interval' seconds, take last 'detection_window_seconds' of data",
+    "3. Pattern detector analyzes the entire window at once (not frame-by-frame)",
+    "4. Update detection state based on window analysis",
+    "5. This matches WiFi CSI patterns better than instant detection"
+  ]
+}

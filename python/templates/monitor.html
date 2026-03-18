@@ -1,424 +1,1095 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WiFi CSI Presence Detection</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .header h1 {
-            font-size: 2em;
-            color: #667eea;
-            margin-bottom: 8px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        .status-display {
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-
-        .status-label {
-            font-size: 0.9em;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .status-value {
-            font-size: 3.5em;
-            font-weight: bold;
-            padding: 20px;
-            border-radius: 10px;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .loading {
-            background: linear-gradient(90deg, #999 25%, #bbb 50%, #999 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .stat-label {
-            font-size: 0.85em;
-            color: #999;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        .stat-value {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .chart-section {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .chart-title {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 400px;
-            margin-bottom: 30px;
-        }
-
-        .legend {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-        }
-
-        .connection-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 50px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-        }
-
-        .status-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .connected {
-            background: #4CAF50;
-        }
-
-        .disconnected {
-            background: #f44336;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.5em;
-            }
-            .status-value {
-                font-size: 2em;
-            }
-            .chart-container {
-                height: 300px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSI Radar — WiFi Presence Detection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg:#07090d; --sidebar:#0b0e14; --panel:#0f1319; --panel2:#141a24;
+      --border:#1c2535; --text:#dce8f8; --muted:#6b84a0;
+      --accent:#3b8eff; --green:#27c76f; --red:#e0414f;
+      --radius:13px; --sw:230px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
+    .sidebar{width:var(--sw);min-height:100vh;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:200}
+    .sb-logo{padding:22px 20px 20px;border-bottom:1px solid var(--border)}
+    .sb-logo-title{font-size:1.05em;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
+    .sb-logo-sub{font-size:.72em;color:var(--muted);margin-top:3px;padding-left:26px}
+    .sb-nav{padding:12px 0;flex:1}
+    .nav-btn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 20px;background:none;border:none;border-left:3px solid transparent;cursor:pointer;color:var(--muted);font-size:.85em;font-weight:500;text-align:left;transition:all .15s;font-family:inherit}
+    .nav-btn:hover{color:var(--text);background:rgba(255,255,255,.03)}
+    .nav-btn.active{color:var(--accent);background:rgba(59,142,255,.08);border-left-color:var(--accent)}
+    .nav-btn .ni{font-size:1.05em;width:18px;flex-shrink:0}
+    .sb-footer{padding:16px;border-top:1px solid var(--border)}
+    .conn-pill{display:flex;align-items:center;gap:9px;padding:9px 12px;background:var(--panel);border:1px solid var(--border);border-radius:9px;font-size:.78em;font-weight:500;color:var(--muted)}
+    .conn-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .conn-dot.on{background:var(--green);box-shadow:0 0 7px var(--green)}
+    .conn-dot.off{background:var(--red)}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .pulse{animation:pulse 1.8s infinite}
+    .main{margin-left:var(--sw);flex:1;padding:28px 30px}
+    .page{display:none}
+    .page.active{display:block}
+    .ph{margin-bottom:22px}
+    .ph h1{font-size:1.45em;font-weight:600}
+    .ph p{color:var(--muted);font-size:.84em;margin-top:4px}
+    .ph-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:22px}
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+    .card-title{font-size:.72em;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:16px}
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}
+    .row{display:flex;align-items:center}
+    .col{display:flex;flex-direction:column}
+    .gap6{gap:6px}.gap8{gap:8px}.gap10{gap:10px}.gap12{gap:12px}.gap16{gap:16px}
+    .between{justify-content:space-between}
+    .wrap{flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 17px;border-radius:8px;border:none;cursor:pointer;font-size:.83em;font-weight:600;transition:all .15s;font-family:inherit;white-space:nowrap}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary:hover{filter:brightness(1.15)}
+    .btn-success{background:var(--green);color:#000}
+    .btn-success:hover{filter:brightness(1.1)}
+    .btn-danger{background:var(--red);color:#fff}
+    .btn-danger:hover{filter:brightness(1.1)}
+    .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
+    .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+    .btn:disabled{opacity:.4;cursor:not-allowed;filter:none!important}
+    .btn-sm{padding:6px 12px;font-size:.78em}
+    .status-hero{text-align:center;padding:30px 16px}
+    .status-label-sm{font-size:.7em;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:14px}
+    .status-badge{display:inline-block;font-size:2.1em;font-weight:700;padding:16px 28px;border-radius:14px;min-width:300px;transition:background .35s,color .35s,border .35s;border:2px solid transparent}
+    .score-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .score-chip{background:var(--panel2);border:1px solid var(--border);border-radius:7px;padding:7px 14px;font-size:.8em;color:var(--muted)}
+    .score-chip .sv{font-weight:700;margin-left:5px;color:var(--text)}
+    .stat-mini{background:var(--panel2);border:1px solid var(--border);border-radius:11px;padding:14px 16px;text-align:center}
+    .stat-mini .sl{font-size:.68em;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600;margin-bottom:6px}
+    .stat-mini .sv{font-size:1.55em;font-weight:700;color:var(--accent)}
+    .prog-wrap{height:5px;background:var(--border);border-radius:100px;overflow:hidden;margin-top:8px}
+    .prog-bar{height:100%;border-radius:100px;transition:width .5s linear}
+    .chart-wrap{position:relative;height:260px}
+    .score-chart-wrap{position:relative;height:360px}
+    .field{display:flex;flex-direction:column;gap:5px}
+    .field label{font-size:.75em;color:var(--muted);font-weight:500}
+    .field input{background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 11px;font-size:.85em;width:100%;font-family:inherit}
+    .field input:focus{outline:none;border-color:var(--accent)}
+    .cal-settings-grid{align-items:stretch}
+    .cal-settings-grid .field,.cal-secondary-grid .field{height:100%;padding:14px;border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,0)),var(--panel2)}
+    .cal-settings-grid .field label,.cal-secondary-grid .field label{min-height:36px;display:flex;align-items:flex-end;line-height:1.35;font-size:.76em;font-weight:600}
+    .cal-settings-grid .field input,.cal-secondary-grid .field input{margin-top:auto;background:rgba(0,0,0,.16)}
+    .coll-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:13px}
+    .coll-card.collecting{border-color:var(--accent);background:rgba(59,142,255,.04)}
+    .coll-icon{font-size:2em}
+    .coll-name{font-size:1.05em;font-weight:600}
+    .coll-desc{font-size:.8em;color:var(--muted);line-height:1.55}
+    .coll-timer{font-size:2.2em;font-weight:700;color:var(--accent);text-align:center;padding:6px 0}
+    .coll-frames{font-size:.78em;color:var(--muted);text-align:center}
+    .stage-row{display:flex;align-items:center;gap:14px;padding:13px 15px;border-radius:10px;border:1px solid var(--border);background:var(--panel2)}
+    .stage-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85em;flex-shrink:0}
+    .s-idle{background:var(--border);color:var(--muted)}
+    .s-active{background:var(--accent);color:#fff}
+    .s-done{background:var(--green);color:#000}
+    .stage-meta{margin-left:auto;text-align:right;min-width:86px}
+    .stage-meta-label{font-size:.64em;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700}
+    .stage-meta-value{font-size:.84em;font-weight:600;color:var(--text);margin-top:3px}
+    .countdown-block{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:8px}
+    .countdown-num{font-size:3.5em;font-weight:700;color:var(--accent);line-height:1}
+    .countdown-sub{font-size:.7em;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:600}
+    .cal-esp-card{padding:14px 15px;border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)),var(--panel2)}
+    .cal-esp-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+    .cal-esp-title{font-size:.84em;font-weight:600}
+    .cal-esp-sub{font-size:.76em;color:var(--muted);line-height:1.5}
+    .cal-esp-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+    .cal-esp-stat{padding:9px 10px;border:1px solid var(--border);border-radius:10px;background:rgba(0,0,0,.12)}
+    .cal-esp-stat-label{font-size:.64em;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:4px}
+    .cal-esp-stat-value{font-size:.82em;font-weight:600}
+    .cal-live-box{margin-top:10px;background:#0b1016;border:1px solid var(--border);border-radius:10px;padding:12px;font-family:'SF Mono','Fira Code',monospace;font-size:.7em;line-height:1.55;color:#8fb3cc;max-height:130px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+    .alert{padding:11px 15px;border-radius:9px;font-size:.83em;border:1px solid;line-height:1.5}
+    .al-info{background:rgba(59,142,255,.1);border-color:rgba(59,142,255,.3);color:#7ab3ff}
+    .al-success{background:rgba(39,199,111,.1);border-color:rgba(39,199,111,.3);color:#5dd89a}
+    .al-warn{background:rgba(240,146,43,.1);border-color:rgba(240,146,43,.3);color:#f4b76a}
+    .records-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+    .records-head h3{font-size:1em;font-weight:600}
+    .records-sub{color:var(--muted);font-size:.78em}
+    .logs-layout{display:flex;flex-direction:column;gap:16px}
+    .records-shell{display:flex;flex-direction:column;gap:16px}
+    .records-intro{padding:18px;border:1px solid var(--border);border-radius:14px;background:
+      radial-gradient(circle at top right,rgba(39,199,111,.12),transparent 32%),
+      linear-gradient(135deg,rgba(59,142,255,.12),rgba(255,255,255,.02));}
+    .records-kicker{font-size:.7em;text-transform:uppercase;letter-spacing:1.6px;color:#8bb8ff;font-weight:700;margin-bottom:8px}
+    .records-intro h4{font-size:1.05em;font-weight:600;margin-bottom:8px}
+    .records-intro p{font-size:.84em;color:var(--muted);line-height:1.65;max-width:78ch}
+    .room-showcase{padding:20px;border:1px solid var(--border);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,0)),var(--panel2)}
+    .room-banner{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+    .room-heading{display:flex;flex-direction:column;gap:6px}
+    .room-label{font-size:.72em;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:700}
+    .room-name{font-size:1.2em;font-weight:600}
+    .room-caption{font-size:.84em;color:var(--muted);max-width:66ch;line-height:1.6}
+    .room-stats{display:flex;gap:10px;flex-wrap:wrap}
+    .room-stat{min-width:130px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:rgba(0,0,0,.12)}
+    .room-stat-label{font-size:.68em;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:4px}
+    .room-stat-value{font-size:1.02em;font-weight:600}
+    .scenario-grid{display:grid;grid-template-columns:repeat(2,minmax(280px,1fr));gap:16px}
+    .record-card{position:relative;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)),var(--panel);border-radius:16px;padding:16px;cursor:pointer;transition:border-color .15s,transform .15s,background .15s,box-shadow .15s;min-height:240px;display:flex;flex-direction:column;overflow:hidden}
+    .record-card:hover{border-color:rgba(59,142,255,.45);transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.18)}
+    .record-card.selected{border-color:var(--accent);background:linear-gradient(180deg,rgba(59,142,255,.14),rgba(255,255,255,.02)),var(--panel);box-shadow:0 0 0 1px rgba(59,142,255,.2) inset}
+    .record-card.is-missing{cursor:default;opacity:.82}
+    .record-card.is-missing:hover{transform:none;box-shadow:none;border-color:var(--border)}
+    .record-accent{position:absolute;inset:0 auto auto 0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent),transparent)}
+    .record-card.state-empty .record-accent{background:linear-gradient(90deg,#27c76f,transparent)}
+    .record-card.state-occupied .record-accent{background:linear-gradient(90deg,#3b8eff,transparent)}
+    .record-card.state-multiple .record-accent{background:linear-gradient(90deg,#e0414f,transparent)}
+    .record-card.state-empty .record-icon{background:rgba(39,199,111,.12);border-color:rgba(39,199,111,.2)}
+    .record-card.state-occupied .record-icon{background:rgba(59,142,255,.12);border-color:rgba(59,142,255,.2)}
+    .record-card.state-multiple .record-icon{background:rgba(224,65,79,.12);border-color:rgba(224,65,79,.2)}
+    .record-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .record-icon-wrap{display:flex;align-items:center;gap:10px}
+    .record-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.05em;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06)}
+    .record-name{font-size:.98em;font-weight:600;line-height:1.25}
+    .record-sub{font-size:.78em;color:var(--muted);margin-top:3px}
+    .record-badge{font-size:.68em;padding:5px 9px;border-radius:999px;border:1px solid var(--border);color:var(--muted);text-transform:uppercase;letter-spacing:.9px;font-weight:700;white-space:nowrap}
+    .record-card.has-data .record-badge{color:var(--green);border-color:rgba(39,199,111,.35);background:rgba(39,199,111,.08)}
+    .record-card.is-missing .record-badge{color:#f4b76a;border-color:rgba(244,183,106,.28);background:rgba(244,183,106,.08)}
+    .record-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+    .record-metric{padding:9px 10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.03)}
+    .record-metric-label{font-size:.65em;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:4px}
+    .record-metric-value{font-size:.84em;font-weight:600}
+    .record-foot{margin-top:auto;padding-top:12px;border-top:1px solid rgba(255,255,255,.05);font-size:.78em;color:var(--muted);line-height:1.6}
+    .record-foot strong{color:var(--text)}
+    .file-viewer-box{background:var(--panel2);border:1px solid var(--border);border-radius:9px;padding:14px;font-family:'SF Mono','Fira Code',monospace;font-size:.72em;line-height:1.65;color:#8fb3cc;max-height:460px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
+    .divider{height:1px;background:var(--border);margin:16px 0}
+    .win-info-bar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:10px 16px;background:var(--panel2);border:1px solid var(--border);border-radius:9px;font-size:.81em;color:var(--muted)}
+    .win-info-bar b{color:var(--text)}
+    .win-info-bar .ac{color:var(--accent);font-weight:700}
+    .det-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:100px;font-size:.78em;font-weight:600}
+    @media(max-width:960px){.g3{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}.scenario-grid{grid-template-columns:1fr}}
+    @media(max-width:700px){
+      :root{--sw:54px}
+      .nav-btn span:not(.ni){display:none}
+      .sb-logo-sub,.sb-logo-title span{display:none}
+      .conn-pill span:not(.conn-dot){display:none}
+      .main{padding:14px}
+      .g2{grid-template-columns:1fr}
+      .scenario-grid{grid-template-columns:1fr}
+      .cal-esp-meta{grid-template-columns:1fr}
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📡 WiFi CSI Presence Detection</h1>
-            <p>Real-time room occupancy monitoring</p>
-        </div>
 
-        <div class="status-display">
-            <div class="status-label">Current Status</div>
-            <div class="status-value loading" id="statusValue">INITIALIZING...</div>
-        </div>
+<nav class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-title">&#x1F4E1; <span>CSI Radar</span></div>
+    <div class="sb-logo-sub">WiFi Presence Detection</div>
+  </div>
+  <div class="sb-nav">
+    <button class="nav-btn active" onclick="showPage('dashboard')"><span class="ni">&#x1F3E0;</span><span>Dashboard</span></button>
+    <button class="nav-btn" onclick="showPage('calibrate')"><span class="ni">📊</span><span>Live Data & Detection</span></button>
+    <button class="nav-btn" onclick="showPage('esp')"><span class="ni">&#x1F50C;</span><span>ESP32 Live</span></button>
+    <button class="nav-btn" onclick="showPage('logs')"><span class="ni">&#x1F4C2;</span><span>Logs &amp; Files</span></button>
+  </div>
+  <div class="sb-footer">
+    <div class="conn-pill">
+      <div class="conn-dot off pulse" id="connDot"></div>
+      <span id="connText">Disconnected</span>
+    </div>
+  </div>
+</nav>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Current Variance</div>
-                <div class="stat-value" id="currentVar">--</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Avg Energy</div>
-                <div class="stat-value" id="avgEnergy">--</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Data Points</div>
-                <div class="stat-value" id="dataPoints">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Calibration</div>
-                <div class="stat-value" id="calibStatus">--</div>
-            </div>
-        </div>
+<main class="main">
 
-        <div class="chart-section">
-            <div class="chart-title">CSI Variance Over Time</div>
-            <div class="chart-container">
-                <canvas id="chart"></canvas>
-            </div>
-            <div class="legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #4CAF50;"></div>
-                    <span id="legendEmpty">Empty Room (Var &lt; --)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #2196F3;"></div>
-                    <span id="legendPerson">Person Detected (-- to --)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #F44336;"></div>
-                    <span id="legendMulti">Multiple People (Var ≥ --)</span>
-                </div>
-            </div>
-        </div>
+  <!-- DASHBOARD -->
+  <div id="page-dashboard" class="page active">
+    <div class="ph-row">
+      <div class="ph" style="margin-bottom:0"><h1>Live Detection</h1><p>Real-time WiFi CSI presence classification</p></div>
+      <div class="row gap8 wrap">
+        <button class="btn btn-success" onclick="startDetection()">&#x25B6; Start</button>
+        <button class="btn btn-danger" onclick="stopDetection()">&#x23F9; Stop</button>
+        <span id="detPill" class="det-pill" style="background:rgba(39,199,111,.12);color:var(--green)">&#x25CF; Active</span>
+      </div>
+    </div>
+    <div id="dashModeMsg" class="alert al-info" style="display:none;margin-bottom:14px"></div>
 
-        <div class="chart-section" id="patternMatchSection" style="display: none;">
-            <div class="chart-title">🧠 Pattern Matching</div>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Confidence</div>
-                    <div class="stat-value" id="confidence">--</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Empty Match</div>
-                    <div class="stat-value" id="scoreEmpty">--</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Occupied Match</div>
-                    <div class="stat-value" id="scoreOccupied">--</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Multi Match</div>
-                    <div class="stat-value" id="scoreMulti">--</div>
-                </div>
-            </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Detection Baseline Mode</div>
+      <div style="color:var(--muted);font-size:.83em;margin-bottom:14px">Choose which saved dataset drives live detection</div>
+      <div class="g2" style="gap:12px">
+        <div style="padding:12px;background:var(--panel2);border-radius:9px;border:1px solid var(--border)">
+          <div class="row gap8" style="margin-bottom:8px">
+            <div style="font-weight:600">📊 Collected Session Data</div>
+            <span id="detCollectedStatusMain" class="det-pill" style="background:rgba(224,65,79,.12);color:var(--red);font-size:.75em">● Off</span>
+          </div>
+          <div style="color:var(--muted);font-size:.78em;margin-bottom:10px">Uses files from <b style="color:var(--text)">data2/realtime</b></div>
+          <div class="row gap8">
+            <button class="btn btn-success" onclick="startDetectionMode('collected')" style="flex:1">▶ Start Detection</button>
+            <button class="btn btn-ghost" onclick="stopDetectionMode('collected')" style="flex:1">⏹ Stop</button>
+          </div>
         </div>
+        <div style="padding:12px;background:var(--panel2);border-radius:9px;border:1px solid var(--border)">
+          <div class="row gap8" style="margin-bottom:8px">
+            <div style="font-weight:600">⚙️ Calibrated Baseline Data</div>
+            <span id="detCalibratedStatusMain" class="det-pill" style="background:rgba(224,65,79,.12);color:var(--red);font-size:.75em">● Off</span>
+          </div>
+          <div style="color:var(--muted);font-size:.78em;margin-bottom:10px">Uses files from <b style="color:var(--text)">data2/myroom</b></div>
+          <div class="row gap8">
+            <button class="btn btn-accent" onclick="startDetectionMode('calibrated')" style="flex:1">▶ Start Detection</button>
+            <button class="btn btn-ghost" onclick="stopDetectionMode('calibrated')" style="flex:1">⏹ Stop</button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="connection-status">
-        <div class="status-dot disconnected" id="connectionDot"></div>
-        <span id="connectionText">Connecting...</span>
+    <div class="win-info-bar mt12" style="margin-bottom:16px">
+      <span>Analysis window: <b id="wWin">7s</b></span>
+      <span>Updates every: <b id="wEvery">5s</b></span>
+      <span>Next update: <b class="ac" id="wNext">--</b></span>
+      <span>Frames since last: <b id="wFrames">0</b></span>
+      <div style="flex:1;min-width:100px">
+        <div class="prog-wrap" style="height:4px;margin-top:0"><div class="prog-bar" id="detProgBar" style="width:0%;background:var(--accent)"></div></div>
+      </div>
     </div>
 
-    <script>
-        let chart = null;
-        let reconnectAttempts = 0;
+    <div class="g2" style="align-items:start;margin-bottom:16px">
+      <div class="card">
+        <div class="status-hero">
+          <div class="status-label-sm">Room Status</div>
+          <div class="status-badge" id="statusBadge" style="background:#141c28;color:#6b84a0;border-color:#1c2535">&#x23F3; INITIALIZING</div>
+          <div class="score-row">
+            <div class="score-chip">Empty<span class="sv" id="sEmpty">--</span></div>
+            <div class="score-chip">Person<span class="sv" id="sPerson">--</span></div>
+            <div class="score-chip">Multi<span class="sv" id="sMulti">--</span></div>
+            <div class="score-chip">Confidence<span class="sv" id="sConf">--</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col gap10">
+        <div class="g2">
+          <div class="stat-mini"><div class="sl">Variance</div><div class="sv" id="stVar">--</div></div>
+          <div class="stat-mini"><div class="sl">Avg Energy</div><div class="sv" id="stEnergy">--</div></div>
+          <div class="stat-mini"><div class="sl">Data Points</div><div class="sv" id="stPoints">0</div></div>
+          <div class="stat-mini"><div class="sl">Calibrated</div><div class="sv" id="stCal">--</div></div>
+        </div>
+        <div class="card" style="padding:14px 16px">
+          <div style="font-size:.72em;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:10px">Detection Cycle</div>
+          <div class="prog-wrap" style="height:8px"><div class="prog-bar" id="cycleBar" style="width:0%;background:linear-gradient(90deg,var(--accent),var(--green))"></div></div>
+          <div class="row between mt12" style="font-size:.76em;color:var(--muted)">
+            <span>Last: <b id="lastAgo" style="color:var(--text)">--</b></span>
+            <span>Next: <b id="nextIn" style="color:var(--accent)">--</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        function initChart() {
-            const ctx = document.getElementById('chart').getContext('2d');
-            chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'CSI Variance',
-                        data: [],
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 0,
-                        pointHoverRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false
-                        }
-                    },
-                    scales: {
-                        x: {
-                            display: true,
-                            title: { display: true, text: 'Time (seconds)' }
-                        },
-                        y: {
-                            display: true,
-                            beginAtZero: true,
-                            title: { display: true, text: 'Variance' },
-                            min: 0,
-                            max: 15
-                        }
-                    }
-                }
-            });
-        }
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">CSI Variance &mdash; Live</div>
+      <div class="chart-wrap"><canvas id="varChart"></canvas></div>
+    </div>
+    <div class="card" id="scoreCardEl" style="display:none">
+      <div class="card-title">Pattern Match Scores &mdash; 5s History</div>
+      <div class="score-chart-wrap"><canvas id="scoreChart"></canvas></div>
+      <div style="margin-top:16px;padding:12px;background:#0d1117;border-radius:6px;border-left:3px solid #3b8eff">
+        <div style="font-size:11px;color:#6b84a0;margin-bottom:8px">📊 <strong>5-Second Detection Windows</strong> (Most Recent First)</div>
+        <div id="detectionHistoryTable" style="max-height:200px;overflow-y:auto;font-size:10px;font-family:monospace;color:#a0b5c7">
+          <div style="display:none" id="historyEmpty">No detection history yet</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        function updateDisplay(data) {
-            const statusEl = document.getElementById('statusValue');
-            statusEl.textContent = data.status;
-            statusEl.style.background = data.status_color;
-            statusEl.classList.remove('loading');
+  <!-- DATA COLLECTION -->
 
-            if (data.variance && data.variance.length > 0) {
-                const currentVar = data.variance[data.variance.length - 1];
-                const avgEnergy = data.energy.reduce((a, b) => a + b, 0) / data.energy.length;
-                
-                document.getElementById('currentVar').textContent = currentVar.toFixed(2);
-                document.getElementById('avgEnergy').textContent = avgEnergy.toFixed(2);
-                document.getElementById('dataPoints').textContent = data.variance.length;
-            }
+  <!-- LIVE DATA COLLECTION & DETECTION -->
+  <div id="page-calibrate" class="page">
+    <div class="ph"><h1>Live Data Collection</h1><p>Collect CSI data for the three occupancy states and save session data to the realtime dataset</p></div>
+    <div id="rtMessage" class="alert al-info" style="display:none;margin-bottom:14px"></div>
+    
+    <!-- Step 1: Data Collection -->
+    <div style="margin-bottom:28px">
+      <div class="card-title" style="margin-bottom:14px">📊 Step 1: Collect Data for Each State</div>
+      <div class="g3" style="gap:14px">
+        <!-- Empty Room -->
+        <div class="card" style="border:2px solid rgba(27,193,115,.2)">
+          <div style="font-weight:600;margin-bottom:10px;font-size:.88em">🟢 Empty Room</div>
+          <div style="color:var(--muted);font-size:.78em;margin-bottom:12px">No people present, room completely still</div>
+          <div class="field" style="margin-bottom:10px"><label style="font-size:.78em">Duration (s)</label><input type="number" id="rtEmptyDur" min="20" value="60" style="font-size:.82em"></div>
+          <div class="row gap8">
+            <button class="btn btn-primary" onclick="startRealtime('empty')" style="flex:1;font-size:.82em">▶ Record</button>
+            <button class="btn btn-ghost" onclick="stopRealtime('empty')" style="flex:1;font-size:.82em">⏹ Stop</button>
+          </div>
+          <div class="row gap8" style="margin-top:10px;font-size:.78em">
+            <div style="flex:1"><span style="color:var(--muted)">Frames:</span> <b id="rtEmptyFrames" style="color:var(--text)">0</b></div>
+            <div style="flex:1"><span style="color:var(--muted)">Timer:</span> <b id="rtEmptyTimer" style="color:var(--text)">--</b></div>
+          </div>
+          <div class="prog-wrap" style="width:100%;margin-top:8px;height:4px"><div class="prog-bar" id="rtEmptyBar" style="width:0%;background:var(--green)"></div></div>
+        </div>
+        
+        <!-- Occupied Room -->
+        <div class="card" style="border:2px solid rgba(59,142,255,.2)">
+          <div style="font-weight:600;margin-bottom:10px;font-size:.88em">🔵 Person in Room</div>
+          <div style="color:var(--muted);font-size:.78em;margin-bottom:12px">One person moving naturally</div>
+          <div class="field" style="margin-bottom:10px"><label style="font-size:.78em">Duration (s)</label><input type="number" id="rtOccupiedDur" min="20" value="60" style="font-size:.82em"></div>
+          <div class="row gap8">
+            <button class="btn btn-primary" onclick="startRealtime('occupied')" style="flex:1;font-size:.82em">▶ Record</button>
+            <button class="btn btn-ghost" onclick="stopRealtime('occupied')" style="flex:1;font-size:.82em">⏹ Stop</button>
+          </div>
+          <div class="row gap8" style="margin-top:10px;font-size:.78em">
+            <div style="flex:1"><span style="color:var(--muted)">Frames:</span> <b id="rtOccupiedFrames" style="color:var(--text)">0</b></div>
+            <div style="flex:1"><span style="color:var(--muted)">Timer:</span> <b id="rtOccupiedTimer" style="color:var(--text)">--</b></div>
+          </div>
+          <div class="prog-wrap" style="width:100%;margin-top:8px;height:4px"><div class="prog-bar" id="rtOccupiedBar" style="width:0%;background:var(--accent)"></div></div>
+        </div>
+        
+        <!-- Multiple People -->
+        <div class="card" style="border:2px solid rgba(240,113,27,.2)">
+          <div style="font-weight:600;margin-bottom:10px;font-size:.88em">🔴 Multiple People</div>
+          <div style="color:var(--muted);font-size:.78em;margin-bottom:12px">2+ people with movement</div>
+          <div class="field" style="margin-bottom:10px"><label style="font-size:.78em">Duration (s)</label><input type="number" id="rtMultipleDur" min="20" value="60" style="font-size:.82em"></div>
+          <div class="row gap8">
+            <button class="btn btn-primary" onclick="startRealtime('multiple')" style="flex:1;font-size:.82em">▶ Record</button>
+            <button class="btn btn-ghost" onclick="stopRealtime('multiple')" style="flex:1;font-size:.82em">⏹ Stop</button>
+          </div>
+          <div class="row gap8" style="margin-top:10px;font-size:.78em">
+            <div style="flex:1"><span style="color:var(--muted)">Frames:</span> <b id="rtMultipleFrames" style="color:var(--text)">0</b></div>
+            <div style="flex:1"><span style="color:var(--muted)">Timer:</span> <b id="rtMultipleTimer" style="color:var(--text)">--</b></div>
+          </div>
+          <div class="prog-wrap" style="width:100%;margin-top:8px;height:4px"><div class="prog-bar" id="rtMultipleBar" style="width:0%;background:rgba(240,113,27,.8)"></div></div>
+        </div>
+      </div>
+    </div>
 
-            if (data.thresholds) {
-                const personThreshold = data.thresholds.person.toFixed(2);
-                const multiThreshold = data.thresholds.multi.toFixed(2);
-                
-                document.getElementById('legendEmpty').textContent = `Empty Room (Var < ${personThreshold})`;
-                document.getElementById('legendPerson').textContent = `Person Detected (${personThreshold} to ${multiThreshold})`;
-                document.getElementById('legendMulti').textContent = `Multiple People (Var ≥ ${multiThreshold})`;
-            }
+    <!-- Step 2: Collected Data Summary -->
+    <div class="card" style="margin-bottom:28px;background:rgba(39,199,111,.05);border:2px solid rgba(39,199,111,.2)">
+      <div class="card-title">✅ Collected Data Summary</div>
+      <div class="col gap12" style="margin-top:14px">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:.82em">
+          <div style="padding:10px;background:rgba(27,193,115,.1);border-radius:8px">
+            <div style="color:var(--muted)">Empty Room</div>
+            <div style="font-weight:600;margin-top:4px"><b id="summaryEmpty" style="color:var(--text)">0</b> frames</div>
+          </div>
+          <div style="padding:10px;background:rgba(59,142,255,.1);border-radius:8px">
+            <div style="color:var(--muted)">Occupied</div>
+            <div style="font-weight:600;margin-top:4px"><b id="summaryOccupied" style="color:var(--text)">0</b> frames</div>
+          </div>
+          <div style="padding:10px;background:rgba(240,113,27,.1);border-radius:8px">
+            <div style="color:var(--muted)">Multiple</div>
+            <div style="font-weight:600;margin-top:4px"><b id="summaryMultiple" style="color:var(--text)">0</b> frames</div>
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--panel2);border-radius:8px;font-size:.80em;color:var(--muted)">
+          📁 Saved to: <b id="dataLocation" style="color:var(--text)">/data2/realtime/</b>
+        </div>
+      </div>
+    </div>
 
-            document.getElementById('calibStatus').textContent = data.is_calibrated ? '✅ Ready' : '⏳ Loading';
+  </div>
 
-            if (data.detection_confidence !== undefined && data.detection_scores) {
-                document.getElementById('patternMatchSection').style.display = 'block';
-                document.getElementById('confidence').textContent = `${data.detection_confidence}%`;
-                
-                if (data.detection_scores.empty !== undefined) {
-                    document.getElementById('scoreEmpty').textContent = `${data.detection_scores.empty}%`;
-                }
-                if (data.detection_scores.occupied !== undefined) {
-                    document.getElementById('scoreOccupied').textContent = `${data.detection_scores.occupied}%`;
-                }
-                if (data.detection_scores.multi !== undefined) {
-                    document.getElementById('scoreMulti').textContent = `${data.detection_scores.multi}%`;
-                }
-            }
+  <!-- ESP32 LIVE -->
+  <div id="page-esp" class="page">
+    <div class="ph-row">
+      <div class="ph" style="margin-bottom:0"><h1>ESP32 Live Feed</h1><p>Connection state and real-time CSI frames received from ESP32</p></div>
+      <button class="btn btn-ghost" onclick="showPage('esp')">&#x21BB; Live Refresh</button>
+    </div>
+    <div class="g2" style="align-items:start">
+      <div class="card">
+        <div class="card-title">Connection</div>
+        <div class="row gap12 wrap" style="margin-bottom:12px">
+          <span id="espStatusPill" class="det-pill" style="background:rgba(224,65,79,.12);color:var(--red)">&#x25CF; Not Connected</span>
+          <span style="font-size:.82em;color:var(--muted)">Updates every 600ms</span>
+        </div>
+        <div style="font-size:.82em;color:var(--muted)">Last frame at: <b id="espLastAt" style="color:var(--text)">--</b></div>
+        <div style="font-size:.82em;color:var(--muted);margin-top:6px">Values per frame: <b id="espValsCount" style="color:var(--text)">0</b></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Latest CSI Line</div>
+        <div id="espLastLine" class="file-viewer-box" style="min-height:110px">Waiting for CSI data...</div>
+      </div>
+    </div>
+    <div class="card mt16">
+      <div class="card-title">Recent CSI Frames</div>
+      <div id="espRawFeed" class="file-viewer-box" style="min-height:260px;max-height:420px">Waiting for CSI data...</div>
+    </div>
+  </div>
 
-            const connectionDot = document.getElementById('connectionDot');
-            const connectionText = document.getElementById('connectionText');
-            
-            if (data.is_connected) {
-                connectionDot.classList.remove('disconnected');
-                connectionDot.classList.add('connected');
-                connectionText.textContent = 'Connected';
-            } else {
-                connectionDot.classList.add('disconnected');
-                connectionDot.classList.remove('connected');
-                connectionText.textContent = 'Disconnected';
-            }
+  <!-- LOGS -->
+  <div id="page-logs" class="page">
+    <div class="ph-row">
+      <div class="ph" style="margin-bottom:0"><h1>Reference Calibration Records</h1><p>Primary baseline dataset for your calibrated room, presented as a full-size review board with raw CSI inspection</p></div>
+      <button class="btn btn-ghost" onclick="loadLogs()">&#x21BB; Refresh</button>
+    </div>
+    <div class="logs-layout">
+      <div class="card">
+        <div class="records-head">
+          <h3>Reference Calibration Dataset</h3>
+          <div class="records-sub">Showing the three saved baseline records from the calibrated room and the three live-calibration records</div>
+        </div>
+        <div id="fileList"><div style="color:var(--muted);font-size:.83em;padding:24px 0;text-align:center">Loading...</div></div>
+      </div>
+      <div class="card">
+        <div class="row between" style="margin-bottom:14px">
+          <span style="font-size:.72em;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted)">Raw CSI Viewer</span>
+          <span id="viewFilename" style="font-size:.82em;color:var(--accent);font-weight:600"></span>
+        </div>
+        <div id="fileContent" class="file-viewer-box" style="min-height:200px"><span style="color:var(--muted)">Select a file from the list to inspect it</span></div>
+        <div id="viewMeta" style="margin-top:8px;font-size:.76em;color:var(--muted)"></div>
+        <div id="deleteWrap" style="margin-top:12px;display:none">
+          <button class="btn btn-danger btn-sm" onclick="deleteFile()">&#x1F5D1; Delete File</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-            if (!chart) initChart();
+</main>
 
-            if (data.variance && data.variance.length > 0 && chart) {
-                chart.data.labels = data.timestamps.map((t, i) => (i % 10 === 0) ? t.toFixed(1) : '');
-                chart.data.datasets[0].data = data.variance;
-                chart.update('none');
-            }
-        }
+<script>
+let varChart=null,scoreChart=null;
+let activeCollLabel=null,collPollTimer=null;
+let currentFile=null;
 
-        function pollData() {
-            fetch('/api/data')
-                .then(response => {
-                    if (!response.ok) throw new Error('Network error');
-                    return response.json();
-                })
-                .then(data => {
-                    updateDisplay(data);
-                    reconnectAttempts = 0;
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    reconnectAttempts++;
-                });
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    if((b.getAttribute('onclick')||'').includes("'"+id+"'"))b.classList.add('active');
+  });
+  if(id==='logs')loadLogs();
+}
 
-            setTimeout(pollData, 100);
-        }
+function initVarChart(){
+  const ctx=document.getElementById('varChart').getContext('2d');
+  varChart=new Chart(ctx,{
+    type:'line',
+    data:{labels:[],datasets:[{label:'CSI Variance',data:[],borderColor:'#3b8eff',backgroundColor:'rgba(59,142,255,.06)',borderWidth:2,fill:true,tension:.3,pointRadius:0}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{display:true,title:{display:true,text:'Time (s)',color:'#6b84a0'},ticks:{color:'#6b84a0',maxTicksLimit:8},grid:{color:'#1c2535'}},
+        y:{display:true,title:{display:true,text:'Variance',color:'#6b84a0'},ticks:{color:'#6b84a0'},grid:{color:'#1c2535'},beginAtZero:true}
+      }}
+  });
+}
 
-        window.addEventListener('DOMContentLoaded', pollData);
-    </script>
+function initScoreChart(){
+  const ctx=document.getElementById('scoreChart').getContext('2d');
+  scoreChart=new Chart(ctx,{
+    type:'line',
+    data:{labels:[],datasets:[
+      {label:'Empty %',data:[],borderColor:'#27c76f',backgroundColor:'rgba(39,199,111,.06)',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#27c76f',pointBorderColor:'#fff',pointBorderWidth:1.5,tension:.3,fill:true},
+      {label:'Person %',data:[],borderColor:'#3b8eff',backgroundColor:'rgba(59,142,255,.0)',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#3b8eff',pointBorderColor:'#fff',pointBorderWidth:1.5,tension:.3},
+      {label:'Multi %',data:[],borderColor:'#e0414f',backgroundColor:'rgba(224,65,79,.0)',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#e0414f',pointBorderColor:'#fff',pointBorderWidth:1.5,tension:.3}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,
+      plugins:{
+        legend:{display:true,position:'top',labels:{color:'#6b84a0',boxWidth:12,font:{size:11},padding:12}},
+        tooltip:{mode:'index',intersect:false,backgroundColor:'rgba(0,0,0,.8)',titleColor:'#fff',bodyColor:'#fff',borderColor:'#444',borderWidth:1,padding:8,displayColors:true}
+      },
+      scales:{
+        x:{display:true,ticks:{color:'#6b84a0',maxTicksLimit:12,font:{size:10}},grid:{color:'#1c2535',drawBorder:true}},
+        y:{display:true,min:0,suggestedMax:30,ticks:{color:'#6b84a0',font:{size:10}},grid:{color:'#1c2535'},title:{display:true,text:'Score (%)',color:'#6b84a0',font:{size:11}}}
+      }
+    }
+  });
+}
+
+function updateScoreChart(scoreHistory){
+  if(!scoreChart||!scoreHistory||scoreHistory.length===0)return;
+  
+  // For better visibility, show every N-th point label (max 12-15 labels on X-axis)
+  const labelStep=Math.max(1,Math.ceil(scoreHistory.length/15));
+  
+  // Create labels showing "5s ago", "10s ago" etc. or absolute timestamps
+  const labels=scoreHistory.map((h,i)=>{
+    if(i%labelStep!==0&&i!==scoreHistory.length-1)return '';
+    const secondsAgo=Math.round(h.seconds_ago||0);
+    const mins=Math.floor(secondsAgo/60);
+    const secs=secondsAgo%60;
+    if(mins>0)return `${mins}m${secs}s ago`;
+    return secondsAgo===0?'Now':`${secs}s ago`;
+  });
+  
+  scoreChart.data.labels=labels;
+  const allScores=scoreHistory.flatMap(p=>[p.empty||0,p.occupied||0,p.multi||0]);
+  const dataMax=Math.max(...allScores,1);
+  scoreChart.options.scales.y.suggestedMax=Math.max(30,Math.ceil(dataMax*1.25));
+  scoreChart.data.datasets[0].data=scoreHistory.map(p=>p.empty||0);
+  scoreChart.data.datasets[1].data=scoreHistory.map(p=>p.occupied||0);
+  scoreChart.data.datasets[2].data=scoreHistory.map(p=>p.multi||0);
+  scoreChart.update('none');
+  
+  // Update detection history table (most recent first)
+  const table=document.getElementById('detectionHistoryTable');
+  const recentHistory=[...scoreHistory].reverse().slice(0,15);
+  
+  let html='';
+  recentHistory.forEach((h,idx)=>{
+    const secondsAgo=Math.round(h.seconds_ago||0);
+    const stateEmoji={'empty':'🟢','occupied':'🔵','multi':'🔴','unknown':'⚪'}[h.state]||'⚪';
+    const confidenceBar=Math.min(100,Math.max(0,h.confidence||0));
+    const marginOk=h.margin>=8?'✓':'';
+    
+    html+=`<div style="display:grid;grid-template-columns:40px 30px 50px 50px 30px 40px;gap:8px;padding:8px;border-bottom:1px solid #1c2535;align-items:center">
+      <div title="State: ${h.state}">${stateEmoji}</div>
+      <div title="Seconds ago">${secondsAgo}s</div>
+      <div title="Top score">${(h.occupied||h.multi||h.empty||0).toFixed(0)}%</div>
+      <div title="Confidence"><span style="background:#3b8eff33;padding:2px 4px;border-radius:3px">${(h.confidence||0).toFixed(1)}%</span></div>
+      <div title="Margin to 2nd: ${h.margin>=8?'Good':'Low'}">${marginOk} ${(h.margin||0).toFixed(1)}</div>
+      <div title="Frames analyzed">${h.frames_analyzed||0}f</div>
+    </div>`;
+  });
+  
+  if(html===''){
+    document.getElementById('historyEmpty').style.display='block';
+    table.innerHTML='';
+    table.appendChild(document.getElementById('historyEmpty'));
+  }else{
+    document.getElementById('historyEmpty').style.display='none';
+    table.innerHTML=html;
+  }
+}
+
+function updateDashboard(d){
+  const dot=document.getElementById('connDot'),ct=document.getElementById('connText');
+  const serialConnected=!!d.serial_connected;
+  const streamActive=!!d.is_connected;
+  if(streamActive){
+    dot.className='conn-dot on';
+    ct.textContent='ESP32 Streaming';
+  }else if(serialConnected){
+    dot.className='conn-dot on';
+    ct.textContent='ESP32 Connected (No CSI)';
+  }else{
+    dot.className='conn-dot off pulse';
+    ct.textContent='ESP32 Not Connected';
+  }
+  const badge=document.getElementById('statusBadge'),col=d.status_color||'#6b84a0';
+  badge.textContent=d.status||'INITIALIZING';
+  badge.style.color=col;badge.style.background=col+'18';badge.style.borderColor=col+'55';
+  const det=d.detection_enabled!==false;
+  const pill=document.getElementById('detPill');
+  pill.textContent=det?'\u25CF Active':'\u25CF Paused';
+  pill.style.color=det?'var(--green)':'var(--red)';
+  pill.style.background=det?'rgba(39,199,111,.1)':'rgba(224,65,79,.1)';
+  const ds=d.detection_scores||{};
+  document.getElementById('sEmpty').textContent=ds.empty!=null?ds.empty+'%':'--';
+  document.getElementById('sPerson').textContent=ds.occupied!=null?ds.occupied+'%':'--';
+  document.getElementById('sMulti').textContent=ds.multi!=null?ds.multi+'%':'--';
+  document.getElementById('sConf').textContent=d.detection_confidence!=null?d.detection_confidence+'%':'--';
+  if(d.variance&&d.variance.length>0){
+    document.getElementById('stVar').textContent=d.variance[d.variance.length-1].toFixed(2);
+    document.getElementById('stEnergy').textContent=(d.energy.reduce((a,b)=>a+b,0)/d.energy.length).toFixed(2);
+    document.getElementById('stPoints').textContent=d.variance.length;
+  }
+  document.getElementById('stCal').textContent=d.is_calibrated?'\u2713 Ready':'\u26A0 No';
+  if(d.window_info){
+    const wi=d.window_info;
+    document.getElementById('wWin').textContent=wi.window_seconds+'s';
+    document.getElementById('wEvery').textContent=wi.update_interval+'s';
+    document.getElementById('wNext').textContent=wi.time_until_next.toFixed(1)+'s';
+    document.getElementById('wFrames').textContent=wi.frames_since_last||0;
+    const pct=Math.max(0,Math.min(100,((wi.update_interval-wi.time_until_next)/wi.update_interval)*100));
+    document.getElementById('detProgBar').style.width=pct+'%';
+    document.getElementById('cycleBar').style.width=pct+'%';
+    document.getElementById('lastAgo').textContent=wi.last_detection_ago>0?wi.last_detection_ago.toFixed(0)+'s ago':'--';
+    document.getElementById('nextIn').textContent=wi.time_until_next.toFixed(1)+'s';
+  }
+  if(!varChart)initVarChart();
+  if(varChart&&d.variance&&d.variance.length>0){
+    const step=Math.max(1,Math.floor(d.variance.length/100));
+    varChart.data.labels=d.timestamps.filter((_,i)=>i%step===0).map(t=>t.toFixed(1));
+    varChart.data.datasets[0].data=d.variance.filter((_,i)=>i%step===0);
+    varChart.update('none');
+  }
+  if(d.score_history&&d.score_history.length>0){
+    document.getElementById('scoreCardEl').style.display='block';
+    if(!scoreChart)initScoreChart();
+    updateScoreChart(d.score_history);
+  }
+  if(d.calibration)applyCalUI(d.calibration);
+
+  if(d.esp_live){
+    const calEspPill=document.getElementById('calEspPill');
+    const calEspLastAt=document.getElementById('calEspLastAt');
+    const calEspVals=document.getElementById('calEspVals');
+    const calLiveLine=document.getElementById('calLiveLine');
+    const espPill=document.getElementById('espStatusPill');
+    const espLastAt=document.getElementById('espLastAt');
+    const espVals=document.getElementById('espValsCount');
+    const espLastLine=document.getElementById('espLastLine');
+    const espRawFeed=document.getElementById('espRawFeed');
+
+    if(espPill){
+      if(streamActive){
+        espPill.textContent='\u25CF Streaming';
+        espPill.style.background='rgba(39,199,111,.12)';
+        espPill.style.color='var(--green)';
+      }else if(serialConnected){
+        espPill.textContent='\u25CF Connected (No CSI Data)';
+        espPill.style.background='rgba(244,183,106,.16)';
+        espPill.style.color='#f4b76a';
+      }else{
+        espPill.textContent='\u25CF Not Connected';
+        espPill.style.background='rgba(224,65,79,.12)';
+        espPill.style.color='var(--red)';
+      }
+    }
+
+    if(calEspPill){
+      if(d.is_connected){
+        calEspPill.textContent='\u25CF Connected';
+        calEspPill.style.background='rgba(39,199,111,.12)';
+        calEspPill.style.color='var(--green)';
+      }else{
+        calEspPill.textContent='\u25CF Not Connected';
+        calEspPill.style.background='rgba(224,65,79,.12)';
+        calEspPill.style.color='var(--red)';
+      }
+    }
+
+    if(espLastAt){
+      if(d.esp_live.last_csi_at && d.esp_live.last_csi_at > 0){
+        espLastAt.textContent=new Date(d.esp_live.last_csi_at * 1000).toLocaleTimeString();
+      }else{
+        espLastAt.textContent='--';
+      }
+    }
+
+    if(calEspLastAt){
+      if(d.esp_live.last_csi_at && d.esp_live.last_csi_at > 0){
+        calEspLastAt.textContent=new Date(d.esp_live.last_csi_at * 1000).toLocaleTimeString();
+      }else{
+        calEspLastAt.textContent='--';
+      }
+    }
+
+    if(espVals){
+      espVals.textContent=String(d.esp_live.last_csi_values_count || 0);
+    }
+
+    if(calEspVals){
+      calEspVals.textContent=String(d.esp_live.last_csi_values_count || 0);
+    }
+
+    if(espLastLine){
+      espLastLine.textContent=d.esp_live.last_csi_line || 'Waiting for CSI data...';
+    }
+
+    if(calLiveLine){
+      calLiveLine.textContent=d.esp_live.last_csi_line || 'Waiting for CSI data...';
+    }
+
+    if(espRawFeed){
+      const rows=(d.esp_live.recent_lines||[]).map(item=>{
+        const ts=item.ts?new Date(item.ts*1000).toLocaleTimeString():'--:--:--';
+        return '['+ts+'] ('+(item.values_count||0)+' vals) '+(item.line||'');
+      });
+      espRawFeed.textContent=rows.length?rows.slice().reverse().join('\n'):'Waiting for CSI data...';
+    }
+  }
+}
+
+function applyCalUI(cal){
+  const sn1=document.getElementById('sn1'),sn2=document.getElementById('sn2'),sn3=document.getElementById('sn3');
+  const block=document.getElementById('calCountBlock'),num=document.getElementById('calCountNum'),bar=document.getElementById('calProgBar');
+  const msg=document.getElementById('calMsgBox');
+  const emptyFrames=document.getElementById('calEmptyFrames');
+  const occupiedFrames=document.getElementById('calOccupiedFrames');
+  const multipleFrames=document.getElementById('calMultipleFrames');
+  if(!sn1||!sn2||!sn3||!block||!num||!bar||!msg){
+    return;
+  }
+  msg.textContent=cal.message||'';msg.style.display=cal.message?'block':'none';
+  if(emptyFrames)emptyFrames.textContent=String(cal.empty_frames_collected||0);
+  if(occupiedFrames)occupiedFrames.textContent=String(cal.occupied_frames_collected||0);
+  if(multipleFrames)multipleFrames.textContent=String(cal.multiple_frames_collected||0);
+  if(cal.stage==='empty'){
+    sn1.className='stage-num s-active';sn2.className='stage-num s-idle';sn3.className='stage-num s-idle';
+    block.style.display='flex';num.textContent=Math.max(0,Math.ceil(cal.remaining));
+    bar.style.width=(cal.empty_duration>0?Math.min(100,((cal.empty_duration-cal.remaining)/cal.empty_duration)*100):0)+'%';
+    msg.className='alert al-info';
+  }else if(cal.stage==='occupied'){
+    sn1.className='stage-num s-done';sn2.className='stage-num s-active';sn3.className='stage-num s-idle';
+    block.style.display='flex';num.textContent=Math.max(0,Math.ceil(cal.remaining));
+    bar.style.width=(cal.occupied_duration>0?Math.min(100,((cal.occupied_duration-cal.remaining)/cal.occupied_duration)*100):0)+'%';
+    msg.className='alert al-info';
+  }else if(cal.stage==='multiple'){
+    sn1.className='stage-num s-done';sn2.className='stage-num s-done';sn3.className='stage-num s-active';
+    block.style.display='flex';num.textContent=Math.max(0,Math.ceil(cal.remaining));
+    bar.style.width=(cal.multiple_duration>0?Math.min(100,((cal.multiple_duration-cal.remaining)/cal.multiple_duration)*100):0)+'%';
+    msg.className='alert al-info';
+  }else if(cal.stage==='done'){
+    sn1.className='stage-num s-done';sn2.className='stage-num s-done';sn3.className='stage-num s-done';block.style.display='none';msg.className='alert al-success';
+  }else if(cal.stage==='failed'){
+    sn1.className='stage-num s-idle';sn2.className='stage-num s-idle';sn3.className='stage-num s-idle';block.style.display='none';msg.className='alert al-warn';
+  }else{
+    sn1.className='stage-num s-idle';sn2.className='stage-num s-idle';sn3.className='stage-num s-idle';block.style.display='none';
+  }
+}
+
+function poll(){
+  fetch('/api/data').then(r=>r.json()).then(d=>updateDashboard(d)).catch(()=>{}).finally(()=>setTimeout(poll,600));
+}
+
+async function startDetection(){await fetch('/api/detection/start',{method:'POST'}).catch(()=>{});}
+async function stopDetection(){await fetch('/api/detection/stop',{method:'POST'}).catch(()=>{});}
+
+async function startCalibration(){
+  const body={
+    empty_duration:parseInt(document.getElementById('calEmptyDur').value)||60,
+    occupied_duration:parseInt(document.getElementById('calOccDur').value)||60,
+    multiple_duration:parseInt(document.getElementById('calMultiDur').value)||60,
+    min_frames:parseInt(document.getElementById('calMinFr').value)||80,
+    alpha:parseFloat(document.getElementById('calAlpha').value)||0.9
+  };
+  const r=await fetch('/api/calibration/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d=await r.json();
+  const msg=document.getElementById('calMsgBox');
+  msg.textContent=d.message||'...';msg.style.display='block';msg.className='alert al-info';
+}
+async function stopCalibration(){
+  const r=await fetch('/api/calibration/stop',{method:'POST'});
+  const d=await r.json();
+  const msg=document.getElementById('calMsgBox');
+  msg.textContent=d.message||'Stopped';msg.style.display='block';msg.className='alert al-warn';
+}
+
+// Realtime individual collection + detection mode control
+let rtCollectionTimer = null;
+let rtActiveLabel = null;
+let currentDetectionMode = null;
+
+function showRealtimeMessage(text, level='al-info'){
+  const ids = ['rtMessage', 'dashModeMsg'];
+  let shown = false;
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.textContent = text;
+    el.className = 'alert ' + level;
+    el.style.display = 'block';
+    shown = true;
+  });
+  if(!shown){
+    alert(text);
+  }
+}
+
+function capLabel(label){
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+function summaryIdForLabel(label){
+  if(label === 'empty') return 'summaryEmpty';
+  if(label === 'occupied') return 'summaryOccupied';
+  return 'summaryMultiple';
+}
+
+function startRTP(){
+  if(rtCollectionTimer) clearInterval(rtCollectionTimer);
+  rtCollectionTimer = setInterval(pollRealtime, 500);
+}
+
+function stopRTP(){
+  if(rtCollectionTimer){
+    clearInterval(rtCollectionTimer);
+    rtCollectionTimer = null;
+  }
+}
+
+async function refreshRealtimeSummary(){
+  const r = await fetch('/api/realtime/summary').catch(()=>null);
+  if(!r) return;
+  const d = await r.json();
+  const emptyEl = document.getElementById('summaryEmpty');
+  const occupiedEl = document.getElementById('summaryOccupied');
+  const multipleEl = document.getElementById('summaryMultiple');
+  const folderEl = document.getElementById('dataLocation');
+  if(emptyEl) emptyEl.textContent = String(d.empty || 0);
+  if(occupiedEl) occupiedEl.textContent = String(d.occupied || 0);
+  if(multipleEl) multipleEl.textContent = String(d.multiple || 0);
+  if(folderEl && d.folder) folderEl.textContent = d.folder;
+}
+
+async function startRealtime(label){
+  if(rtActiveLabel && rtActiveLabel !== label){
+    showRealtimeMessage('Stop the current recording first.', 'al-warn');
+    return;
+  }
+
+  const durId = 'rt' + capLabel(label) + 'Dur';
+  const dur = parseInt(document.getElementById(durId).value) || 60;
+  const r = await fetch('/api/realtime/start', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({label, duration:dur})
+  }).catch(()=>null);
+
+  if(!r){
+    showRealtimeMessage('Failed to start realtime collection (network error).', 'al-warn');
+    return;
+  }
+
+  const d = await r.json();
+  showRealtimeMessage(d.message || 'Realtime collection updated.', d.ok ? 'al-success' : 'al-warn');
+  if(d.ok){
+    rtActiveLabel = label;
+    startRTP();
+    refreshRealtimeSummary();
+  }
+}
+
+async function stopRealtime(_label){
+  const r = await fetch('/api/realtime/stop', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({})
+  }).catch(()=>null);
+
+  if(!r){
+    showRealtimeMessage('Failed to stop realtime collection (network error).', 'al-warn');
+    return;
+  }
+
+  const d = await r.json();
+  showRealtimeMessage(d.message || 'Realtime collection stopped.', d.ok ? 'al-info' : 'al-warn');
+  stopRTP();
+  rtActiveLabel = null;
+  await refreshRealtimeSummary();
+}
+
+async function pollRealtime(){
+  const r = await fetch('/api/realtime/status').catch(()=>null);
+  if(!r) return;
+  const d = await r.json();
+
+  if(!d.active){
+    if(rtActiveLabel){
+      showRealtimeMessage('Collection finished.', 'al-success');
+    }
+    stopRTP();
+    rtActiveLabel = null;
+    await refreshRealtimeSummary();
+    return;
+  }
+
+  const label = d.label;
+  const cap = capLabel(label);
+  const m = Math.floor(d.remaining/60);
+  const s = Math.floor(d.remaining%60);
+  const timerText = m > 0 ? m + ':' + String(s).padStart(2,'0') : s + 's';
+
+  const framesEl = document.getElementById('rt' + cap + 'Frames');
+  const timerEl = document.getElementById('rt' + cap + 'Timer');
+  const barEl = document.getElementById('rt' + cap + 'Bar');
+  const summaryEl = document.getElementById(summaryIdForLabel(label));
+
+  if(framesEl) framesEl.textContent = String(d.frames || 0);
+  if(timerEl) timerEl.textContent = timerText;
+  if(barEl) barEl.style.width = String(d.progress || 0) + '%';
+  if(summaryEl) summaryEl.textContent = String(d.frames || 0);
+}
+
+function updateDetectionStatusPills(mode){
+  const collectedMain = document.getElementById('detCollectedStatusMain');
+  const calibratedMain = document.getElementById('detCalibratedStatusMain');
+
+  const setPill = (el, on) => {
+    if(!el) return;
+    el.style.background = on ? 'rgba(39,199,111,.12)' : 'rgba(224,65,79,.12)';
+    el.style.color = on ? 'var(--green)' : 'var(--red)';
+    el.textContent = on ? '● Running' : '● Off';
+  };
+
+  setPill(collectedMain, mode === 'collected');
+  setPill(calibratedMain, mode === 'calibrated');
+}
+
+async function refreshDetectionModeStatus(){
+  const r = await fetch('/api/detection/mode/status').catch(()=>null);
+  if(!r) return;
+  const d = await r.json();
+  currentDetectionMode = d.mode || null;
+  updateDetectionStatusPills(currentDetectionMode);
+}
+
+async function startDetectionMode(mode){
+  if(currentDetectionMode && currentDetectionMode !== mode){
+    showRealtimeMessage('Stop the current detection mode first.', 'al-warn');
+    return;
+  }
+
+  const r = await fetch('/api/detection/mode/start', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({mode})
+  }).catch(()=>null);
+
+  if(!r){
+    showRealtimeMessage('Failed to start detection mode (network error).', 'al-warn');
+    return;
+  }
+
+  const d = await r.json();
+  showRealtimeMessage(d.message || 'Detection mode updated.', d.ok ? 'al-success' : 'al-warn');
+  await refreshDetectionModeStatus();
+}
+
+async function stopDetectionMode(mode){
+  const r = await fetch('/api/detection/mode/stop', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({mode})
+  }).catch(()=>null);
+
+  if(!r){
+    showRealtimeMessage('Failed to stop detection mode (network error).', 'al-warn');
+    return;
+  }
+
+  const d = await r.json();
+  showRealtimeMessage(d.message || 'Detection stopped.', d.ok ? 'al-info' : 'al-warn');
+  await refreshDetectionModeStatus();
+}
+
+async function loadLogs(){
+  const el=document.getElementById('fileList');
+  el.innerHTML='<div style="color:var(--muted);font-size:.83em;padding:24px 0;text-align:center">Loading...</div>';
+  const r=await fetch('/api/logs/list').catch(()=>null);
+  if(!r){el.innerHTML='<div style="color:var(--muted);padding:16px;font-size:.82em">Error loading files</div>';return;}
+  const data=await r.json();
+  const esc=(value)=>String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+  const scenarioConfig=[
+    {key:'empty',title:'Clear-Room Baseline',subtitle:'Reference state capture',icon:'\uD83D\uDFE2',hint:'Foundational baseline used to define the quiet, unoccupied room signature.'},
+    {key:'occupied',title:'Single Occupant Profile',subtitle:'Individual presence capture',icon:'\uD83D\uDD35',hint:'Reference record for one person present in the calibrated environment.'},
+    {key:'multiple',title:'Multi-Occupant Profile',subtitle:'Group presence capture',icon:'\uD83D\uDD34',hint:'Reference record for two or more people sharing the calibrated space.'}
+  ];
+  const matchScenario=(name)=>{
+    const lower=name.toLowerCase();
+    if(lower.includes('multiple')||lower.includes('multi'))return 'multiple';
+    if(lower.includes('occupied'))return 'occupied';
+    if(lower.includes('empty'))return 'empty';
+    return null;
+  };
+  const baselineRoom='myroom';
+  const baselineFiles=data[baselineRoom]||null;
+  const liveRoom='realtime';
+  const liveFiles=data[liveRoom]||null;
+
+  const renderDatasetSection=(files, label, sourcePath, description)=>{
+    if(!files){
+      return '<section class="room-showcase"><div class="room-banner"><div class="room-heading"><div class="room-label">'+esc(label)+'</div><div class="room-name">No Records Found</div><div class="room-caption">No dataset found in '+esc(sourcePath)+'.</div></div></div></section>';
+    }
+
+    const byScenario={};
+    files.forEach(file=>{
+      const key=matchScenario(file.name);
+      if(key&&!byScenario[key])byScenario[key]=file;
+    });
+
+    const totalFrames=files.reduce((sum,file)=>sum+(file.frames||0),0);
+    const availableCount=scenarioConfig.filter(cfg=>byScenario[cfg.key]&&byScenario[cfg.key].frames>0).length;
+
+    let section='<section class="room-showcase">';
+    section+='<div class="room-banner">'+
+      '<div class="room-heading">'+
+        '<div class="room-label">'+esc(label)+'</div>'+
+        '<div class="room-name">'+esc(description)+'</div>'+
+        '<div class="room-caption">This dataset uses the three baseline states only: empty, occupied, and multiple people.</div>'+
+      '</div>'+
+      '<div class="room-stats">'+
+        '<div class="room-stat"><div class="room-stat-label">Saved Profiles</div><div class="room-stat-value">'+availableCount+' / 3</div></div>'+
+        '<div class="room-stat"><div class="room-stat-label">Total Frames</div><div class="room-stat-value">'+totalFrames+'</div></div>'+
+        '<div class="room-stat"><div class="room-stat-label">Baseline Source</div><div class="room-stat-value">'+esc(sourcePath)+'</div></div>'+
+      '</div>'+
+    '</div>';
+
+    section+='<div class="scenario-grid">';
+    scenarioConfig.forEach(cfg=>{
+      const file=byScenario[cfg.key]||null;
+      const hasData=!!(file&&file.frames>0);
+      const cardState='state-'+cfg.key;
+      section+='<article class="record-card '+cardState+' '+(hasData?'has-data':'is-missing')+'"'+(file?' data-path="'+esc(file.path)+'" data-name="'+esc(file.name)+'"':'')+'>'+
+        '<div class="record-accent"></div>'+
+        '<div class="record-top">'+
+          '<div class="record-icon-wrap">'+
+            '<span class="record-icon">'+cfg.icon+'</span>'+
+            '<div><div class="record-name">'+esc(cfg.title)+'</div><div class="record-sub">'+esc(cfg.subtitle)+'</div></div>'+
+          '</div>'+
+          '<span class="record-badge">'+(hasData?'Recorded':'Pending')+'</span>'+
+        '</div>'+
+        '<div class="record-meta">'+
+          '<div class="record-metric"><div class="record-metric-label">Frames</div><div class="record-metric-value">'+(file?esc(String(file.frames)):'0')+'</div></div>'+
+          '<div class="record-metric"><div class="record-metric-label">Size</div><div class="record-metric-value">'+(file?esc(String(file.size_kb))+' KB':'--')+'</div></div>'+
+          '<div class="record-metric"><div class="record-metric-label">Stored File</div><div class="record-metric-value">'+(file?esc(file.name):'Not collected')+'</div></div>'+
+          '<div class="record-metric"><div class="record-metric-label">Last Updated</div><div class="record-metric-value">'+(file?esc(file.modified):'Waiting')+'</div></div>'+
+        '</div>'+
+        '<div class="record-foot"><strong>'+(hasData?'Reference record ready for review.':'No usable record yet.')+'</strong> '+esc(cfg.hint)+(file&&!hasData?' The file exists but does not contain CSI frames.':'')+'</div>'+
+      '</article>';
+    });
+    section+='</div></section>';
+    return section;
+  };
+
+  let html='';
+  if(!baselineFiles&&!liveFiles){html='<div style="color:var(--muted);padding:22px;text-align:center;font-size:.83em">No baseline datasets were found in data2/myroom or data2/realtime</div>';}
+  else{
+    html+='<div class="records-shell">'+
+      '<div class="records-intro">'+
+      '<div class="records-kicker">Reference Calibration Records</div>'+
+      '<h4>Primary baseline review board</h4>'+
+      '<p>This page shows the two baseline groups used by detection: the primary calibrated set in data2/myroom and the live-calibration set in data2/realtime. Each group contains three baseline scenarios: empty, occupied, and multiple people.</p>'+
+      '</div>';
+    html+=renderDatasetSection(baselineFiles,'\uD83D\uDCC1 Primary Calibration Baseline','data2/myroom','Reference Environment Suite');
+    html+=renderDatasetSection(liveFiles,'\u2699\uFE0F Live Calibration Baseline','data2/realtime','Dashboard Session Calibration Suite');
+    html+='</div>';
+  }
+  el.innerHTML=html;
+  el.querySelectorAll('.record-card[data-path]').forEach(card=>{
+    card.addEventListener('click',()=>viewFile(card.dataset.path,card.dataset.name,card));
+  });
+}
+
+async function viewFile(path,name,rowEl){
+  currentFile=path;
+  document.querySelectorAll('.record-card').forEach(r=>r.classList.remove('selected'));
+  if(rowEl)rowEl.classList.add('selected');
+  document.getElementById('viewFilename').textContent=name;
+  document.getElementById('fileContent').textContent='Loading\u2026';
+  document.getElementById('viewMeta').textContent='';
+  document.getElementById('deleteWrap').style.display='none';
+  const r=await fetch('/api/logs/read?path='+encodeURIComponent(path));
+  const d=await r.json();
+  if(d.error){document.getElementById('fileContent').textContent='Error: '+d.error;return;}
+  document.getElementById('fileContent').textContent=d.lines.join('\n');
+  document.getElementById('viewMeta').textContent=d.lines.length+' lines (first 200 shown)';
+  document.getElementById('deleteWrap').style.display='block';
+}
+
+async function deleteFile(){
+  if(!currentFile)return;
+  if(!confirm('Delete "'+currentFile+'"?\n\nThis cannot be undone.'))return;
+  const r=await fetch('/api/logs/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path:currentFile})});
+  const d=await r.json();
+  if(d.ok){
+    document.getElementById('fileContent').textContent='File deleted.';
+    document.getElementById('viewFilename').textContent='';
+    document.getElementById('viewMeta').textContent='';
+    document.getElementById('deleteWrap').style.display='none';
+    currentFile=null;loadLogs();
+  }else{alert('Delete failed: '+(d.error||'unknown'));}
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  poll();
+  refreshRealtimeSummary();
+  refreshDetectionModeStatus();
+  setInterval(refreshDetectionModeStatus, 1500);
+});
+</script>
 </body>
 </html>

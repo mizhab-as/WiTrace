@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# ESP-IDF generated build output
+firmware/csi_receiver/build/
+
+# Local editor/cache artifacts
+*.swp
+*.swo

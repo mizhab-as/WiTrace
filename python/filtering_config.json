@@ -1,0 +1,24 @@
+{
+  "selected_preset": "aggressive",
+  "description": "Aggressive Filtering (High stability, slower response)",
+  "config": {
+    "name": "Aggressive Filtering (High stability, slower response)",
+    "savgol_window": 15,
+    "savgol_polyorder": 3,
+    "outlier_multiplier": 1.0,
+    "percentile_cutoff": [
+      10,
+      90
+    ],
+    "use_median_filter": true,
+    "median_window": 7,
+    "use_adaptive_filter": false
+  },
+  "version": "2.0",
+  "timestamp": "2026-03-09 08:05:56.610160",
+  "usage": {
+    "python_script": "Update auto_calibrate.py __init__ with these values",
+    "web_ui": "Live calibration uses app.py default parameters",
+    "next_step": "Run: python3 auto_calibrate.py to apply"
+  }
+}
