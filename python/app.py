@@ -21,6 +21,8 @@ CONFIG = {
     'esp_live_timeout_seconds': 2.5,      # Treat ESP as disconnected if no CSI arrives recently
     'data_timeout_seconds': 15.0,         # Reconnect if no data for 15 seconds (was 5)
     'serial_read_timeout': 3,              # Serial port read timeout in seconds
+    'esp_live_max_lines': 20,              # Limit recent CSI lines sent to UI
+    'esp_live_max_chars': 260,             # Truncate CSI lines for stable UI rendering
 }
 
 DEFAULT_THRESHOLDS = {
@@ -99,6 +101,14 @@ class SystemState:
         self.live_calibration_applied = False
         
         self.load_calibration()
+
+    @staticmethod
+    def _compact_csi_line(line, max_chars):
+        # Keep a compact, single-line preview to avoid huge dashboard payloads.
+        compact = " ".join((line or "").split())
+        if len(compact) <= max_chars:
+            return compact
+        return compact[: max_chars - 3] + "..."
     
     def load_calibration(self):
         try:
@@ -153,12 +163,13 @@ class SystemState:
 
     def add_raw_csi_line(self, line, values_count):
         with self.lock:
-            self.last_csi_line = line
+            compact_line = self._compact_csi_line(line, CONFIG['esp_live_max_chars'])
+            self.last_csi_line = compact_line
             self.last_csi_values_count = int(values_count)
             self.last_csi_at = time.time()
             self.raw_csi_lines.append({
                 'ts': self.last_csi_at,
-                'line': line,
+                'line': compact_line,
                 'values_count': int(values_count),
             })
     
@@ -385,7 +396,7 @@ class SystemState:
                             'line': item.get('line', ''),
                             'values_count': int(item.get('values_count', 0)),
                         }
-                        for item in self.raw_csi_lines
+                        for item in list(self.raw_csi_lines)[-CONFIG['esp_live_max_lines']:]
                     ],
                 },
                 'error': self.error_message
