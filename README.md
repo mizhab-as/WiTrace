@@ -1,323 +1,269 @@
-# WiFi CSI Human Presence Detection System
+ <div align="center">
 
-Real-time human presence detection using WiFi Channel State Information (CSI) from ESP32.
+# 📡 WiTrace
 
-![System Overview](docs/system-overview.png)
+### WiFi CSI‑Based Human Presence and Occupancy Detection
 
-## 🎯 Overview
+[![License](https://img.shields.io/github/license/jeevanjoseph03/WiTrace)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)](https://www.python.org/)
+[![ESP-IDF](https://img.shields.io/badge/ESP--IDF-v5.x-red?logo=espressif)](https://docs.espressif.com/projects/esp-idf/en/latest/)
+[![Platform](https://img.shields.io/badge/Hardware-ESP32-informational)](https://www.espressif.com/en/products/socs/esp32)
 
-This project uses **WiFi CSI** (Channel State Information) to detect human presence in a room without cameras or wearable devices. The system consists of:
+> A non-invasive, privacy-preserving indoor presence and occupancy detection system leveraging **WiFi Channel State Information (CSI)** — no cameras, no sensors, just WiFi signals.
 
-- **ESP32 Module**: Captures WiFi CSI data from the environment
-- **Python Detector**: Analyzes CSI patterns to detect human presence in real-time
+</div>
 
-The system can detect:
-- ✅ Empty room
-- 👤 Person present (stationary)
-- 🚶 Person moving/walking
-- 👥 Multiple people or high activity
+---
 
-## 📋 Requirements
+## 🧠 Overview
 
-### Hardware
-- **ESP32 Development Board** (any variant with WiFi)
-- USB cable for ESP32 connection
-- WiFi Access Point (router)
+**WiTrace** exploits minute disturbances in WiFi Channel State Information (CSI) caused by human movement to detect and classify room occupancy states. By analyzing how the wireless multipath signal changes over time, the system can differentiate between:
 
-### Software
-- **Python 3.7+** (with pip)
-- **ESP-IDF** (for compiling firmware) - v4.4 or later
-- Libraries: NumPy, SciPy, Matplotlib, PySerial (auto-installed)
+- 🟢 **Empty Room** — No person present
+- 🟡 **Person Present (Still)** — Stationary occupant
+- 🟠 **Person Walking** — Active movement detected
+- 🔴 **Multiple People / High Activity** — Dense occupancy or high motion
 
-### Operating Systems
-- ✅ macOS
-- ✅ Linux
-- ✅ Windows
+The system combines **ESP32 firmware** for raw CSI capture with **Python-based signal processing** for feature extraction, classification, and visualization — all without any visual or acoustic surveillance.
 
-## 🚀 Quick Start
+---
 
-### 1️⃣ Setup Environment
+## ✨ Features
 
-**On macOS/Linux:**
+- 📶 **Raw WiFi CSI Collection** via ESP32 (ESP-IDF firmware)
+- 🧹 **Signal Preprocessing** — Static component removal, Gaussian smoothing
+- 📊 **Energy Analysis** — Per-frame mean CSI energy across scenarios
+- 🎯 **Motion Path Estimation** — Centroid-based subcarrier tracking
+- 🧮 **Statistical Presence Classifier** — Z-score normalized decision logic
+- 🌡️ **CSI Heatmaps** — Normalized amplitude visualization across subcarriers
+- 📉 **Scatter & Line Plots** — Multi-scenario comparison dashboards
+- 🔒 **Privacy-First** — Entirely passive, RF-based, no cameras or microphones
+
+---
+
+## 🗂️ Repository Structure
+
+```
+WiTrace/
+├── firmware/
+│   └── csi_receiver/          # ESP-IDF project for ESP32 CSI capture
+│       ├── main/              # Main application source (C)
+│       ├── CMakeLists.txt     # ESP-IDF build configuration
+│       └── sdkconfig          # ESP-IDF SDK configuration
+│
+├── python/
+│   ├── process_csi.py         # CSI energy analysis & motion path visualization
+│   ├── presence_det.py        # Feature extraction & statistical presence classifier
+│   └── backup_wall.py        # Extended analysis with through-wall scenario
+│
+├── data/                      # Raw CSI dataset files (.txt)
+│   ├── empty.txt              # Baseline — empty room
+│   ├── occupied.txt           # Stationary person
+│   ├── walking.txt            # Walking person
+│   ├── multi_occ.txt          # Multiple occupants
+│   └── wall.txt               # Person behind wall
+│
+└── docs/                      # Documentation assets
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer       | Technology                          |
+|-------------|-------------------------------------|
+| Hardware    | ESP32 (Wi-Fi CSI capable)           |
+| Firmware    | ESP-IDF (C), CMake                  |
+| Processing  | Python 3, NumPy, SciPy              |
+| Visualization | Matplotlib                        |
+| Classification | Statistical Z-score thresholding |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+#### Firmware
+- [ESP-IDF v5.x](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/)
+- ESP32 development board with CSI support
+
+#### Python
+- Python 3.8+
+- Install dependencies:
+
 ```bash
-chmod +x setup.sh
-./setup.sh
+pip install numpy scipy matplotlib
 ```
 
-**On Windows:**
-```cmd
-setup.bat
-```
+---
 
-This will:
-- Create Python virtual environment
-- Install all dependencies
-- Configure the project
-
-### 2️⃣ Configure WiFi Credentials
-
-Edit the ESP32 firmware with your WiFi credentials:
-
-```c
-// File: firmware/csi_receiver/main/csi_receiver.c
-#define WIFI_SSID "YourWiFiName"
-#define WIFI_PASS "YourWiFiPassword"
-```
-
-### 3️⃣ Flash ESP32 Firmware
+### 1️⃣ Flash the Firmware (ESP32)
 
 ```bash
 cd firmware/csi_receiver
+idf.py set-target esp32
 idf.py build
 idf.py -p /dev/ttyUSB0 flash monitor
 ```
 
-Replace `/dev/ttyUSB0` with your ESP32's serial port:
-- macOS: `/dev/cu.usbserial-*` or `/dev/cu.SLAB_USBtoUART`
-- Linux: `/dev/ttyUSB0` or `/dev/ttyACM0`
-- Windows: `COM3` or similar
+> The firmware captures CSI frames and prints them to serial in the format:
+> ```
+> CSI_DATA: <subcarrier values...>
+> ```
 
-### 4️⃣ Run Presence Detection
-
-```bash
-cd python
-source env/bin/activate  # On Windows: env\Scripts\activate.bat
-python3 run_presence_detection.py
-```
-
-The system will:
-1. Auto-detect your ESP32
-2. Connect and receive CSI data
-3. Calibrate (stay still for 10 seconds)
-4. Start real-time presence detection
-
-## 📊 Usage Modes
-
-### Advanced Detector Mode (Recommended)
-```bash
-python3 run_presence_detection.py detector
-```
-
-Features:
-- 🎯 Automatic calibration
-- 📈 Multi-graph visualization
-- 🎨 Color-coded status display
-- 📊 Real-time statistics
-
-### Simple Live Plot Mode
-```bash
-python3 run_presence_detection.py simple
-```
-
-Features:
-- 📉 Basic live plotting
-- ⚡ Lightweight and fast
-- 📊 Simple variance-based detection
-
-## 🏗️ Project Structure
-
-```
-wifi_csi_imaging/
-│
-├── firmware/
-│   └── csi_receiver/          # ESP32 firmware
-│       └── main/
-│           └── csi_receiver.c # CSI data capture code
-│
-├── python/
-│   ├── run_presence_detection.py  # Main runner script ⭐
-│   ├── csi_detector.py            # Advanced detection system
-│   ├── live_plot.py               # Simple live plotter
-│   ├── presence_det.py            # Offline analysis
-│   └── env/                       # Python virtual environment
-│
-├── data/                      # Sample CSI datasets
-│   ├── empty.txt
-│   ├── occupied.txt
-│   ├── walking.txt
-│   └── multi_occ.txt
-│
-├── requirements.txt           # Python dependencies
-├── setup.sh                   # Setup script (Unix)
-├── setup.bat                  # Setup script (Windows)
-└── README.md                  # This file
-```
-
-## 🔬 How It Works
-
-### WiFi CSI (Channel State Information)
-
-CSI measures how WiFi signals propagate through the environment. When a person moves or is present in a room, they affect the wireless signal patterns, which can be detected and analyzed.
-
-### Detection Pipeline
-
-1. **ESP32** captures CSI data from WiFi packets
-2. **Serial** transfers data to Python in real-time
-3. **Preprocessing** removes noise and spikes
-4. **Feature Extraction** computes statistical features:
-   - Variance (motion indicator)
-   - Rate of change (activity level)
-   - Frequency domain features
-5. **Classification** determines presence status:
-   - Empty room (low variance)
-   - Person present (medium variance)
-   - Person moving (high variance + high rate of change)
-   - Multiple people (very high variance)
-
-### Calibration
-
-The system automatically calibrates to your environment during the first 10 seconds. This establishes a baseline for "empty room" conditions.
-
-## 🛠️ Customization
-
-### Adjust Detection Sensitivity
-
-Edit `python/csi_detector.py`:
-
-```python
-class AdaptiveClassifier:
-    def __init__(self, calibration_time=30, adaptation_rate=0.95):
-        self.calibration_time = 50  # Increase for more stable baseline
-```
-
-### Change CSI Data Rate
-
-Edit `firmware/csi_receiver/main/csi_receiver.c`:
-
-```c
-#define CSI_SEND_RATE_MS 100  // Milliseconds (100ms = 10 Hz)
-```
-
-Lower values = more data, but may overload serial connection.
-
-### Customize Visualization
-
-Edit plot settings in `python/csi_detector.py`:
-
-```python
-def setup_visualization(self):
-    # Modify figure size, colors, layout, etc.
-    self.fig, axes = plt.subplots(2, 2, figsize=(14, 8))
-```
-
-## 📈 Testing with Recorded Data
-
-Test the detector without ESP32 using recorded datasets:
+Redirect the serial output to a `.txt` file to create your dataset:
 
 ```bash
-cd python
-python3 test_with_data.py
+idf.py -p /dev/ttyUSB0 monitor > ../data/empty.txt
 ```
-
-Or analyze specific scenarios:
-
-```bash
-python3 presence_det.py
-```
-
-## 🐛 Troubleshooting
-
-### No CSI data appearing
-
-1. **Check WiFi connection**: Ensure ESP32 connects to your WiFi
-   - Monitor serial output for "WiFi Connected" message
-   - Verify SSID and password in firmware
-
-2. **Check power saving**: Ensure power saving is disabled
-   - Already configured in the provided firmware
-
-3. **Check promiscuous mode**: Must be enabled
-   - Already enabled in the provided firmware
-
-### ESP32 not detected
-
-1. **Install USB drivers**:
-   - **CP210x**: [Silicon Labs drivers](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)
-   - **CH340**: [CH340 drivers](https://sparks.gogo.co.nz/ch340.html)
-
-2. **Check permissions** (Linux/macOS):
-   ```bash
-   sudo chmod 666 /dev/ttyUSB0
-   ```
-
-3. **Manual port selection**:
-   ```bash
-   python3 run_presence_detection.py /dev/ttyUSB0
-   ```
-
-### Poor detection accuracy
-
-1. **Increase calibration time**: Edit `csi_detector.py`:
-   ```python
-   detector.classifier.calibration_time = 100
-   ```
-
-2. **Reduce environmental noise**:
-   - Close doors/windows
-   - Minimize WiFi interference
-   - Keep ESP32 in central location
-
-3. **Collect training data**:
-   - Record empty room for 30 seconds
-   - Adjust thresholds based on your environment
-
-## 📚 Technical Details
-
-### CSI Configuration
-
-```c
-wifi_csi_config_t csi_config = {
-    .lltf_en = true,           // Legacy LTF
-    .htltf_en = true,          // HT LTF
-    .stbc_htltf2_en = true,    // STBC HT-LTF2
-    .ltf_merge_en = true,      // Merge LTF data
-    .channel_filter_en = false, // No channel filter
-    .manu_scale = false,       // Auto scaling
-    .shift = false             // No bit shifting
-};
-```
-
-### Feature Engineering
-
-The system extracts multiple features from CSI amplitude:
-- **Statistical**: mean, variance, standard deviation, min, max
-- **Temporal**: rate of change, moving averages
-- **Frequency**: FFT peaks, frequency domain energy
-
-### Adaptive Classification
-
-The classifier adapts to environmental changes over time using:
-- Dynamic threshold adjustment
-- Moving average baseline updates
-- Outlier removal and spike filtering
-
-## 🤝 Contributing
-
-Contributions are welcome! Areas for improvement:
-- Machine learning models (SVM, Random Forest, Neural Networks)
-- Multi-room detection
-- Person counting accuracy
-- Mobile app integration
-- Web dashboard
-
-## 📄 License
-
-MIT License - see LICENSE file for details
-
-## 🔗 References
-
-- [ESP32 CSI Documentation](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/wifi.html#wi-fi-channel-state-information)
-- [WiFi Sensing Research Papers](https://www.google.com/search?q=wifi+sensing+csi+human+detection)
-
-## 📧 Support
-
-For issues and questions:
-1. Check the Troubleshooting section
-2. Review ESP32 serial monitor output
-3. Open an issue on GitHub
 
 ---
 
-**Made with ❤️ using ESP32 and Python**
+### 2️⃣ Run CSI Processing & Visualization
 
-*Last updated: February 2026*
+```bash
+cd python
+python process_csi.py
+```
+
+This script will:
+- Load the CSI datasets (`empty`, `occupied`, `walking`, `multi_occ`)
+- Generate **energy comparison** line plots
+- Plot **individual energy graphs** per scenario
+- Render **motion path comparison** across all datasets
+- Display **energy scatter plots** for all scenarios
+
+---
+
+### 3️⃣ Run Presence Detection
+
+```bash
+cd python
+python presence_det.py
+```
+
+This script will:
+- Extract features: **mean energy**, **temporal variance**, **motion centroid variance**
+- Classify each dataset using a **Z-score normalized statistical classifier**
+- Print a results card for each scenario:
+
+```
+==================================================
+        CSI PRESENCE DETECTION RESULTS
+==================================================
+
+--------------------------------------------------
+ SCENARIO: Walking
+--------------------------------------------------
+ Mean CSI Energy      : 42.87
+ Temporal Variance    : 198.34
+ Motion Variance      : 56.21
+ Person Detection     : PERSON WALKING
+ Confidence Level     : High
+--------------------------------------------------
+```
+
+---
+
+## 📐 How It Works
+
+```
+┌─────────────┐     WiFi CSI Frames     ┌────────────────────┐
+│  ESP32 Node │ ───────────────────────▶│  Serial / Log File │
+│  (Transmit  │                         │  (Raw CSI Data)    │
+│   + Receive)│                         └────────┬───────────┘
+└─────────────┘                                  │
+                                                 ▼
+                                    ┌────────────────────────┐
+                                    │  Preprocessing         │
+                                    │  • Remove static mean  │
+                                    │  • Compute magnitude   │
+                                    │  • Gaussian smoothing  │
+                                    └────────────┬───────────┘
+                                                 │
+                                                 ▼
+                                    ┌────────────────────────┐
+                                    │  Feature Extraction    │
+                                    │  • Mean CSI energy     │
+                                    │  • Temporal variance   │
+                                    │  • Motion centroid     │
+                                    └────────────┬───────────┘
+                                                 │
+                                                 ▼
+                                    ┌────────────────────────┐
+                                    │  Z-Score Classifier    │
+                                    │  vs. Empty Baseline    │
+                                    └────────────┬───────────┘
+                                                 │
+                                                 ▼
+                                    ┌────────────────────────┐
+                                    │  Presence Decision     │
+                                    │  + Confidence Level    │
+                                    └────────────────────────┘
+```
+
+### Detection Thresholds
+
+| Z-Score (Motion Variance) | Classification                   | Confidence   |
+|---------------------------|----------------------------------|--------------|
+| `< 0.5`                   | No Person Detected               | High         |
+| `0.5 – 3.0`               | Person Present (Still)           | Medium-High  |
+| `3.0 – 8.0`               | Person Walking                   | High         |
+| `> 8.0`                   | Multiple People / High Activity  | Very High    |
+
+---
+
+## 📁 Data Format
+
+CSI data files are plain-text logs captured from the ESP32 serial output. Each line follows this format:
+
+```
+CSI_DATA: <int> <int> <int> ... <int>
+```
+
+Each integer represents the amplitude of one WiFi subcarrier at a given time frame. Multiple lines = multiple time frames.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork this repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m "Add your feature"`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is open-source. Please refer to the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👨‍💻 Authors
+
+**WiTrace** was collaboratively developed by:
+
+- [Mizhab](https://github.com/mizhab-as)
+- [Jeevan Joseph](https://github.com/jeevanjoseph03)
+- [Irfan](https://github.com/Irfan-34)
+- [Muzammil](https://github.com/muzml)
+
+---
+
+## 🙏 Acknowledgements
+
+- [Espressif ESP-IDF](https://github.com/espressif/esp-idf) for the WiFi CSI API  
+- Research inspiration from WiFi-based passive sensing literature
+
+---
+---
+
+<div align="center">
+  <sub>Built with 📡 WiFi signals and 🐍 Python</sub>
+</div>
+.
