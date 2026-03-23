@@ -317,7 +317,7 @@
         <div class="card" style="border:2px solid rgba(27,193,115,.2)">
           <div style="font-weight:600;margin-bottom:10px;font-size:.88em">🟢 Empty Room</div>
           <div style="color:var(--muted);font-size:.78em;margin-bottom:12px">No people present, room completely still</div>
-          <div class="field" style="margin-bottom:10px"><label style="font-size:.78em">Duration (s)</label><input type="number" id="rtEmptyDur" min="20" value="60" style="font-size:.82em"></div>
+          <div class="field" style="margin-bottom:10px"><label style="font-size:.78em">Duration (s)</label><input type="number" id="rtEmptyDur" min="20" value="70" style="font-size:.82em"></div>
           <div class="row gap8">
             <button class="btn btn-primary" onclick="startRealtime('empty')" style="flex:1;font-size:.82em">▶ Record</button>
             <button class="btn btn-ghost" onclick="stopRealtime('empty')" style="flex:1;font-size:.82em">⏹ Stop</button>
@@ -740,7 +740,7 @@ async function stopDetection(){await fetch('/api/detection/stop',{method:'POST'}
 
 async function startCalibration(){
   const body={
-    empty_duration:parseInt(document.getElementById('calEmptyDur').value)||60,
+    empty_duration:parseInt(document.getElementById('calEmptyDur').value)||70,
     occupied_duration:parseInt(document.getElementById('calOccDur').value)||60,
     multiple_duration:parseInt(document.getElementById('calMultiDur').value)||60,
     min_frames:parseInt(document.getElementById('calMinFr').value)||80,
@@ -822,7 +822,8 @@ async function startRealtime(label){
   }
 
   const durId = 'rt' + capLabel(label) + 'Dur';
-  const dur = parseInt(document.getElementById(durId).value) || 60;
+  const durFallback = label === 'empty' ? 70 : 60;
+  const dur = parseInt(document.getElementById(durId).value) || durFallback;
   const r = await fetch('/api/realtime/start', {
     method:'POST',
     headers:{'Content-Type':'application/json'},

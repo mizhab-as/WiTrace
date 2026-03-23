@@ -13,6 +13,15 @@ class PatternDetector:
         self.min_frames = 50            # Minimum frames for pattern MATCHING (was 100 for building)
         self.min_frames_for_training = 100  # Separate threshold for building new patterns
         self.min_windows = 3            # Minimum feature windows required to build a pattern
+        # Startup skip: discard the first N frames of each training file.
+        # For 'empty', someone must be in the room to press Start, so we skip ~20 s
+        # (≈200 frames at 10 Hz) to let them leave before we start learning.
+        # For occupied/multi a shorter skip handles brief setup noise.
+        self.startup_skip_frames = {
+            'empty':    100,   # ~10 seconds — person walks out after starting
+            'occupied':  50,   # ~5 seconds  — person settles into position
+            'multi':     50,   # ~5 seconds
+        }
         self.min_confidence = 55.0      # Increased from 45.0 - stricter confidence threshold
         self.min_margin = 8.0           # Increased from 3.0 - require better separation between patterns
         self.min_binary_margin = 5.0    # Increased from 2.0 - stricter for empty/not_empty distinction
@@ -49,10 +58,11 @@ class PatternDetector:
         for state, filename in state_files.items():
             filepath = os.path.join(self.data_folder, filename)
             if os.path.exists(filepath):
-                pattern_data = self._extract_pattern(filepath)
+                skip = self.startup_skip_frames.get(state, 0)
+                pattern_data = self._extract_pattern(filepath, skip_frames=skip)
                 if pattern_data:
                     self.patterns[state] = pattern_data
-                    print(f"✅ Loaded {state}: {pattern_data['samples']} windows")
+                    print(f"✅ Loaded {state}: {pattern_data['samples']} windows (skipped first {skip} frames)")
             else:
                 print(f"⚠️ Reference file not found: {filename}")
 
@@ -61,7 +71,16 @@ class PatternDetector:
         else:
             print("🧠 Training mode: raw-window-feature")
     
-    def _extract_pattern(self, filepath):
+    def _extract_pattern(self, filepath, skip_frames=0):
+        """Load and build a pattern from a CSI training file.
+
+        Args:
+            filepath:    Path to the .txt training file.
+            skip_frames: How many frames to discard from the *start* of the file.
+                         Use this to ignore the startup period where a person may
+                         still be in the room before leaving (empty recordings) or
+                         still settling into position (occupied recordings).
+        """
         frame_signatures = []
         frame_energies = []
         
@@ -80,7 +99,15 @@ class PatternDetector:
                                     frame_energies.append(float(np.mean(np.abs(values))))
                         except ValueError:
                             continue
-            
+
+            # ── Startup skip ───────────────────────────────────────────────────
+            # Discard contaminated frames from the beginning of the recording
+            # (e.g. person still in room when empty recording started).
+            if skip_frames > 0 and len(frame_signatures) > skip_frames:
+                frame_signatures = frame_signatures[skip_frames:]
+                frame_energies   = frame_energies[skip_frames:]
+            # ──────────────────────────────────────────────────────────────────
+
             if len(frame_signatures) < self.min_frames_for_training:
                 return None
 
@@ -183,6 +210,15 @@ class PatternDetector:
         if arr.size < 8:
             return None
 
+        # GAP 1 FIX: IQR outlier clipping — same filter used in auto_calibrate.py,
+        # now applied to live frames.  ESP32 packet errors cause occasional amplitude
+        # spikes that poison the FFT spectrum; clip them before processing.
+        # Guard: only clip when IQR > 0 (avoids collapsing constant-value frames).
+        Q1, Q3 = np.percentile(arr, [25, 75])
+        IQR = Q3 - Q1
+        if IQR > 0:
+            arr = np.clip(arr, Q1 - 1.5 * IQR, Q3 + 1.5 * IQR)
+
         arr = arr - np.mean(arr)
         if np.allclose(arr, 0):
             return None
@@ -248,6 +284,14 @@ class PatternDetector:
             return None
 
         e = np.array(energy_window, dtype=float)
+
+        # GAP 2 FIX: 3-point moving average on energy before computing statistics.
+        # Smooths transient noise (e.g. brief WiFi interference bursts) without
+        # attenuating the slower variance signal that distinguishes empty vs occupied.
+        if len(e) >= 3:
+            kernel = np.ones(3) / 3.0
+            e = np.convolve(e, kernel, mode='same')
+
         emean = np.mean(e)
         estd = np.std(e)
         if estd < 1e-8:
@@ -327,21 +371,39 @@ class PatternDetector:
                 'scores': {}
             }
 
-        n = min(len(frame_signatures), len(frame_energies))
-        sig_win = frame_signatures[n - self.window_frames:n]
-        ene_win = frame_energies[n - self.window_frames:n]
-        query = self._extract_feature_vector(sig_win, ene_win)
-        if query is None:
-            return {
-                'status': 'INITIALIZING',
-                'confidence': 0.0,
-                'scores': {}
-            }
+        # ── CORE FIX: Multi-window averaging ──────────────────────────────────
+        # Old code extracted a SINGLE feature vector from the last 150 frames.
+        # That single snapshot is very noisy — one quiet/loud window swings the
+        # result wildly. We now use the SAME sliding-window approach used when
+        # building patterns, extract all overlapping windows from the live buffer,
+        # score each window against every pattern, then AVERAGE the scores.
+        # This is exactly how the reference centroids were computed, so the
+        # comparison is apples-to-apples instead of apples-to-a-single-noisy-frame.
+        query_features_list = self._window_features(list(frame_signatures), list(frame_energies))
+
+        # Fallback: if the buffer is short, use the single-window path.
+        if not query_features_list:
+            n = min(len(frame_signatures), len(frame_energies))
+            sig_win = list(frame_signatures)[max(0, n - self.window_frames):n]
+            ene_win = list(frame_energies)[max(0, n - self.window_frames):n]
+            q = self._extract_feature_vector(sig_win, ene_win)
+            if q is None:
+                return {'status': 'INITIALIZING', 'confidence': 0.0, 'scores': {}}
+            query_features_list = [q]
         
+        # Score each query window against every reference pattern, then average.
+        per_window_scores = []  # list of {state: score} dicts
+        for query in query_features_list:
+            window_scores = {}
+            for state, pattern in self.patterns.items():
+                window_scores[state] = self._calculate_similarity(query, pattern)
+            per_window_scores.append(window_scores)
+
+        # Average across windows
         scores = {}
-        for state, pattern in self.patterns.items():
-            score = self._calculate_similarity(query, pattern)
-            scores[state] = score
+        for state in self.patterns:
+            scores[state] = float(np.mean([ws[state] for ws in per_window_scores]))
+        # ──────────────────────────────────────────────────────────────────────
         
         if not scores:
             return {
@@ -350,7 +412,7 @@ class PatternDetector:
                 'scores': scores
             }
         
-        # Always use the best match (no uncertain state)
+        # Pick the best match
         best_state = max(scores, key=scores.get)
         best_score = float(scores[best_state])
 
@@ -364,18 +426,13 @@ class PatternDetector:
             'not_empty': max(scores.get('occupied', 0.0), scores.get('multi', 0.0))
         }
         binary_margin = float(abs(binary_scores['empty'] - binary_scores['not_empty']))
-        
-        # IMPROVED LOGIC: Add stricter filtering to avoid false empty positives
-        # If 'empty' is best but margin to occupied is small, be more conservative
+
+        # FIX 4: Raised threshold for empty→occupied override from 35.0 → 55.0.
+        # Previously fired too easily on noisy data, converting valid empty readings.
         if best_state == 'empty':
             occupied_score = max(scores.get('occupied', 0.0), scores.get('multi', 0.0))
             margin_to_occupied = best_score - occupied_score
-            
-            # If margin is too small (<5), occupied might be a stronger candidate
-            # Threshold: empty must be clearly better, or occupied must be weak
-            if margin_to_occupied < 5.0 and occupied_score > 35.0:
-                # Empty barely wins but occupied is moderately confident
-                # Boost occupied confidence as alternative
+            if margin_to_occupied < 5.0 and occupied_score > 55.0:
                 binary_state = 'not_empty'
                 best_state = 'occupied' if scores.get('occupied', 0.0) > scores.get('multi', 0.0) else 'multi'
             else:
@@ -384,13 +441,13 @@ class PatternDetector:
             binary_state = 'not_empty'
 
         final_state = best_state
-        
+
         status_map = {
             'empty': '🟢 EMPTY ROOM',
             'occupied': '🔵 PERSON DETECTED',
             'multi': '🔴 MULTIPLE PEOPLE'
         }
-        
+
         return {
             'status': status_map.get(final_state, 'UNKNOWN'),
             'state': final_state,
@@ -434,8 +491,10 @@ class PatternDetector:
         
         # Sigmoid-like transformation emphasizes low distances (empty) vs high distances (occupied)
         # Old: similarity = np.exp(-0.75 * spread_adjust)
-        # New: More aggressive decay to be stricter about matches
-        similarity = np.exp(-1.2 * spread_adjust)
+        # GAP 3 FIX: Relaxed from -1.2 → -1.0.  With IQR clipping and energy
+        # smoothing (Gap 1 & 2), inputs are cleaner so patterns match more reliably;
+        # keeping -1.2 would under-score genuinely strong occupied detections.
+        similarity = np.exp(-1.0 * spread_adjust)
         
         # Scale to 0-100 range with higher threshold for acceptance
         final_score = max(0.0, min(100.0, float(similarity * 100.0)))

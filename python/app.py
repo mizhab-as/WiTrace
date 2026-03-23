@@ -53,10 +53,9 @@ class SystemState:
         self.pending_state = None
         self.pending_count = 0
         self.hysteresis_needed = {
-            '🟢 EMPTY ROOM': 2,
-            '🔵 PERSON DETECTED': 2,
+            '🟢 EMPTY ROOM': 3,       # Needs 15-20s (3 windows) of empty signal to confirm person left
+            '🔵 PERSON DETECTED': 2,  # Needs 10s (2 windows) of person signal to confirm person entered
             '🔴 MULTIPLE PEOPLE': 2,
-            '🟡 UNCERTAIN': 2,
         }
         
         # Window-based periodic detection (5-second intervals)
@@ -195,23 +194,14 @@ class SystemState:
             self._fallback_status()
             return
         
-        # Get window of CSI data (last N seconds)
-        window_seconds = CONFIG['detection_window_seconds']
-        cutoff_time = current_time - window_seconds
-        
-        # Filter signatures and energies to only include recent window
-        windowed_sigs = []
-        windowed_energies = []
-        
-        # Get timestamps for signature window (approximate based on frame rate)
-        if len(self.signature_window) > 0 and len(self.frame_energy_window) > 0:
-            # Assume roughly constant frame rate, work backwards from current time
-            frames_in_window = min(len(self.signature_window), self.frames_since_last_detection)
-            windowed_sigs = list(self.signature_window)[-frames_in_window:] if frames_in_window > 0 else list(self.signature_window)
-            windowed_energies = list(self.frame_energy_window)[-frames_in_window:] if frames_in_window > 0 else list(self.frame_energy_window)
-        
+        # FIX 2: Always use the FULL rolling buffer (signature_window / frame_energy_window).
+        # Previously, only the frames that arrived SINCE the last detection were used,
+        # which could be far fewer than min_frames_for_detection and made each window tiny.
+        windowed_sigs = list(self.signature_window)
+        windowed_energies = list(self.frame_energy_window)
+
         if len(windowed_sigs) < CONFIG['min_frames_for_detection']:
-            # Not enough frames in window yet
+            # Not enough frames in rolling buffer yet
             self.last_detection_time = current_time  # Update timer anyway
             return
         
@@ -236,13 +226,15 @@ class SystemState:
                 new_state = '🔵 PERSON DETECTED'
             elif state_name == 'multi':
                 new_state = '🔴 MULTIPLE PEOPLE'
-            else:
-                new_state = '🟢 EMPTY ROOM'  # Default to empty if unknown
-            
-            # Update state based on window analysis
-            self.stable_state = new_state
-            self.current_status = new_state
-            
+            # STABILITY LAYER 1 — Majority vote over last 3 windows (15 seconds total).
+            # Effectively ignores any single-window random spike or dip.
+            voted_state = self._majority_vote_state(new_state, window=3)
+
+            # STABILITY LAYER 2 — Asymmetric Hysteresis
+            # Confirms the smoothed state change.
+            self._apply_hysteresis(voted_state)
+            self.current_status = self.stable_state
+
             # Update color
             color_map = {
                 '🟢 EMPTY ROOM': '#4CAF50',
@@ -305,6 +297,35 @@ class SystemState:
             self.pending_state = None
             self.pending_count = 0
     
+    def _majority_vote_state(self, latest_state, window=5):
+        """
+        Look at the last `window` detection results and return the majority state.
+        This smooths out single-window noise without blocking any detection.
+        If no history yet, fall back to the latest single result.
+        """
+        if not self.detection_history:
+            return latest_state
+
+        state_map = {
+            'empty': '🟢 EMPTY ROOM',
+            'occupied': '🔵 PERSON DETECTED',
+            'multi': '🔴 MULTIPLE PEOPLE',
+        }
+
+        recent = list(self.detection_history)[-window:]
+        counts = {}
+        for entry in recent:
+            s = state_map.get(entry.get('state', ''), '')
+            if s:
+                counts[s] = counts.get(s, 0) + 1
+
+        if not counts:
+            return latest_state
+
+        # Return the majority state; ties broken by latest_state preference
+        majority = max(counts, key=lambda k: (counts[k], k == latest_state))
+        return majority
+
     def _fallback_status(self):
         if len(self.samples) > 0:
             latest_variance = self.samples[-1].variance
