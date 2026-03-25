@@ -1,4 +1,4 @@
-/* * Data converted from /Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from /Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 .section .rodata.embedded

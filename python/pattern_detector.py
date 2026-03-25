@@ -20,7 +20,12 @@ class PatternDetector:
         self.min_confidence = 55.0      # Increased from 45.0 - stricter confidence threshold
         self.min_margin = 8.0           # Increased from 3.0 - require better separation between patterns
         self.min_binary_margin = 5.0    # Increased from 2.0 - stricter for empty/not_empty distinction
-        # Feature weights: emphasize variance, entropy, and spectral characteristics
+
+        # Optional meta gating (keeps training + live consistent)
+        self.active_tx_mac = (os.environ.get('WITRACE_TX_MAC') or '').strip().lower() or None
+        self.lock_tx_mac = True
+        self.min_snr_db = 10
+        # Feature weights: emphasize variance, entropy, spectral characteristics, and basic link quality
         self.feature_weights = np.array([
             1.5,   # emean (0) - energy level
             3.0,   # estd (1) - VARIANCE KEY FEATURE - higher weight
@@ -38,6 +43,14 @@ class PatternDetector:
             1.5,   # centroid_norm (13)
             1.5,   # rms_norm (14)
             1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,  # sig_bands (15-22) - lower weight
+
+            # Meta-derived features (23-28)
+            0.35,  # rssi_mean
+            0.65,  # rssi_std
+            0.75,  # snr_mean
+            0.85,  # snr_std
+            0.25,  # mcs_mean
+            0.25,  # rate_mean
         ])
         self.load_reference_patterns()
     
@@ -68,27 +81,74 @@ class PatternDetector:
     def _extract_pattern(self, filepath):
         frame_signatures = []
         frame_energies = []
+        frame_meta = []
+        pending_meta = None
+        pending_values = None
         
         try:
             with open(filepath, 'r') as f:
                 for line in f:
                     line = line.strip()
+                    if line.startswith('CSI_META:'):
+                        parsed = self._parse_csi_meta_line(line)
+                        if parsed:
+                            # If CSI_DATA came first, pair retroactively.
+                            if pending_values is not None:
+                                if self._accept_meta(parsed):
+                                    sig = self._frame_signature(pending_values, meta=parsed)
+                                    if sig is not None:
+                                        frame_signatures.append(sig)
+                                        frame_energies.append(float(self.values_to_energy(pending_values, meta=parsed)))
+                                        frame_meta.append(dict(parsed))
+                                pending_values = None
+                            else:
+                                pending_meta = parsed
+                        else:
+                            pending_meta = None
+                        continue
+                    if line.startswith('tx_mac='):
+                        # Some logs may contain loose meta lines.
+                        pending_meta = {'tx_mac': line.split('=', 1)[1].strip()}
+                        continue
                     if line.startswith('CSI_DATA:'):
                         try:
                             values_str = line.split(':', 1)[1].strip()
                             values = [int(v) for v in values_str.split()]
                             if values:
-                                sig = self._frame_signature(values)
-                                if sig is not None:
-                                    frame_signatures.append(sig)
-                                    frame_energies.append(float(np.mean(np.abs(values))))
+                                if pending_meta is not None:
+                                    if self._accept_meta(pending_meta):
+                                        sig = self._frame_signature(values, meta=pending_meta)
+                                        if sig is not None:
+                                            frame_signatures.append(sig)
+                                            frame_energies.append(float(self.values_to_energy(values, meta=pending_meta)))
+                                            frame_meta.append(dict(pending_meta))
+                                    pending_meta = None
+                                else:
+                                    # Buffer in case CSI_META arrives immediately after.
+                                    # If no meta arrives, flush the buffered frame on the next CSI_DATA.
+                                    if pending_values is not None:
+                                        sig = self._frame_signature(pending_values, meta=None)
+                                        if sig is not None:
+                                            frame_signatures.append(sig)
+                                            frame_energies.append(float(self.values_to_energy(pending_values, meta=None)))
+                                            frame_meta.append({})
+                                    pending_values = values
                         except ValueError:
                             continue
+
+            # Flush last unpaired CSI_DATA
+            if pending_values is not None:
+                sig = self._frame_signature(pending_values, meta=None)
+                if sig is not None:
+                    frame_signatures.append(sig)
+                    frame_energies.append(float(self.values_to_energy(pending_values, meta=None)))
+                    frame_meta.append({})
+                pending_values = None
             
             if len(frame_signatures) < self.min_frames_for_training:
                 return None
 
-            window_features = self._window_features(frame_signatures, frame_energies)
+            window_features = self._window_features(frame_signatures, frame_energies, frame_meta)
             if len(window_features) < self.min_windows:
                 return None
 
@@ -123,12 +183,15 @@ class PatternDetector:
         }
 
     def build_pattern_from_live(self, frame_signatures, frame_energies, min_frames=None):
+        return self.build_pattern_from_live_with_meta(frame_signatures, frame_energies, frame_meta=None, min_frames=min_frames)
+
+    def build_pattern_from_live_with_meta(self, frame_signatures, frame_energies, frame_meta=None, min_frames=None):
         if frame_signatures is None or frame_energies is None:
             return None, "missing data"
         required = self.min_frames if min_frames is None else max(20, int(min_frames))
         if len(frame_signatures) < required or len(frame_energies) < required:
             return None, f"insufficient frames ({len(frame_signatures)}/{required})"
-        features = self._window_features(frame_signatures, frame_energies)
+        features = self._window_features(frame_signatures, frame_energies, frame_meta)
         if len(features) < 1:
             return None, f"insufficient windows ({len(features)})"
         return self._build_pattern(features), f"frames={len(frame_signatures)}, windows={len(features)}"
@@ -143,10 +206,23 @@ class PatternDetector:
         multiple_energies=None,
         alpha=0.85,
         min_frames=None,
+        empty_meta=None,
+        occupied_meta=None,
+        multiple_meta=None,
     ):
         alpha = float(min(0.98, max(0.50, alpha)))
-        empty_pattern, empty_msg = self.build_pattern_from_live(empty_signatures, empty_energies, min_frames=min_frames)
-        occ_pattern, occ_msg = self.build_pattern_from_live(occupied_signatures, occupied_energies, min_frames=min_frames)
+        empty_pattern, empty_msg = self.build_pattern_from_live_with_meta(
+            empty_signatures,
+            empty_energies,
+            frame_meta=empty_meta,
+            min_frames=min_frames,
+        )
+        occ_pattern, occ_msg = self.build_pattern_from_live_with_meta(
+            occupied_signatures,
+            occupied_energies,
+            frame_meta=occupied_meta,
+            min_frames=min_frames,
+        )
 
         if empty_pattern is None:
             return False, f"Empty calibration failed: {empty_msg}"
@@ -165,9 +241,10 @@ class PatternDetector:
 
         has_multi_inputs = multiple_signatures is not None and multiple_energies is not None
         if has_multi_inputs:
-            multi_pattern, multi_msg = self.build_pattern_from_live(
+            multi_pattern, multi_msg = self.build_pattern_from_live_with_meta(
                 multiple_signatures,
                 multiple_energies,
+                frame_meta=multiple_meta,
                 min_frames=min_frames,
             )
             if multi_pattern is None:
@@ -182,10 +259,109 @@ class PatternDetector:
 
         return True, f"Live calibration applied (empty + occupied) [{empty_msg}; {occ_msg}]"
 
-    def _frame_signature(self, values):
-        arr = np.abs(np.array(values, dtype=float))
+    @staticmethod
+    def _parse_csi_meta_line(line):
+        if not line or not line.startswith('CSI_META:'):
+            return None
+        payload = line.split(':', 1)[1].strip()
+        if not payload:
+            return None
+        meta = {}
+        for token in payload.split():
+            if '=' not in token:
+                continue
+            key, value = token.split('=', 1)
+            key = key.strip()
+            value = value.strip()
+            if not key:
+                continue
+            if key == 'tx_mac':
+                meta[key] = value
+                continue
+            try:
+                meta[key] = int(value)
+            except ValueError:
+                meta[key] = value
+        return meta if meta else None
+
+    def _accept_meta(self, meta):
+        meta = dict(meta or {})
+        tx_mac = meta.get('tx_mac')
+        if isinstance(tx_mac, str):
+            tx_mac = tx_mac.strip().lower()
+        else:
+            tx_mac = None
+
+        if self.active_tx_mac:
+            if tx_mac and tx_mac != self.active_tx_mac:
+                return False
+        elif self.lock_tx_mac and tx_mac:
+            self.active_tx_mac = tx_mac
+
+        try:
+            rssi = meta.get('rssi')
+            noise_floor = meta.get('noise_floor')
+            if isinstance(rssi, int) and isinstance(noise_floor, int):
+                snr = int(rssi - noise_floor)
+                if snr < int(self.min_snr_db):
+                    return False
+        except Exception:
+            pass
+        return True
+
+    @staticmethod
+    def _values_to_amplitude(values, meta=None):
+        if values is None:
+            return None
+        try:
+            arr = np.asarray(values, dtype=float)
+        except Exception:
+            return None
         if arr.size < 8:
             return None
+
+        # Backward-compatibility:
+        # - Older datasets in this repo contain CSI_DATA-only and may already be in an "amplitude-ish" int format.
+        # - Newer (CSI_META+CSI_DATA) streams are treated as interleaved int8 I/Q bytes.
+        has_meta = isinstance(meta, dict) and len(meta) > 0
+
+        if not has_meta:
+            amp = np.abs(arr)
+        else:
+            if arr.size % 2 == 0:
+                i = arr[0::2]
+                q = arr[1::2]
+                amp = np.sqrt(i * i + q * q)
+            else:
+                amp = np.abs(arr)
+
+        if amp.size < 4:
+            return None
+
+        # Many logs include trailing zero padding; trim it so FFT features remain informative.
+        nz = np.nonzero(amp)[0]
+        if nz.size == 0:
+            return None
+        last = int(nz[-1])
+        if last < (amp.size - 1):
+            amp = amp[: last + 1]
+
+        if amp.size < 8:
+            return None
+        return amp
+
+    def values_to_energy(self, values, meta=None):
+        amp = self._values_to_amplitude(values, meta=meta)
+        if amp is None:
+            return 0.0
+        return float(np.mean(amp))
+
+    def _frame_signature(self, values, meta=None):
+        amp = self._values_to_amplitude(values, meta=meta)
+        if amp is None:
+            return None
+
+        arr = amp.astype(float)
 
         arr = arr - np.mean(arr)
         if np.allclose(arr, 0):
@@ -204,11 +380,13 @@ class PatternDetector:
         norm = np.linalg.norm(spectrum) + 1e-9
         return spectrum / norm
 
-    def frame_signature(self, values):
-        return self._frame_signature(values)
+    def frame_signature(self, values, meta=None):
+        return self._frame_signature(values, meta=meta)
 
-    def _window_features(self, frame_signatures, frame_energies):
-        n = min(len(frame_signatures), len(frame_energies))
+    def _window_features(self, frame_signatures, frame_energies, frame_meta=None):
+        if frame_meta is None:
+            frame_meta = [{} for _ in range(min(len(frame_signatures), len(frame_energies)))]
+        n = min(len(frame_signatures), len(frame_energies), len(frame_meta))
         if n < self.min_frames:
             return []
 
@@ -216,14 +394,16 @@ class PatternDetector:
         for i in range(0, n - self.window_frames + 1, self.window_step):
             sig_win = frame_signatures[i:i + self.window_frames]
             ene_win = frame_energies[i:i + self.window_frames]
-            vec = self._extract_feature_vector(sig_win, ene_win)
+            meta_win = frame_meta[i:i + self.window_frames]
+            vec = self._extract_feature_vector(sig_win, ene_win, meta_win)
             if vec is not None:
                 features.append(vec)
 
         if not features:
             sig_win = frame_signatures[-self.window_frames:]
             ene_win = frame_energies[-self.window_frames:]
-            vec = self._extract_feature_vector(sig_win, ene_win)
+            meta_win = frame_meta[-self.window_frames:]
+            vec = self._extract_feature_vector(sig_win, ene_win, meta_win)
             if vec is not None:
                 features.append(vec)
 
@@ -247,9 +427,12 @@ class PatternDetector:
             vals.append(weighted_var)
         return np.array(vals, dtype=float) if vals else np.array([np.var(x)])
 
-    def _extract_feature_vector(self, sig_window, energy_window):
+    def _extract_feature_vector(self, sig_window, energy_window, meta_window=None):
         if len(sig_window) < 16 or len(energy_window) < 16:
             return None
+
+        if meta_window is None:
+            meta_window = [{} for _ in range(len(energy_window))]
 
         e = np.array(energy_window, dtype=float)
         emean = np.mean(e)
@@ -295,6 +478,38 @@ class PatternDetector:
         split = np.array_split(sig_mean, 8)
         sig_bands = [float(np.sum(b)) for b in split]
 
+        # Meta stats (robust to missing meta)
+        rssi_vals = []
+        snr_vals = []
+        mcs_vals = []
+        rate_vals = []
+        for m in meta_window:
+            if not isinstance(m, dict):
+                continue
+            rssi = m.get('rssi')
+            noise_floor = m.get('noise_floor')
+            if isinstance(rssi, int):
+                rssi_vals.append(rssi)
+                if isinstance(noise_floor, int):
+                    snr_vals.append(int(rssi - noise_floor))
+            mcs = m.get('mcs')
+            if isinstance(mcs, int):
+                mcs_vals.append(mcs)
+            rate = m.get('rate')
+            if isinstance(rate, int):
+                rate_vals.append(rate)
+
+        def _mean_std(xs):
+            if not xs:
+                return 0.0, 0.0
+            arr = np.asarray(xs, dtype=float)
+            return float(np.mean(arr)), float(np.std(arr))
+
+        rssi_mean, rssi_std = _mean_std(rssi_vals)
+        snr_mean, snr_std = _mean_std(snr_vals)
+        mcs_mean, _ = _mean_std(mcs_vals)
+        rate_mean, _ = _mean_std(rate_vals)
+
         vec = np.array([
             emean,
             estd,
@@ -312,11 +527,18 @@ class PatternDetector:
             centroid_norm,
             rms_norm,
             *sig_bands,
+
+            rssi_mean,
+            rssi_std,
+            snr_mean,
+            snr_std,
+            mcs_mean,
+            rate_mean,
         ], dtype=float)
 
         return vec
     
-    def detect(self, frame_signatures, frame_energies=None):
+    def detect(self, frame_signatures, frame_energies=None, frame_meta=None):
         if not self.patterns:
             return {
                 'status': 'ERROR: No reference patterns',
@@ -331,10 +553,14 @@ class PatternDetector:
                 'scores': {}
             }
 
-        n = min(len(frame_signatures), len(frame_energies))
+        if frame_meta is None:
+            frame_meta = [{} for _ in range(min(len(frame_signatures), len(frame_energies)))]
+
+        n = min(len(frame_signatures), len(frame_energies), len(frame_meta))
         sig_win = frame_signatures[n - self.window_frames:n]
         ene_win = frame_energies[n - self.window_frames:n]
-        query = self._extract_feature_vector(sig_win, ene_win)
+        meta_win = frame_meta[n - self.window_frames:n]
+        query = self._extract_feature_vector(sig_win, ene_win, meta_win)
         if query is None:
             return {
                 'status': 'INITIALIZING',

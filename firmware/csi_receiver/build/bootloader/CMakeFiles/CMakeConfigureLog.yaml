@@ -36,6 +36,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -74,6 +75,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/git"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/git"
       - "/Users/mizhabas/esp/esp-idf/tools/git"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/git"
       - "/opt/homebrew/opt/openjdk@17/bin/git"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/git"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/git"
@@ -81,6 +83,9 @@ events:
     found: "/opt/homebrew/bin/git"
     search_context:
       ENV{PATH}:
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
@@ -97,6 +102,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -165,6 +171,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -203,6 +210,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/uname"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/uname"
       - "/Users/mizhabas/esp/esp-idf/tools/uname"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/uname"
       - "/opt/homebrew/opt/openjdk@17/bin/uname"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/uname"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/uname"
@@ -220,6 +228,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -230,6 +241,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -309,6 +321,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -373,6 +386,9 @@ events:
       - "/Users/mizhabas/esp/esp-idf/tools/ninja-build"
       - "/Users/mizhabas/esp/esp-idf/tools/ninja"
       - "/Users/mizhabas/esp/esp-idf/tools/samu"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/ninja-build"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/ninja"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/samu"
       - "/opt/homebrew/opt/openjdk@17/bin/ninja-build"
       - "/opt/homebrew/opt/openjdk@17/bin/ninja"
       - "/opt/homebrew/opt/openjdk@17/bin/samu"
@@ -395,6 +411,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -405,6 +424,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -474,6 +494,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -513,6 +534,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -523,6 +547,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -594,6 +619,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -604,6 +632,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -660,7 +689,7 @@ events:
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
       
       The C compiler identification is GNU, found in:
-        /Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/4.2.3/CompilerIdC/a.out
+        /Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/4.2.3/CompilerIdC/a.out
       
   -
     kind: "find-v1"
@@ -697,6 +726,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -730,6 +760,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -740,6 +773,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -810,6 +844,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -843,6 +878,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -853,6 +891,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -923,6 +962,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -956,6 +996,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -966,6 +1009,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -1036,6 +1080,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -1069,6 +1114,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -1079,6 +1127,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -1149,6 +1198,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -1182,6 +1232,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -1192,6 +1245,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -1262,6 +1316,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -1295,6 +1350,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -1305,6 +1363,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -1375,6 +1434,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -1408,6 +1468,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -1418,6 +1481,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -1488,6 +1552,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -1521,6 +1586,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -1531,6 +1599,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -1601,6 +1670,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -1639,6 +1709,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-dlltool"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-dlltool"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-dlltool"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-dlltool"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-dlltool"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-dlltool"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-dlltool"
@@ -1676,6 +1747,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/dlltool"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/dlltool"
       - "/Users/mizhabas/esp/esp-idf/tools/dlltool"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/dlltool"
       - "/opt/homebrew/opt/openjdk@17/bin/dlltool"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/dlltool"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/dlltool"
@@ -1709,6 +1781,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -1719,6 +1794,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -1789,6 +1865,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -1822,6 +1899,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -1832,6 +1912,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -1902,6 +1983,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -1940,6 +2022,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-tapi"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-tapi"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-tapi"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-tapi"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-tapi"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-tapi"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-tapi"
@@ -1977,6 +2060,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/tapi"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/tapi"
       - "/Users/mizhabas/esp/esp-idf/tools/tapi"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/tapi"
       - "/opt/homebrew/opt/openjdk@17/bin/tapi"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/tapi"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/tapi"
@@ -2010,6 +2094,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -2020,6 +2107,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -2092,6 +2180,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -2130,6 +2219,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ar-12.2"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ar-12.2"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ar-12.2"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ar-12.2"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ar-12.2"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ar-12.2"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ar-12.2"
@@ -2167,6 +2257,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ar-12"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ar-12"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ar-12"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ar-12"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ar-12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ar-12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ar-12"
@@ -2204,6 +2295,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ar12"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ar12"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ar12"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ar12"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ar12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ar12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ar12"
@@ -2237,6 +2329,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -2247,6 +2342,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -2319,6 +2415,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -2357,6 +2454,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ranlib-12.2"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ranlib-12.2"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ranlib-12.2"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ranlib-12.2"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ranlib-12.2"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ranlib-12.2"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ranlib-12.2"
@@ -2394,6 +2492,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ranlib-12"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ranlib-12"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ranlib-12"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ranlib-12"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ranlib-12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ranlib-12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ranlib-12"
@@ -2431,6 +2530,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ranlib12"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ranlib12"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ranlib12"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ranlib12"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ranlib12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ranlib12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ranlib12"
@@ -2464,6 +2564,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -2474,6 +2577,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -2543,6 +2647,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -2582,6 +2687,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -2592,6 +2700,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -2663,6 +2772,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -2673,6 +2785,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -2729,7 +2842,7 @@ events:
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
       
       The CXX compiler identification is GNU, found in:
-        /Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/4.2.3/CompilerIdCXX/a.out
+        /Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/4.2.3/CompilerIdCXX/a.out
       
   -
     kind: "find-v1"
@@ -2768,6 +2881,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -2806,6 +2920,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ar-12.2"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ar-12.2"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ar-12.2"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ar-12.2"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ar-12.2"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ar-12.2"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ar-12.2"
@@ -2843,6 +2958,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ar-12"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ar-12"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ar-12"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ar-12"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ar-12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ar-12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ar-12"
@@ -2880,6 +2996,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ar12"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ar12"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ar12"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ar12"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ar12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ar12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ar12"
@@ -2913,6 +3030,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -2923,6 +3043,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -2995,6 +3116,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -3033,6 +3155,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ranlib-12.2"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ranlib-12.2"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ranlib-12.2"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ranlib-12.2"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ranlib-12.2"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ranlib-12.2"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ranlib-12.2"
@@ -3070,6 +3193,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ranlib-12"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ranlib-12"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ranlib-12"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ranlib-12"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ranlib-12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ranlib-12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ranlib-12"
@@ -3107,6 +3231,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ranlib12"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ranlib12"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ranlib12"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ranlib12"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ranlib12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ranlib12"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ranlib12"
@@ -3140,6 +3265,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -3150,6 +3278,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -3219,6 +3348,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -3258,6 +3388,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -3268,6 +3401,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -3354,6 +3488,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -3392,6 +3527,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ar-"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ar-"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ar-"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ar-"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ar-"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ar-"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ar-"
@@ -3429,6 +3565,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ar-"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ar-"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ar-"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ar-"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ar-"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ar-"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ar-"
@@ -3462,6 +3599,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -3472,6 +3612,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -3544,6 +3685,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/"
       - "/Users/mizhabas/esp/esp-idf/tools/"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/"
       - "/opt/homebrew/opt/openjdk@17/bin/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/"
@@ -3582,6 +3724,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ranlib-"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ranlib-"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ranlib-"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ranlib-"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ranlib-"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ranlib-"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ranlib-"
@@ -3619,6 +3762,7 @@ events:
       - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin/xtensa-esp32-elf-gcc-ranlib-"
       - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin/xtensa-esp32-elf-gcc-ranlib-"
       - "/Users/mizhabas/esp/esp-idf/tools/xtensa-esp32-elf-gcc-ranlib-"
+      - "/Users/mizhabas/wifi_csi_imaging/.venv/bin/xtensa-esp32-elf-gcc-ranlib-"
       - "/opt/homebrew/opt/openjdk@17/bin/xtensa-esp32-elf-gcc-ranlib-"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand/xtensa-esp32-elf-gcc-ranlib-"
       - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli/xtensa-esp32-elf-gcc-ranlib-"
@@ -3652,6 +3796,9 @@ events:
         - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
         - "/Users/mizhabas/esp/esp-idf/components/partition_table"
         - "/Users/mizhabas/esp/esp-idf/components/app_update"
+        - "/Users/mizhabas/esp/esp-idf/components/espcoredump"
+        - "/Users/mizhabas/esp/esp-idf/components/partition_table"
+        - "/Users/mizhabas/esp/esp-idf/components/app_update"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp-elf-gdb/12.1_20221002/xtensa-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/riscv32-esp-elf-gdb/12.1_20221002/riscv32-esp-elf-gdb/bin"
         - "/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin"
@@ -3662,6 +3809,7 @@ events:
         - "/Users/mizhabas/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230419/openocd-esp32/bin"
         - "/Users/mizhabas/.espressif/python_env/idf5.1_py3.14_env/bin"
         - "/Users/mizhabas/esp/esp-idf/tools"
+        - "/Users/mizhabas/wifi_csi_imaging/.venv/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/opt/homebrew/opt/openjdk@17/bin"
         - "/Users/mizhabas/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand"
@@ -3707,8 +3855,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-8ILYnC"
-      binary: "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-8ILYnC"
+      source: "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-7IKiQO"
+      binary: "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-7IKiQO"
     cmakeVariables:
       CMAKE_C_FLAGS: "-mlongcalls -Wno-frame-address "
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -3718,10 +3866,10 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-8ILYnC'
+        Change Dir: '/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-7IKiQO'
         
-        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_d06c8
-        [1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c
+        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_0fcc8
+        [1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c
         Using built-in specs.
         COLLECT_GCC=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
         Target: xtensa-esp32-elf
@@ -3729,8 +3877,8 @@ events:
         Thread model: posix
         Supported LTO compression algorithms: zlib
         gcc version 12.2.0 (crosstool-NG esp-12.2.0_20230208) 
-        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_d06c8.dir/'
-         /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/cc1 -quiet -v -iprefix /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/ /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_d06c8.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mlongcalls -Wno-frame-address -version -o /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//cctcLlCF.s
+        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_0fcc8.dir/'
+         /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/cc1 -quiet -v -iprefix /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/ /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_0fcc8.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mlongcalls -Wno-frame-address -version -o /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccsNolo6.s
         GNU C17 (crosstool-NG esp-12.2.0_20230208) version 12.2.0 (xtensa-esp32-elf)
         	compiled by GNU C version Apple LLVM 13.0.0 (clang-1300.0.27.3), GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
         
@@ -3751,12 +3899,12 @@ events:
         
         GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
         Compiler executable checksum: 41045ea1f6ee309545637b31d7699b95
-        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_d06c8.dir/'
-         /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/as --traditional-format --longcalls -o CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//cctcLlCF.s
+        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_0fcc8.dir/'
+         /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/as --traditional-format --longcalls -o CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccsNolo6.s
         COMPILER_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/
         LIBRARY_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/
-        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.'
-        [2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj -o cmTC_d06c8   && :
+        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.'
+        [2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj -o cmTC_0fcc8   && :
         Using built-in specs.
         COLLECT_GCC=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
         COLLECT_LTO_WRAPPER=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper
@@ -3767,9 +3915,9 @@ events:
         gcc version 12.2.0 (crosstool-NG esp-12.2.0_20230208) 
         COMPILER_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/
         LIBRARY_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/
-        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_d06c8' '-dumpdir' 'cmTC_d06c8.'
-         /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/collect2 -plugin /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/liblto_plugin.so -plugin-opt=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccxhigOw.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -o cmTC_d06c8 /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crti.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtbegin.o -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0 -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj -lgcc -lc -lnosys -lc -lgcc /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtend.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtn.o
-        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_d06c8' '-dumpdir' 'cmTC_d06c8.'
+        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_0fcc8' '-dumpdir' 'cmTC_0fcc8.'
+         /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/collect2 -plugin /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/liblto_plugin.so -plugin-opt=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//cc90VdKw.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -o cmTC_0fcc8 /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crti.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtbegin.o -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0 -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj -lgcc -lc -lnosys -lc -lgcc /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtend.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtn.o
+        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_0fcc8' '-dumpdir' 'cmTC_0fcc8.'
         
       exitCode: 0
   -
@@ -3806,10 +3954,10 @@ events:
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
-        ignore line: [Change Dir: '/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-8ILYnC']
+        ignore line: [Change Dir: '/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-7IKiQO']
         ignore line: []
-        ignore line: [Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_d06c8]
-        ignore line: [[1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_0fcc8]
+        ignore line: [[1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc]
         ignore line: [Target: xtensa-esp32-elf]
@@ -3817,8 +3965,8 @@ events:
         ignore line: [Thread model: posix]
         ignore line: [Supported LTO compression algorithms: zlib]
         ignore line: [gcc version 12.2.0 (crosstool-NG esp-12.2.0_20230208) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_d06c8.dir/']
-        ignore line: [ /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/cc1 -quiet -v -iprefix /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/ /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_d06c8.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mlongcalls -Wno-frame-address -version -o /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//cctcLlCF.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_0fcc8.dir/']
+        ignore line: [ /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/cc1 -quiet -v -iprefix /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/ /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_0fcc8.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mlongcalls -Wno-frame-address -version -o /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccsNolo6.s]
         ignore line: [GNU C17 (crosstool-NG esp-12.2.0_20230208) version 12.2.0 (xtensa-esp32-elf)]
         ignore line: [	compiled by GNU C version Apple LLVM 13.0.0 (clang-1300.0.27.3)  GMP version 6.2.1  MPFR version 4.1.0  MPC version 1.2.1  isl version isl-0.24-GMP]
         ignore line: []
@@ -3839,12 +3987,12 @@ events:
         ignore line: []
         ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
         ignore line: [Compiler executable checksum: 41045ea1f6ee309545637b31d7699b95]
-        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_d06c8.dir/']
-        ignore line: [ /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/as --traditional-format --longcalls -o CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//cctcLlCF.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_0fcc8.dir/']
+        ignore line: [ /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/as --traditional-format --longcalls -o CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccsNolo6.s]
         ignore line: [COMPILER_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/]
         ignore line: [LIBRARY_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.']
-        ignore line: [[2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj -o cmTC_d06c8   && :]
+        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.']
+        ignore line: [[2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj -o cmTC_0fcc8   && :]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc]
         ignore line: [COLLECT_LTO_WRAPPER=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper]
@@ -3855,27 +4003,27 @@ events:
         ignore line: [gcc version 12.2.0 (crosstool-NG esp-12.2.0_20230208) ]
         ignore line: [COMPILER_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/]
         ignore line: [LIBRARY_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_d06c8' '-dumpdir' 'cmTC_d06c8.']
-        link line: [ /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/collect2 -plugin /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/liblto_plugin.so -plugin-opt=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccxhigOw.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -o cmTC_d06c8 /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crti.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtbegin.o -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0 -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj -lgcc -lc -lnosys -lc -lgcc /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtend.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtn.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_0fcc8' '-dumpdir' 'cmTC_0fcc8.']
+        link line: [ /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/collect2 -plugin /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/liblto_plugin.so -plugin-opt=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//cc90VdKw.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -o cmTC_0fcc8 /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crti.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtbegin.o -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0 -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj -lgcc -lc -lnosys -lc -lgcc /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtend.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtn.o]
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccxhigOw.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//cc90VdKw.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
           arg [-plugin-opt=-pass-through=-lnosys] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_d06c8] ==> ignore
+          arg [cmTC_0fcc8] ==> ignore
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o] ==> obj [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o]
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crti.o] ==> obj [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crti.o]
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtbegin.o] ==> obj [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtbegin.o]
           arg [-L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0] ==> dir [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0]
           arg [-L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc] ==> dir [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc]
           arg [-L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib] ==> dir [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib]
-          arg [CMakeFiles/cmTC_d06c8.dir/CMakeCCompilerABI.c.obj] ==> ignore
+          arg [CMakeFiles/cmTC_0fcc8.dir/CMakeCCompilerABI.c.obj] ==> ignore
           arg [-lgcc] ==> lib [gcc]
           arg [-lc] ==> lib [c]
           arg [-lnosys] ==> lib [nosys]
@@ -3883,7 +4031,7 @@ events:
           arg [-lgcc] ==> lib [gcc]
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtend.o] ==> obj [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtend.o]
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtn.o] ==> obj [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtn.o]
-        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_d06c8' '-dumpdir' 'cmTC_d06c8.']
+        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_0fcc8' '-dumpdir' 'cmTC_0fcc8.']
         ignore line: []
         ignore line: []
         collapse obj [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o] ==> [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/xtensa-esp32-elf/lib/crt0.o]
@@ -3910,8 +4058,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-y0qo1A"
-      binary: "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-y0qo1A"
+      source: "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-yni5VD"
+      binary: "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-yni5VD"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "-mlongcalls -Wno-frame-address "
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -3922,10 +4070,10 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-y0qo1A'
+        Change Dir: '/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-yni5VD'
         
-        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_4d836
-        [1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj -c /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_eaf9c
+        [1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj -c /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp
         Using built-in specs.
         COLLECT_GCC=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++
         Target: xtensa-esp32-elf
@@ -3933,8 +4081,8 @@ events:
         Thread model: posix
         Supported LTO compression algorithms: zlib
         gcc version 12.2.0 (crosstool-NG esp-12.2.0_20230208) 
-        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_4d836.dir/'
-         /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/cc1plus -quiet -v -iprefix /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/ /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_4d836.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mlongcalls -Wno-frame-address -version -o /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccAAkqp0.s
+        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_eaf9c.dir/'
+         /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/cc1plus -quiet -v -iprefix /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/ /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_eaf9c.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mlongcalls -Wno-frame-address -version -o /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccBsKWOp.s
         GNU C++17 (crosstool-NG esp-12.2.0_20230208) version 12.2.0 (xtensa-esp32-elf)
         	compiled by GNU C version Apple LLVM 13.0.0 (clang-1300.0.27.3), GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
         
@@ -3961,12 +4109,12 @@ events:
         
         GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
         Compiler executable checksum: 001a1709fcfdfaf0aca5244a702b9403
-        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_4d836.dir/'
-         /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/as --traditional-format --longcalls -o CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccAAkqp0.s
+        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_eaf9c.dir/'
+         /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/as --traditional-format --longcalls -o CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccBsKWOp.s
         COMPILER_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/
         LIBRARY_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/
-        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.'
-        [2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj -o cmTC_4d836   && :
+        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.'
+        [2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj -o cmTC_eaf9c   && :
         Using built-in specs.
         COLLECT_GCC=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++
         COLLECT_LTO_WRAPPER=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper
@@ -3977,9 +4125,9 @@ events:
         gcc version 12.2.0 (crosstool-NG esp-12.2.0_20230208) 
         COMPILER_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/
         LIBRARY_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/
-        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_4d836' '-dumpdir' 'cmTC_4d836.'
-         /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/collect2 -plugin /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/liblto_plugin.so -plugin-opt=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccmRVV0K.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -o cmTC_4d836 /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crti.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtbegin.o -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0 -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj -lstdc++ -lm -lgcc -lc -lnosys -lc -lgcc /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtend.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtn.o
-        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_4d836' '-dumpdir' 'cmTC_4d836.'
+        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_eaf9c' '-dumpdir' 'cmTC_eaf9c.'
+         /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/collect2 -plugin /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/liblto_plugin.so -plugin-opt=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccnYhaGV.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -o cmTC_eaf9c /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crti.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtbegin.o -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0 -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj -lstdc++ -lm -lgcc -lc -lnosys -lc -lgcc /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtend.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtn.o
+        COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_eaf9c' '-dumpdir' 'cmTC_eaf9c.'
         
       exitCode: 0
   -
@@ -4022,10 +4170,10 @@ events:
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
-        ignore line: [Change Dir: '/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-y0qo1A']
+        ignore line: [Change Dir: '/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-yni5VD']
         ignore line: []
-        ignore line: [Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_4d836]
-        ignore line: [[1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj -c /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_eaf9c]
+        ignore line: [[1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++   -mlongcalls -Wno-frame-address     -v -o CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj -c /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++]
         ignore line: [Target: xtensa-esp32-elf]
@@ -4033,8 +4181,8 @@ events:
         ignore line: [Thread model: posix]
         ignore line: [Supported LTO compression algorithms: zlib]
         ignore line: [gcc version 12.2.0 (crosstool-NG esp-12.2.0_20230208) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_4d836.dir/']
-        ignore line: [ /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/cc1plus -quiet -v -iprefix /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/ /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_4d836.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mlongcalls -Wno-frame-address -version -o /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccAAkqp0.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_eaf9c.dir/']
+        ignore line: [ /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/cc1plus -quiet -v -iprefix /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/ /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_eaf9c.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mlongcalls -Wno-frame-address -version -o /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccBsKWOp.s]
         ignore line: [GNU C++17 (crosstool-NG esp-12.2.0_20230208) version 12.2.0 (xtensa-esp32-elf)]
         ignore line: [	compiled by GNU C version Apple LLVM 13.0.0 (clang-1300.0.27.3)  GMP version 6.2.1  MPFR version 4.1.0  MPC version 1.2.1  isl version isl-0.24-GMP]
         ignore line: []
@@ -4061,12 +4209,12 @@ events:
         ignore line: []
         ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
         ignore line: [Compiler executable checksum: 001a1709fcfdfaf0aca5244a702b9403]
-        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_4d836.dir/']
-        ignore line: [ /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/as --traditional-format --longcalls -o CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccAAkqp0.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_eaf9c.dir/']
+        ignore line: [ /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/as --traditional-format --longcalls -o CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj /var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccBsKWOp.s]
         ignore line: [COMPILER_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/]
         ignore line: [LIBRARY_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.']
-        ignore line: [[2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj -o cmTC_4d836   && :]
+        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj' '-c' '-dumpdir' 'CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [[2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -mlongcalls -Wno-frame-address -v CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj -o cmTC_eaf9c   && :]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++]
         ignore line: [COLLECT_LTO_WRAPPER=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper]
@@ -4077,27 +4225,27 @@ events:
         ignore line: [gcc version 12.2.0 (crosstool-NG esp-12.2.0_20230208) ]
         ignore line: [COMPILER_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/bin/]
         ignore line: [LIBRARY_PATH=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/:/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_4d836' '-dumpdir' 'cmTC_4d836.']
-        link line: [ /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/collect2 -plugin /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/liblto_plugin.so -plugin-opt=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccmRVV0K.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -o cmTC_4d836 /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crti.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtbegin.o -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0 -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj -lstdc++ -lm -lgcc -lc -lnosys -lc -lgcc /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtend.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtn.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_eaf9c' '-dumpdir' 'cmTC_eaf9c.']
+        link line: [ /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/collect2 -plugin /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/liblto_plugin.so -plugin-opt=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper -plugin-opt=-fresolution=/var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccnYhaGV.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lnosys -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -o cmTC_eaf9c /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crti.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtbegin.o -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0 -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc -L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj -lstdc++ -lm -lgcc -lc -lnosys -lc -lgcc /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtend.o /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtn.o]
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../libexec/gcc/xtensa-esp32-elf/12.2.0/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccmRVV0K.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/var/folders/74/c7d4hs7542d1gkly06n16ggr0000gn/T//ccnYhaGV.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
           arg [-plugin-opt=-pass-through=-lnosys] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_4d836] ==> ignore
+          arg [cmTC_eaf9c] ==> ignore
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o] ==> obj [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o]
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crti.o] ==> obj [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crti.o]
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtbegin.o] ==> obj [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtbegin.o]
           arg [-L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0] ==> dir [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0]
           arg [-L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc] ==> dir [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc]
           arg [-L/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib] ==> dir [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib]
-          arg [CMakeFiles/cmTC_4d836.dir/CMakeCXXCompilerABI.cpp.obj] ==> ignore
+          arg [CMakeFiles/cmTC_eaf9c.dir/CMakeCXXCompilerABI.cpp.obj] ==> ignore
           arg [-lstdc++] ==> lib [stdc++]
           arg [-lm] ==> lib [m]
           arg [-lgcc] ==> lib [gcc]
@@ -4107,7 +4255,7 @@ events:
           arg [-lgcc] ==> lib [gcc]
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtend.o] ==> obj [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtend.o]
           arg [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtn.o] ==> obj [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/crtn.o]
-        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_4d836' '-dumpdir' 'cmTC_4d836.']
+        ignore line: [COLLECT_GCC_OPTIONS='-mlongcalls' '-Wno-frame-address' '-v' '-o' 'cmTC_eaf9c' '-dumpdir' 'cmTC_eaf9c.']
         ignore line: []
         ignore line: []
         collapse obj [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/12.2.0/../../../../xtensa-esp32-elf/lib/crt0.o] ==> [/Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/xtensa-esp32-elf/lib/crt0.o]
@@ -4133,8 +4281,8 @@ events:
     checks:
       - "Looking for sys/types.h"
     directories:
-      source: "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-djzGhY"
-      binary: "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-djzGhY"
+      source: "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-RvJof8"
+      binary: "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-RvJof8"
     cmakeVariables:
       CMAKE_C_FLAGS: "-mlongcalls -Wno-frame-address "
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -4144,11 +4292,11 @@ events:
       variable: "HAVE_SYS_TYPES_H"
       cached: true
       stdout: |
-        Change Dir: '/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-djzGhY'
+        Change Dir: '/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-RvJof8'
         
-        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_f0196
-        [1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_f0196.dir/CheckIncludeFile.c.obj -c /Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-djzGhY/CheckIncludeFile.c
-        [2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_f0196.dir/CheckIncludeFile.c.obj -o cmTC_f0196   && :
+        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_d8d17
+        [1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_d8d17.dir/CheckIncludeFile.c.obj -c /Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-RvJof8/CheckIncludeFile.c
+        [2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_d8d17.dir/CheckIncludeFile.c.obj -o cmTC_d8d17   && :
         
       exitCode: 0
   -
@@ -4160,8 +4308,8 @@ events:
     checks:
       - "Looking for stdint.h"
     directories:
-      source: "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-IR2GWz"
-      binary: "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-IR2GWz"
+      source: "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-Rfjf5T"
+      binary: "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-Rfjf5T"
     cmakeVariables:
       CMAKE_C_FLAGS: "-mlongcalls -Wno-frame-address "
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -4171,11 +4319,11 @@ events:
       variable: "HAVE_STDINT_H"
       cached: true
       stdout: |
-        Change Dir: '/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-IR2GWz'
+        Change Dir: '/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-Rfjf5T'
         
-        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_86ff0
-        [1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_86ff0.dir/CheckIncludeFile.c.obj -c /Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-IR2GWz/CheckIncludeFile.c
-        [2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_86ff0.dir/CheckIncludeFile.c.obj -o cmTC_86ff0   && :
+        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_2c7c0
+        [1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_2c7c0.dir/CheckIncludeFile.c.obj -c /Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-Rfjf5T/CheckIncludeFile.c
+        [2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_2c7c0.dir/CheckIncludeFile.c.obj -o cmTC_2c7c0   && :
         
       exitCode: 0
   -
@@ -4187,8 +4335,8 @@ events:
     checks:
       - "Looking for stddef.h"
     directories:
-      source: "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-ukJE1n"
-      binary: "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-ukJE1n"
+      source: "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-xNxFVe"
+      binary: "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-xNxFVe"
     cmakeVariables:
       CMAKE_C_FLAGS: "-mlongcalls -Wno-frame-address "
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -4198,11 +4346,11 @@ events:
       variable: "HAVE_STDDEF_H"
       cached: true
       stdout: |
-        Change Dir: '/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-ukJE1n'
+        Change Dir: '/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-xNxFVe'
         
-        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_17b51
-        [1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_17b51.dir/CheckIncludeFile.c.obj -c /Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-ukJE1n/CheckIncludeFile.c
-        [2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_17b51.dir/CheckIncludeFile.c.obj -o cmTC_17b51   && :
+        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_c7390
+        [1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_c7390.dir/CheckIncludeFile.c.obj -c /Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-xNxFVe/CheckIncludeFile.c
+        [2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_c7390.dir/CheckIncludeFile.c.obj -o cmTC_c7390   && :
         
       exitCode: 0
   -
@@ -4214,8 +4362,8 @@ events:
     checks:
       - "Check size of time_t"
     directories:
-      source: "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-tsYMx2"
-      binary: "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-tsYMx2"
+      source: "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-1KYJkj"
+      binary: "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-1KYJkj"
     cmakeVariables:
       CMAKE_C_FLAGS: "-mlongcalls -Wno-frame-address "
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -4225,11 +4373,11 @@ events:
       variable: "HAVE_TIME_T_SIZE"
       cached: true
       stdout: |
-        Change Dir: '/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-tsYMx2'
+        Change Dir: '/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-1KYJkj'
         
-        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_dd889
-        [1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_dd889.dir/TIME_T_SIZE.c.obj -c /Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-tsYMx2/TIME_T_SIZE.c
-        [2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_dd889.dir/TIME_T_SIZE.c.obj -o cmTC_dd889   && :
+        Run Build Command(s): /opt/homebrew/bin/ninja -v cmTC_b3b1f
+        [1/2] /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc   -mlongcalls -Wno-frame-address -o CMakeFiles/cmTC_b3b1f.dir/TIME_T_SIZE.c.obj -c /Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader/CMakeFiles/CMakeScratch/TryCompile-1KYJkj/TIME_T_SIZE.c
+        [2/2] : && /Users/mizhabas/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -mlongcalls -Wno-frame-address  CMakeFiles/cmTC_b3b1f.dir/TIME_T_SIZE.c.obj -o cmTC_b3b1f   && :
         
       exitCode: 0
 ...

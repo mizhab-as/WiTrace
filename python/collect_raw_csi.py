@@ -34,6 +34,7 @@ def collect_raw(output_file, duration_seconds=600):
     print("=" * 68)
 
     frame_count = 0
+    meta_count = 0
     start = time.time()
     last_progress_print = -1
 
@@ -51,18 +52,26 @@ def collect_raw(output_file, duration_seconds=600):
                     print(f"Progress: {int((elapsed / duration_seconds) * 100):3d}% | Frames: {frame_count} | Remaining: {remaining}s")
 
                 line = ser.readline().decode("utf-8", errors="ignore").strip()
-                if line.startswith("CSI_DATA:"):
+                if line.startswith("CSI_META:"):
+                    out.write(line + "\n")
+                    meta_count += 1
+                elif line.startswith("CSI_DATA:"):
                     out.write(line + "\n")
                     frame_count += 1
 
         print("\nDone.")
-        print(f"Saved {frame_count} raw CSI frames to {output_file}")
+        print(f"Saved {frame_count} raw CSI frames and {meta_count} metadata lines to {output_file}")
         return 0
     except KeyboardInterrupt:
         print("\nInterrupted by user.")
         return 130
     except serial.SerialException as exc:
-        print(f"Serial error: {exc}")
+        msg = str(exc)
+        print(f"Serial error: {msg}")
+        lowered = msg.lower()
+        if "resource busy" in lowered or "device or resource busy" in lowered or "could not open port" in lowered:
+            print("\nThe serial port appears to be in use by another process (common culprits: `python/app.py`, `idf.py monitor`).")
+            print(f"Try: lsof -nP {port}")
         return 2
 
 

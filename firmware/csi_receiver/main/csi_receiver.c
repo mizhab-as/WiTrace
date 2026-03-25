@@ -58,6 +58,29 @@ static void wifi_csi_cb(void *ctx, wifi_csi_info_t *info)
     g_last_rssi = info->rx_ctrl.rssi;
 
     /*
+     * Emit metadata first so newer parsers can enrich features while older
+     * parsers can still rely on the unchanged CSI_DATA line below.
+     * Note: this ESP-IDF target does not expose CSI sequence in wifi_csi_info_t.
+     */
+    printf(
+        "CSI_META: ts=%u rssi=%d noise_floor=%d channel=%u secondary_channel=%u sig_mode=%u mcs=%u rate=%u cwb=%u sgi=%u stbc=%u ant=%u len=%u rx_state=%u seq=-1 tx_mac=%02x:%02x:%02x:%02x:%02x:%02x\n",
+        (unsigned)info->rx_ctrl.timestamp,
+        (int)info->rx_ctrl.rssi,
+        (int)info->rx_ctrl.noise_floor,
+        (unsigned)info->rx_ctrl.channel,
+        (unsigned)info->rx_ctrl.secondary_channel,
+        (unsigned)info->rx_ctrl.sig_mode,
+        (unsigned)info->rx_ctrl.mcs,
+        (unsigned)info->rx_ctrl.rate,
+        (unsigned)info->rx_ctrl.cwb,
+        (unsigned)info->rx_ctrl.sgi,
+        (unsigned)info->rx_ctrl.stbc,
+        (unsigned)info->rx_ctrl.ant,
+        (unsigned)info->len,
+        (unsigned)info->rx_ctrl.rx_state,
+        info->mac[0], info->mac[1], info->mac[2], info->mac[3], info->mac[4], info->mac[5]);
+
+    /*
      * Keep the legacy plain-integer format so the current Python pipeline and
      * saved datasets can consume new captures without parser changes.
      */

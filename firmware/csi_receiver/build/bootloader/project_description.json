@@ -1,8 +1,8 @@
 {
     "project_name":       "bootloader",
     "project_path":       "/Users/mizhabas/esp/esp-idf/components/bootloader/subproject",
-    "build_dir":          "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader",
-    "config_file":        "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/sdkconfig",
+    "build_dir":          "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader",
+    "config_file":        "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/sdkconfig",
     "config_defaults":    "",
     "bootloader_elf":     "",
     "app_elf":            "bootloader.elf",

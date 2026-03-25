@@ -10,18 +10,18 @@ if(NOT EXISTS "/Users/mizhabas/esp/esp-idf/components/bootloader/subproject")
   file(MAKE_DIRECTORY "/Users/mizhabas/esp/esp-idf/components/bootloader/subproject")
 endif()
 file(MAKE_DIRECTORY
-  "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader"
-  "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader-prefix"
-  "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader-prefix/tmp"
-  "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader-prefix/src/bootloader-stamp"
-  "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader-prefix/src"
-  "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader-prefix/src/bootloader-stamp"
+  "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader"
+  "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader-prefix"
+  "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader-prefix/tmp"
+  "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader-prefix/src/bootloader-stamp"
+  "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader-prefix/src"
+  "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "/Users/mizhabas/hi/WiTrace/firmware/csi_receiver/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "/Users/mizhabas/wifi_csi_imaging/firmware/csi_receiver/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()

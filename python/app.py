@@ -30,6 +30,11 @@ CONFIG = {
     'serial_read_timeout': 3,              # Serial port read timeout in seconds
     'esp_live_max_lines': 20,              # Limit recent CSI lines sent to UI
     'esp_live_max_chars': 260,             # Truncate CSI lines for stable UI rendering
+
+    # Optional quality + source gating (used only when CSI_META is present)
+    # If WITRACE_TX_MAC is set, only frames from that MAC are accepted.
+    'lock_tx_mac': True,
+    'min_snr_db': 10,                      # rssi - noise_floor (approx)
 }
 
 DEFAULT_THRESHOLDS = {
@@ -51,11 +56,16 @@ class SystemState:
         self.variance_window = deque(maxlen=100)
         self.signature_window = deque(maxlen=150)
         self.frame_energy_window = deque(maxlen=300)
+        self.frame_meta_window = deque(maxlen=300)
         self.score_history = deque(maxlen=CONFIG['max_buffer_size'])
         self.raw_csi_lines = deque(maxlen=40)
         self.last_csi_line = ''
         self.last_csi_values_count = 0
+        self.last_csi_meta = {}
         self.last_csi_at = 0.0
+
+        # Source lock to avoid mixing multiple transmitters/routers.
+        self.active_tx_mac = (os.environ.get('WITRACE_TX_MAC') or '').strip().lower() or None
         self.stable_state = "⏳ INITIALIZING"
         self.pending_state = None
         self.pending_count = 0
@@ -101,10 +111,13 @@ class SystemState:
         self.calibration_message = 'Not started'
         self.calibration_empty_signatures = []
         self.calibration_empty_energies = []
+        self.calibration_empty_meta = []
         self.calibration_occupied_signatures = []
         self.calibration_occupied_energies = []
+        self.calibration_occupied_meta = []
         self.calibration_multiple_signatures = []
         self.calibration_multiple_energies = []
+        self.calibration_multiple_meta = []
         self.live_calibration_applied = False
         
         self.load_calibration()
@@ -144,11 +157,53 @@ class SystemState:
                 self._update_status()
 
     def add_csi_frame(self, values):
+        return self.add_csi_frame_with_meta(values, meta=None)
+
+    def add_csi_frame_with_meta(self, values, meta=None):
         if not values:
             return
 
+        meta = dict(meta or {})
+
+        # Apply source lock if requested
+        tx_mac = meta.get('tx_mac')
+        if isinstance(tx_mac, str):
+            tx_mac = tx_mac.strip().lower()
+        else:
+            tx_mac = None
+
+        if self.active_tx_mac:
+            if tx_mac and tx_mac != self.active_tx_mac:
+                return
+        elif CONFIG.get('lock_tx_mac', True) and tx_mac:
+            self.active_tx_mac = tx_mac
+
+        # Quality gating (only when meta has the fields)
+        try:
+            rssi = meta.get('rssi')
+            noise_floor = meta.get('noise_floor')
+            if isinstance(rssi, int) and isinstance(noise_floor, int):
+                snr = int(rssi - noise_floor)
+                if snr < int(CONFIG.get('min_snr_db', 0)):
+                    return
+        except Exception:
+            pass
+
+        try:
+            expected_len = meta.get('len')
+            if isinstance(expected_len, int) and expected_len > 0:
+                # Meta len is the raw CSI byte count in many ESP32 builds.
+                # Our CSI_DATA prints one int per byte, so counts should match.
+                if len(values) != expected_len:
+                    return
+        except Exception:
+            pass
+
         with self.lock:
-            energy = np.mean(np.abs(values))
+            if self.pattern_detector:
+                energy = self.pattern_detector.values_to_energy(values, meta=meta)
+            else:
+                energy = float(np.mean(np.abs(values)))
             self.energy_buffer.append(energy)
 
             if len(self.energy_buffer) >= CONFIG['energy_window']:
@@ -158,27 +213,35 @@ class SystemState:
                 self.variance_window.append(variance)
 
             if self.pattern_detector:
-                signature = self.pattern_detector.frame_signature(values)
+                signature = self.pattern_detector.frame_signature(values, meta=meta)
                 if signature is not None:
                     self.signature_window.append(signature)
                     self.frame_energy_window.append(float(energy))
-                    self._update_live_calibration(signature, float(energy))
+                    self.frame_meta_window.append(dict(meta or {}))
+                    self._update_live_calibration(signature, float(energy), meta=dict(meta or {}))
                     self.frames_since_last_detection += 1
 
             # Only run detection periodically on accumulated window
             self._periodic_detection_update()
 
-    def add_raw_csi_line(self, line, values_count):
+    def add_raw_csi_line(self, line, values_count, meta=None):
         with self.lock:
             compact_line = self._compact_csi_line(line, CONFIG['esp_live_max_chars'])
             self.last_csi_line = compact_line
             self.last_csi_values_count = int(values_count)
+            if meta:
+                self.last_csi_meta = dict(meta)
             self.last_csi_at = time.time()
             self.raw_csi_lines.append({
                 'ts': self.last_csi_at,
                 'line': compact_line,
                 'values_count': int(values_count),
+                'meta': dict(meta) if meta else {},
             })
+
+    def add_raw_csi_meta(self, meta):
+        with self.lock:
+            self.last_csi_meta = dict(meta or {})
     
     def _periodic_detection_update(self):
         """Run pattern detection periodically on accumulated CSI window (every 5 seconds)."""
@@ -209,6 +272,7 @@ class SystemState:
         # Filter signatures and energies to only include recent window
         windowed_sigs = []
         windowed_energies = []
+        windowed_meta = []
         
         # Get timestamps for signature window (approximate based on frame rate)
         if len(self.signature_window) > 0 and len(self.frame_energy_window) > 0:
@@ -216,6 +280,7 @@ class SystemState:
             frames_in_window = min(len(self.signature_window), self.frames_since_last_detection)
             windowed_sigs = list(self.signature_window)[-frames_in_window:] if frames_in_window > 0 else list(self.signature_window)
             windowed_energies = list(self.frame_energy_window)[-frames_in_window:] if frames_in_window > 0 else list(self.frame_energy_window)
+            windowed_meta = list(self.frame_meta_window)[-frames_in_window:] if frames_in_window > 0 else list(self.frame_meta_window)
         
         if len(windowed_sigs) < CONFIG['min_frames_for_detection']:
             # Not enough frames in window yet
@@ -226,7 +291,8 @@ class SystemState:
             # Run detection on the accumulated window (matching raw CSI data with reference patterns)
             result = self.pattern_detector.detect(
                 windowed_sigs,
-                windowed_energies
+                windowed_energies,
+                windowed_meta,
             )
             
             self.detection_confidence = result['confidence']
@@ -396,12 +462,14 @@ class SystemState:
                 'esp_live': {
                     'last_csi_line': self.last_csi_line,
                     'last_csi_values_count': int(self.last_csi_values_count),
+                    'last_csi_meta': dict(self.last_csi_meta),
                     'last_csi_at': float(self.last_csi_at),
                     'recent_lines': [
                         {
                             'ts': float(item.get('ts', 0.0)),
                             'line': item.get('line', ''),
                             'values_count': int(item.get('values_count', 0)),
+                            'meta': dict(item.get('meta', {})),
                         }
                         for item in list(self.raw_csi_lines)[-CONFIG['esp_live_max_lines']:]
                     ],
@@ -424,10 +492,13 @@ class SystemState:
             self.calibration_message = f'Stage 1/3: Keep room EMPTY ({self.calibration_empty_duration}s)'
             self.calibration_empty_signatures = []
             self.calibration_empty_energies = []
+            self.calibration_empty_meta = []
             self.calibration_occupied_signatures = []
             self.calibration_occupied_energies = []
+            self.calibration_occupied_meta = []
             self.calibration_multiple_signatures = []
             self.calibration_multiple_energies = []
+            self.calibration_multiple_meta = []
             self.live_calibration_applied = False
             return True, 'Calibration started: empty stage'
 
@@ -439,9 +510,11 @@ class SystemState:
             self.calibration_message = 'Calibration stopped by user'
             return True, self.calibration_message
 
-    def _update_live_calibration(self, signature, energy):
+    def _update_live_calibration(self, signature, energy, meta=None):
         if not self.calibration_active:
             return
+
+        meta = dict(meta or {})
 
         now = time.time()
         elapsed = now - self.calibration_started_at
@@ -450,6 +523,7 @@ class SystemState:
         if self.calibration_stage == 'empty':
             self.calibration_empty_signatures.append(signature)
             self.calibration_empty_energies.append(float(energy))
+            self.calibration_empty_meta.append(meta)
             if elapsed >= self.calibration_duration:
                 self.calibration_stage = 'occupied'
                 self.calibration_duration = self.calibration_occupied_duration
@@ -461,6 +535,7 @@ class SystemState:
         if self.calibration_stage == 'occupied':
             self.calibration_occupied_signatures.append(signature)
             self.calibration_occupied_energies.append(float(energy))
+            self.calibration_occupied_meta.append(meta)
             if elapsed >= self.calibration_duration:
                 self.calibration_stage = 'multiple'
                 self.calibration_duration = self.calibration_multiple_duration
@@ -472,6 +547,7 @@ class SystemState:
         if self.calibration_stage == 'multiple':
             self.calibration_multiple_signatures.append(signature)
             self.calibration_multiple_energies.append(float(energy))
+            self.calibration_multiple_meta.append(meta)
             if elapsed >= self.calibration_duration:
                 if not self.pattern_detector:
                     self.calibration_active = False
@@ -489,7 +565,10 @@ class SystemState:
                     self.calibration_multiple_signatures,
                     self.calibration_multiple_energies,
                     alpha=self.calibration_alpha,
-                    min_frames=self.calibration_min_frames
+                    min_frames=self.calibration_min_frames,
+                    empty_meta=self.calibration_empty_meta,
+                    occupied_meta=self.calibration_occupied_meta,
+                    multiple_meta=self.calibration_multiple_meta,
                 )
                 self.calibration_active = False
                 self.calibration_stage = 'done' if ok else 'failed'
@@ -511,12 +590,57 @@ def find_esp32_port():
 
 serial_port = find_esp32_port()
 
+
+def parse_csi_meta_line(line):
+    if not line or not line.startswith('CSI_META:'):
+        return None
+
+    payload = line.split(':', 1)[1].strip()
+    if not payload:
+        return None
+
+    meta = {}
+    for token in payload.split():
+        if '=' not in token:
+            continue
+        key, value = token.split('=', 1)
+        key = key.strip()
+        value = value.strip()
+        if not key:
+            continue
+        if key == 'tx_mac':
+            meta[key] = value
+            continue
+        try:
+            meta[key] = int(value)
+        except ValueError:
+            meta[key] = value
+    return meta if meta else None
+
+def parse_loose_meta_line(line):
+    """Handle occasional non-prefixed meta lines like: tx_mac=aa:bb:cc:dd:ee:ff"""
+    if not line:
+        return None
+    s = line.strip()
+    if not s:
+        return None
+    if s.startswith('tx_mac='):
+        value = s.split('=', 1)[1].strip().lower()
+        return {'tx_mac': value} if value else None
+    return None
+
 def read_serial_worker():
     global serial_port
     ser = None
     reconnect_delay = 1
     last_data_time = time.time()
     connection_established = False
+    # CSI_META and CSI_DATA can arrive out-of-order on some setups.
+    # We buffer one item of each and pair if they arrive within this window.
+    pair_window_sec = 0.35
+    pending_meta = None
+    pending_meta_at = 0.0
+    pending_data = None  # dict(line=str, values=list[int], at=float)
     
     try:
         while True:
@@ -547,18 +671,69 @@ def read_serial_worker():
                 
                 if ser.is_open:
                     line = ser.readline().decode('utf-8', errors='ignore').strip()
+
+                    now = time.time()
+
+                    # Flush stale pending CSI_DATA if metadata never arrived
+                    if pending_data and (now - pending_data.get('at', now)) > pair_window_sec:
+                        try:
+                            state.add_raw_csi_line(pending_data['line'], len(pending_data['values']), meta=None)
+                            if detection_enabled.is_set():
+                                state.add_csi_frame_with_meta(pending_data['values'], meta=None)
+                            coll_state.write_frame(pending_data['line'], count_frame=True)
+                            realtime_state.write_frame(pending_data['line'], count_frame=True)
+                            last_data_time = now
+                        finally:
+                            pending_data = None
+
+                    # Drop stale pending meta (kept only briefly to avoid mis-association)
+                    if pending_meta and (now - pending_meta_at) > pair_window_sec:
+                        pending_meta = None
+                        pending_meta_at = 0.0
                     
-                    if line.startswith('CSI_DATA:'):
+                    if line.startswith('CSI_META:'):
+                        parsed_meta = parse_csi_meta_line(line)
+                        if parsed_meta:
+                            # If we already saw CSI_DATA, pair it now
+                            if pending_data and (now - pending_data.get('at', now)) <= pair_window_sec:
+                                state.add_raw_csi_line(pending_data['line'], len(pending_data['values']), meta=parsed_meta)
+                                if detection_enabled.is_set():
+                                    state.add_csi_frame_with_meta(pending_data['values'], meta=parsed_meta)
+                                coll_state.write_frame(pending_data['line'], count_frame=True)
+                                realtime_state.write_frame(pending_data['line'], count_frame=True)
+                                last_data_time = now
+                                pending_data = None
+                                pending_meta = None
+                                pending_meta_at = 0.0
+                            else:
+                                pending_meta = parsed_meta
+                                pending_meta_at = now
+                            state.add_raw_csi_meta(parsed_meta)
+                        coll_state.write_frame(line, count_frame=False)
+                        realtime_state.write_frame(line, count_frame=False)
+                    elif line.startswith('tx_mac='):
+                        parsed_meta = parse_loose_meta_line(line)
+                        if parsed_meta:
+                            pending_meta = parsed_meta
+                            pending_meta_at = now
+                            state.add_raw_csi_meta(parsed_meta)
+                    elif line.startswith('CSI_DATA:'):
                         try:
                             values_str = line.split(':', 1)[1].strip()
                             values = [int(v) for v in values_str.split()]
                             if values:
-                                state.add_raw_csi_line(line, len(values))
-                                if detection_enabled.is_set():
-                                    state.add_csi_frame(values)
-                                coll_state.write_frame(line)
-                                realtime_state.write_frame(line)
-                                last_data_time = time.time()
+                                # If meta already arrived, pair immediately; else buffer CSI_DATA briefly
+                                if pending_meta and (now - pending_meta_at) <= pair_window_sec:
+                                    state.add_raw_csi_line(line, len(values), meta=pending_meta)
+                                    if detection_enabled.is_set():
+                                        state.add_csi_frame_with_meta(values, meta=pending_meta)
+                                    coll_state.write_frame(line, count_frame=True)
+                                    realtime_state.write_frame(line, count_frame=True)
+                                    last_data_time = now
+                                    pending_meta = None
+                                    pending_meta_at = 0.0
+                                else:
+                                    pending_data = {'line': line, 'values': values, 'at': now}
                                 # Reset connection status on successful data
                                 if not state.is_connected:
                                     state.is_connected = True
@@ -625,7 +800,7 @@ class CollectionState:
             self.active = True
             return True, f'Collecting {label} data for {self.duration}s → {self.output_file}'
 
-    def write_frame(self, raw_line):
+    def write_frame(self, raw_line, count_frame=False):
         with self.lock:
             if not self.active or self._file_handle is None:
                 return
@@ -636,7 +811,8 @@ class CollectionState:
             try:
                 self._file_handle.write(raw_line + '\n')
                 self._file_handle.flush()
-                self.frames_collected += 1
+                if count_frame:
+                    self.frames_collected += 1
             except OSError:
                 pass
 
@@ -702,7 +878,7 @@ class RealtimeCollectionState:
             self.active = True
             return True, f'Realtime: {label} for {self.duration}s → {self.output_file}'
 
-    def write_frame(self, raw_line):
+    def write_frame(self, raw_line, count_frame=False):
         with self.lock:
             if not self.active or self._file_handle is None:
                 return
@@ -713,7 +889,8 @@ class RealtimeCollectionState:
             try:
                 self._file_handle.write(raw_line + '\n')
                 self._file_handle.flush()
-                self.frames_collected += 1
+                if count_frame:
+                    self.frames_collected += 1
             except OSError:
                 pass
 
