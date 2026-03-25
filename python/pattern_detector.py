@@ -3,8 +3,12 @@
 import numpy as np
 import os
 
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(THIS_DIR, '..'))
+DEFAULT_DATA_FOLDER = os.path.join(PROJECT_ROOT, 'data2', 'myroom')
+
 class PatternDetector:
-    def __init__(self, data_folder="/Users/mizhabas/wifi_csi_imaging/data2/myroom"):
+    def __init__(self, data_folder=DEFAULT_DATA_FOLDER):
         self.data_folder = data_folder
         self.patterns = {}
         self.target_bins = 64

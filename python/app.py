@@ -11,6 +11,13 @@ import threading
 import os
 from pattern_detector import PatternDetector
 
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(THIS_DIR, '..'))
+CALIBRATION_FILE = os.path.join(THIS_DIR, 'calibration.json')
+CALIBRATED_BASELINE_DIR = os.path.join(PROJECT_ROOT, 'data2', 'myroom')
+COLLECTED_BASELINE_DIR = os.path.join(PROJECT_ROOT, 'data2', 'realtime')
+DATA2_ROOT = os.path.join(PROJECT_ROOT, 'data2')
+
 CONFIG = {
     'max_buffer_size': 300,
     'energy_window': 50,
@@ -112,7 +119,7 @@ class SystemState:
     
     def load_calibration(self):
         try:
-            cal_file = '/Users/mizhabas/wifi_csi_imaging/python/calibration.json'
+            cal_file = CALIBRATION_FILE
             if os.path.exists(cal_file):
                 with open(cal_file, 'r') as f:
                     cal = json.load(f)
@@ -586,9 +593,6 @@ def read_serial_worker():
 
 app = Flask(__name__, template_folder='templates')
 
-CALIBRATED_BASELINE_DIR = '/Users/mizhabas/wifi_csi_imaging/data2/myroom'
-COLLECTED_BASELINE_DIR = '/Users/mizhabas/wifi_csi_imaging/data2/realtime'
-
 # ─── Data collection state ────────────────────────────────────────────────────
 class CollectionState:
     def __init__(self):
@@ -601,7 +605,7 @@ class CollectionState:
         self.output_file = None
         self._file_handle = None
 
-    def start(self, label, duration, data2_folder='/Users/mizhabas/wifi_csi_imaging/data2/myroom'):
+    def start(self, label, duration, data2_folder=CALIBRATED_BASELINE_DIR):
         label_map = {'empty': 'empty.txt', 'occupied': 'occupied.txt', 'multiple': 'multiple_people.txt'}
         if label not in label_map:
             return False, f'Unknown label: {label}'
@@ -678,7 +682,7 @@ class RealtimeCollectionState:
         self.output_file = None
         self._file_handle = None
 
-    def start(self, label, duration, realtime_folder='/Users/mizhabas/wifi_csi_imaging/data2/realtime'):
+    def start(self, label, duration, realtime_folder=COLLECTED_BASELINE_DIR):
         label_map = {'empty': 'empty.txt', 'occupied': 'occupied.txt', 'multiple': 'multiple_people.txt'}
         if label not in label_map:
             return False, f'Unknown label: {label}'
@@ -973,7 +977,6 @@ def api_detection_mode_status():
     })
 
 # ── Logs ──────────────────────────────────────────────────────────────────────
-DATA2_ROOT = '/Users/mizhabas/wifi_csi_imaging/data2'
 
 @app.route('/api/logs/list')
 def api_logs_list():

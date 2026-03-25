@@ -17,7 +17,7 @@
  * Use a stable 2.4 GHz WPA2 network for best CSI results.
  */
 #define WIFI_SSID "Connecting..."
-#define WIFI_PASS "Error500"
+#define WIFI_PASS "tubelight"
 
 #define STATS_PERIOD_MS 5000
 
