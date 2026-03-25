@@ -37,6 +37,10 @@ def collect_raw(output_file, duration_seconds=600):
     meta_count = 0
     start = time.time()
     last_progress_print = -1
+    pending_meta_line = None
+    pending_meta_at = 0.0
+    pending_data_line = None
+    pair_window_sec = 0.35
 
     try:
         with serial.Serial(port, BAUDRATE, timeout=1) as ser, open(output_file, "w") as out:
@@ -52,12 +56,45 @@ def collect_raw(output_file, duration_seconds=600):
                     print(f"Progress: {int((elapsed / duration_seconds) * 100):3d}% | Frames: {frame_count} | Remaining: {remaining}s")
 
                 line = ser.readline().decode("utf-8", errors="ignore").strip()
-                if line.startswith("CSI_META:"):
-                    out.write(line + "\n")
-                    meta_count += 1
-                elif line.startswith("CSI_DATA:"):
-                    out.write(line + "\n")
+                now = time.time()
+
+                # Flush stale unpaired CSI_DATA (meta missing)
+                if pending_data_line and (now - pending_meta_at) > pair_window_sec and pending_meta_line is None:
+                    out.write(pending_data_line + "\n")
                     frame_count += 1
+                    pending_data_line = None
+
+                if line.startswith("CSI_META:"):
+                    if pending_data_line is not None:
+                        # If data came first, write ordered pair: META then DATA
+                        out.write(line + "\n")
+                        out.write(pending_data_line + "\n")
+                        meta_count += 1
+                        frame_count += 1
+                        pending_data_line = None
+                        pending_meta_line = None
+                        pending_meta_at = 0.0
+                    else:
+                        pending_meta_line = line
+                        pending_meta_at = now
+                elif line.startswith("CSI_DATA:"):
+                    if pending_meta_line is not None and (now - pending_meta_at) <= pair_window_sec:
+                        out.write(pending_meta_line + "\n")
+                        out.write(line + "\n")
+                        meta_count += 1
+                        frame_count += 1
+                        pending_meta_line = None
+                        pending_meta_at = 0.0
+                    else:
+                        pending_data_line = line
+
+            # Flush any remaining buffered line at end
+            if pending_meta_line is not None:
+                out.write(pending_meta_line + "\n")
+                meta_count += 1
+            if pending_data_line is not None:
+                out.write(pending_data_line + "\n")
+                frame_count += 1
 
         print("\nDone.")
         print(f"Saved {frame_count} raw CSI frames and {meta_count} metadata lines to {output_file}")

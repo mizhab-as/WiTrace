@@ -28,8 +28,8 @@ CONFIG = {
     'esp_live_timeout_seconds': 2.5,      # Treat ESP as disconnected if no CSI arrives recently
     'data_timeout_seconds': 15.0,         # Reconnect if no data for 15 seconds (was 5)
     'serial_read_timeout': 3,              # Serial port read timeout in seconds
-    'esp_live_max_lines': 20,              # Limit recent CSI lines sent to UI
-    'esp_live_max_chars': 260,             # Truncate CSI lines for stable UI rendering
+    'esp_live_max_lines': 120,             # Show larger realtime capture view
+    'esp_live_max_chars': 2000,            # Keep near-complete CSI lines in UI
 
     # Optional quality + source gating (used only when CSI_META is present)
     # If WITRACE_TX_MAC is set, only frames from that MAC are accepted.
@@ -96,7 +96,22 @@ class SystemState:
         self.is_uncertain = False
         self.binary_margin = 0.0
         self.binary_scores = {'empty': 0.0, 'not_empty': 0.0}
+        self.binary_state = 'unknown'
+        self.detection_method = 'unknown'
+        self.detection_agreement = 0.0
+        self.detection_ensemble_windows = 0
         self.error_message = ""
+        self.baseline_match_scores = {}
+        self.baseline_match_best = None
+        self.baseline_live_trace = []
+        self.baseline_templates = {}
+
+        self.frame_counts = {
+            'accepted': 0,
+            'rejected_source': 0,
+            'rejected_snr': 0,
+            'rejected_len': 0,
+        }
 
         self.calibration_active = False
         self.calibration_stage = 'idle'
@@ -121,6 +136,102 @@ class SystemState:
         self.live_calibration_applied = False
         
         self.load_calibration()
+
+    def _record_frame_decision(self, accepted, reason=None):
+        if accepted:
+            self.frame_counts['accepted'] += 1
+            return
+        if reason == 'source':
+            self.frame_counts['rejected_source'] += 1
+        elif reason == 'snr':
+            self.frame_counts['rejected_snr'] += 1
+        elif reason == 'len':
+            self.frame_counts['rejected_len'] += 1
+
+    def _recent_link_stats(self, window_size=120):
+        metas = list(self.frame_meta_window)[-window_size:]
+        if not metas:
+            return {
+                'samples': 0,
+                'tx_mac': self.active_tx_mac,
+                'rssi_mean': None,
+                'rssi_std': None,
+                'snr_mean': None,
+                'snr_std': None,
+                'snr_p10': None,
+                'snr_p90': None,
+                'rx_error_ratio': None,
+                'len_mean': None,
+                'len_std': None,
+                'mcs_mean': None,
+                'rate_mean': None,
+            }
+
+        rssi = []
+        snr = []
+        mcs = []
+        rate = []
+        clen = []
+        rx_total = 0
+        rx_err = 0
+        tx_mac = None
+
+        for m in metas:
+            if not isinstance(m, dict):
+                continue
+            if tx_mac is None and isinstance(m.get('tx_mac'), str):
+                tx_mac = m.get('tx_mac')
+            rv = m.get('rssi')
+            nf = m.get('noise_floor')
+            if isinstance(rv, int):
+                rssi.append(rv)
+                if isinstance(nf, int):
+                    snr.append(int(rv - nf))
+            mv = m.get('mcs')
+            if isinstance(mv, int):
+                mcs.append(mv)
+            rt = m.get('rate')
+            if isinstance(rt, int):
+                rate.append(rt)
+            lv = m.get('len')
+            if isinstance(lv, int):
+                clen.append(lv)
+            rxs = m.get('rx_state')
+            if isinstance(rxs, int):
+                rx_total += 1
+                if rxs != 0:
+                    rx_err += 1
+
+        def _mean_std(vals):
+            if not vals:
+                return None, None
+            arr = np.asarray(vals, dtype=float)
+            return float(np.mean(arr)), float(np.std(arr))
+
+        rssi_mean, rssi_std = _mean_std(rssi)
+        snr_mean, snr_std = _mean_std(snr)
+        mcs_mean, _ = _mean_std(mcs)
+        rate_mean, _ = _mean_std(rate)
+        len_mean, len_std = _mean_std(clen)
+        snr_p10 = float(np.percentile(np.asarray(snr, dtype=float), 10)) if snr else None
+        snr_p90 = float(np.percentile(np.asarray(snr, dtype=float), 90)) if snr else None
+        rx_error_ratio = float(rx_err / rx_total) if rx_total > 0 else None
+
+        return {
+            'samples': int(len(metas)),
+            'tx_mac': tx_mac or self.active_tx_mac,
+            'rssi_mean': rssi_mean,
+            'rssi_std': rssi_std,
+            'snr_mean': snr_mean,
+            'snr_std': snr_std,
+            'snr_p10': snr_p10,
+            'snr_p90': snr_p90,
+            'rx_error_ratio': rx_error_ratio,
+            'len_mean': len_mean,
+            'len_std': len_std,
+            'mcs_mean': mcs_mean,
+            'rate_mean': rate_mean,
+        }
 
     @staticmethod
     def _compact_csi_line(line, max_chars):
@@ -174,6 +285,8 @@ class SystemState:
 
         if self.active_tx_mac:
             if tx_mac and tx_mac != self.active_tx_mac:
+                with self.lock:
+                    self._record_frame_decision(False, 'source')
                 return
         elif CONFIG.get('lock_tx_mac', True) and tx_mac:
             self.active_tx_mac = tx_mac
@@ -185,6 +298,8 @@ class SystemState:
             if isinstance(rssi, int) and isinstance(noise_floor, int):
                 snr = int(rssi - noise_floor)
                 if snr < int(CONFIG.get('min_snr_db', 0)):
+                    with self.lock:
+                        self._record_frame_decision(False, 'snr')
                     return
         except Exception:
             pass
@@ -195,11 +310,14 @@ class SystemState:
                 # Meta len is the raw CSI byte count in many ESP32 builds.
                 # Our CSI_DATA prints one int per byte, so counts should match.
                 if len(values) != expected_len:
+                    with self.lock:
+                        self._record_frame_decision(False, 'len')
                     return
         except Exception:
             pass
 
         with self.lock:
+            self._record_frame_decision(True)
             if self.pattern_detector:
                 energy = self.pattern_detector.values_to_energy(values, meta=meta)
             else:
@@ -301,16 +419,33 @@ class SystemState:
             self.is_uncertain = result.get('is_uncertain', False)
             self.binary_margin = result.get('binary_margin', 0.0)
             self.binary_scores = result.get('binary_scores', {'empty': 0.0, 'not_empty': 0.0})
+            self.binary_state = result.get('binary_state', 'unknown')
+            self.detection_method = result.get('method', 'unknown')
+            self.detection_agreement = float(result.get('agreement', 0.0))
+            self.detection_ensemble_windows = int(result.get('ensemble_windows', 0))
+
+            # 5-second baseline matching against room reference templates.
+            baseline = self.pattern_detector.match_live_window(windowed_energies)
+            if baseline.get('scores'):
+                self.baseline_match_scores = dict(baseline.get('scores', {}))
+                self.baseline_match_best = baseline.get('best_state')
+                self.baseline_live_trace = list(baseline.get('live_trace', []))
+                self.baseline_templates = dict(baseline.get('templates', {}))
+            else:
+                self.baseline_match_scores = {}
+                self.baseline_match_best = None
+                self.baseline_live_trace = []
+                self.baseline_templates = {}
             
-            state_name = result.get('state')
+            # Final room status = highest 5s baseline match (requested behavior).
+            state_name = self.baseline_match_best or result.get('state')
+            new_state = result.get('status', '🟡 UNCERTAIN')
             if state_name == 'empty':
                 new_state = '🟢 EMPTY ROOM'
             elif state_name == 'occupied':
                 new_state = '🔵 PERSON DETECTED'
             elif state_name == 'multi':
                 new_state = '🔴 MULTIPLE PEOPLE'
-            else:
-                new_state = '🟢 EMPTY ROOM'  # Default to empty if unknown
             
             # Update state based on window analysis
             self.stable_state = new_state
@@ -321,6 +456,7 @@ class SystemState:
                 '🟢 EMPTY ROOM': '#4CAF50',
                 '🔵 PERSON DETECTED': '#2196F3',
                 '🔴 MULTIPLE PEOPLE': '#F44336',
+                '🟡 UNCERTAIN': '#F0AD4E',
                 '⏳ INITIALIZING': '#808080'
             }
             self.status_color = color_map.get(self.current_status, '#808080')
@@ -330,10 +466,13 @@ class SystemState:
                 'timestamp': current_time,
                 'window_index': len(self.detection_history),
                 'seconds_ago': 0,
-                'empty': self.detection_scores.get('empty', 0.0),
-                'occupied': self.detection_scores.get('occupied', 0.0),
-                'multi': self.detection_scores.get('multi', 0.0),
-                'not_empty': max(self.detection_scores.get('occupied', 0.0), self.detection_scores.get('multi', 0.0)),
+                'empty': self.baseline_match_scores.get('empty', self.detection_scores.get('empty', 0.0)),
+                'occupied': self.baseline_match_scores.get('occupied', self.detection_scores.get('occupied', 0.0)),
+                'multi': self.baseline_match_scores.get('multi', self.detection_scores.get('multi', 0.0)),
+                'not_empty': max(
+                    self.baseline_match_scores.get('occupied', self.detection_scores.get('occupied', 0.0)),
+                    self.baseline_match_scores.get('multi', self.detection_scores.get('multi', 0.0))
+                ),
                 'confidence': self.detection_confidence,
                 'margin': self.detection_margin,
                 'state': state_name,
@@ -420,6 +559,19 @@ class SystemState:
                     'empty': float(round(self.binary_scores.get('empty', 0.0), 2)),
                     'not_empty': float(round(self.binary_scores.get('not_empty', 0.0), 2)),
                 },
+                'baseline_match': {
+                    'scores': {k: float(round(v, 2)) for k, v in self.baseline_match_scores.items()},
+                    'best_state': self.baseline_match_best,
+                    'live_trace': [float(v) for v in self.baseline_live_trace],
+                    'templates': {
+                        k: [float(x) for x in vals]
+                        for k, vals in self.baseline_templates.items()
+                    },
+                },
+                'binary_state': self.binary_state,
+                'detection_method': self.detection_method,
+                'detection_agreement': float(round(self.detection_agreement, 3)),
+                'detection_ensemble_windows': int(self.detection_ensemble_windows),
                 'window_info': {
                     'window_seconds': float(CONFIG['detection_window_seconds']),
                     'update_interval': float(CONFIG['detection_update_interval']),
@@ -474,6 +626,13 @@ class SystemState:
                         for item in list(self.raw_csi_lines)[-CONFIG['esp_live_max_lines']:]
                     ],
                 },
+                'frame_quality': {
+                    'accepted': int(self.frame_counts.get('accepted', 0)),
+                    'rejected_source': int(self.frame_counts.get('rejected_source', 0)),
+                    'rejected_snr': int(self.frame_counts.get('rejected_snr', 0)),
+                    'rejected_len': int(self.frame_counts.get('rejected_len', 0)),
+                },
+                'link_quality': self._recent_link_stats(),
                 'error': self.error_message
             }
 
@@ -629,6 +788,23 @@ def parse_loose_meta_line(line):
         return {'tx_mac': value} if value else None
     return None
 
+def format_csi_meta_line(meta):
+    if not isinstance(meta, dict):
+        return 'CSI_META:'
+    ordered_keys = [
+        'ts', 'rssi', 'noise_floor', 'channel', 'secondary_channel',
+        'sig_mode', 'mcs', 'rate', 'cwb', 'sgi', 'stbc', 'ant', 'len',
+        'rx_state', 'seq', 'tx_mac'
+    ]
+    tokens = []
+    for key in ordered_keys:
+        if key in meta:
+            tokens.append(f"{key}={meta[key]}")
+    for key, value in meta.items():
+        if key not in ordered_keys:
+            tokens.append(f"{key}={value}")
+    return 'CSI_META: ' + ' '.join(tokens)
+
 def read_serial_worker():
     global serial_port
     ser = None
@@ -694,13 +870,15 @@ def read_serial_worker():
                     if line.startswith('CSI_META:'):
                         parsed_meta = parse_csi_meta_line(line)
                         if parsed_meta:
+                            state.add_raw_csi_line(line, 0, meta=parsed_meta)
                             # If we already saw CSI_DATA, pair it now
                             if pending_data and (now - pending_data.get('at', now)) <= pair_window_sec:
                                 state.add_raw_csi_line(pending_data['line'], len(pending_data['values']), meta=parsed_meta)
                                 if detection_enabled.is_set():
                                     state.add_csi_frame_with_meta(pending_data['values'], meta=parsed_meta)
-                                coll_state.write_frame(pending_data['line'], count_frame=True)
-                                realtime_state.write_frame(pending_data['line'], count_frame=True)
+                                meta_line = format_csi_meta_line(parsed_meta)
+                                coll_state.write_pair(meta_line, pending_data['line'])
+                                realtime_state.write_pair(meta_line, pending_data['line'])
                                 last_data_time = now
                                 pending_data = None
                                 pending_meta = None
@@ -709,14 +887,13 @@ def read_serial_worker():
                                 pending_meta = parsed_meta
                                 pending_meta_at = now
                             state.add_raw_csi_meta(parsed_meta)
-                        coll_state.write_frame(line, count_frame=False)
-                        realtime_state.write_frame(line, count_frame=False)
                     elif line.startswith('tx_mac='):
                         parsed_meta = parse_loose_meta_line(line)
                         if parsed_meta:
                             pending_meta = parsed_meta
                             pending_meta_at = now
                             state.add_raw_csi_meta(parsed_meta)
+                            state.add_raw_csi_line(line, 0, meta=parsed_meta)
                     elif line.startswith('CSI_DATA:'):
                         try:
                             values_str = line.split(':', 1)[1].strip()
@@ -727,8 +904,9 @@ def read_serial_worker():
                                     state.add_raw_csi_line(line, len(values), meta=pending_meta)
                                     if detection_enabled.is_set():
                                         state.add_csi_frame_with_meta(values, meta=pending_meta)
-                                    coll_state.write_frame(line, count_frame=True)
-                                    realtime_state.write_frame(line, count_frame=True)
+                                    meta_line = format_csi_meta_line(pending_meta)
+                                    coll_state.write_pair(meta_line, line)
+                                    realtime_state.write_pair(meta_line, line)
                                     last_data_time = now
                                     pending_meta = None
                                     pending_meta_at = 0.0
@@ -816,6 +994,10 @@ class CollectionState:
             except OSError:
                 pass
 
+    def write_pair(self, meta_line, data_line):
+        self.write_frame(meta_line, count_frame=False)
+        self.write_frame(data_line, count_frame=True)
+
     def _finish(self):
         if self._file_handle:
             try:
@@ -893,6 +1075,10 @@ class RealtimeCollectionState:
                     self.frames_collected += 1
             except OSError:
                 pass
+
+    def write_pair(self, meta_line, data_line):
+        self.write_frame(meta_line, count_frame=False)
+        self.write_frame(data_line, count_frame=True)
 
     def _finish(self):
         if self._file_handle:

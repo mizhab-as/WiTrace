@@ -20,6 +20,9 @@ class PatternDetector:
         self.min_confidence = 55.0      # Increased from 45.0 - stricter confidence threshold
         self.min_margin = 8.0           # Increased from 3.0 - require better separation between patterns
         self.min_binary_margin = 5.0    # Increased from 2.0 - stricter for empty/not_empty distinction
+        self.template_points = 80
+        self.template_window_frames = 60
+        self.baseline_templates = {}
 
         # Optional meta gating (keeps training + live consistent)
         self.active_tx_mac = (os.environ.get('WITRACE_TX_MAC') or '').strip().lower() or None
@@ -51,6 +54,17 @@ class PatternDetector:
             0.85,  # snr_std
             0.25,  # mcs_mean
             0.25,  # rate_mean
+
+            # Additional metadata quality/link features (29-37)
+            0.30,  # channel_mean
+            0.20,  # cwb_mean
+            0.20,  # sgi_mean
+            0.20,  # stbc_mean
+            0.40,  # len_mean
+            0.40,  # len_std
+            0.70,  # rx_error_ratio
+            0.40,  # snr_p10
+            0.40,  # snr_p90
         ])
         self.load_reference_patterns()
     
@@ -70,6 +84,13 @@ class PatternDetector:
                 if pattern_data:
                     self.patterns[state] = pattern_data
                     print(f"✅ Loaded {state}: {pattern_data['samples']} windows")
+
+                # Build a baseline energy template for live 5s matching graphs.
+                energies = self._extract_energy_series(filepath)
+                if len(energies) >= 20:
+                    tmpl = self._build_energy_template(energies)
+                    if tmpl is not None:
+                        self.baseline_templates[state] = tmpl
             else:
                 print(f"⚠️ Reference file not found: {filename}")
 
@@ -77,6 +98,167 @@ class PatternDetector:
             print(f"⚠️ No valid training patterns found in {self.data_folder}")
         else:
             print("🧠 Training mode: raw-window-feature")
+
+    @staticmethod
+    def _resample_vector(values, target_len):
+        arr = np.asarray(values, dtype=float)
+        if arr.size == 0:
+            return None
+        if arr.size == target_len:
+            return arr
+        x_old = np.linspace(0.0, 1.0, num=arr.size)
+        x_new = np.linspace(0.0, 1.0, num=target_len)
+        return np.interp(x_new, x_old, arr)
+
+    @staticmethod
+    def _normalize_trace(values):
+        arr = np.asarray(values, dtype=float)
+        if arr.size == 0:
+            return arr
+        m = float(np.mean(arr))
+        s = float(np.std(arr))
+        if s < 1e-8:
+            return arr - m
+        return (arr - m) / s
+
+    def _build_energy_template(self, frame_energies):
+        if frame_energies is None or len(frame_energies) < 20:
+            return None
+        x = np.asarray(frame_energies, dtype=float)
+        win = min(max(20, self.template_window_frames), max(20, len(x)))
+        step = max(8, win // 4)
+
+        traces = []
+        if len(x) >= win:
+            for i in range(0, len(x) - win + 1, step):
+                seg = x[i:i + win]
+                r = self._resample_vector(seg, self.template_points)
+                if r is not None:
+                    traces.append(self._normalize_trace(r))
+        else:
+            r = self._resample_vector(x, self.template_points)
+            if r is not None:
+                traces.append(self._normalize_trace(r))
+
+        if not traces:
+            return None
+        return np.mean(np.vstack(traces), axis=0)
+
+    def _extract_energy_series(self, filepath):
+        frame_energies = []
+        pending_meta = None
+        pending_values = None
+        try:
+            with open(filepath, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith('CSI_META:'):
+                        parsed = self._parse_csi_meta_line(line)
+                        if parsed:
+                            if pending_values is not None:
+                                if self._accept_meta(parsed):
+                                    frame_energies.append(float(self.values_to_energy(pending_values, meta=parsed)))
+                                pending_values = None
+                            else:
+                                pending_meta = parsed
+                        else:
+                            pending_meta = None
+                        continue
+                    if line.startswith('tx_mac='):
+                        pending_meta = {'tx_mac': line.split('=', 1)[1].strip()}
+                        continue
+                    if line.startswith('CSI_DATA:'):
+                        try:
+                            values = [int(v) for v in line.split(':', 1)[1].strip().split()]
+                        except ValueError:
+                            continue
+                        if not values:
+                            continue
+
+                        if pending_meta is not None:
+                            if self._accept_meta(pending_meta):
+                                frame_energies.append(float(self.values_to_energy(values, meta=pending_meta)))
+                            pending_meta = None
+                        else:
+                            if pending_values is not None:
+                                frame_energies.append(float(self.values_to_energy(pending_values, meta=None)))
+                            pending_values = values
+
+            if pending_values is not None:
+                frame_energies.append(float(self.values_to_energy(pending_values, meta=None)))
+        except Exception:
+            return []
+        return frame_energies
+
+    def match_live_window(self, frame_energies):
+        if frame_energies is None or len(frame_energies) < 10:
+            return {
+                'scores': {},
+                'best_state': None,
+                'live_trace': [],
+                'templates': {}
+            }
+
+        if not self.baseline_templates:
+            return {
+                'scores': {},
+                'best_state': None,
+                'live_trace': [],
+                'templates': {}
+            }
+
+        win = min(max(20, self.template_window_frames), len(frame_energies))
+        live_seg = np.asarray(frame_energies[-win:], dtype=float)
+        live_r = self._resample_vector(live_seg, self.template_points)
+        if live_r is None:
+            return {
+                'scores': {},
+                'best_state': None,
+                'live_trace': [],
+                'templates': {}
+            }
+        live_z = self._normalize_trace(live_r)
+
+        scores = {}
+        for state, tmpl in self.baseline_templates.items():
+            t = np.asarray(tmpl, dtype=float)
+            if t.size != live_z.size:
+                t = self._resample_vector(t, live_z.size)
+            if t is None:
+                continue
+
+            # Correlation component
+            corr = float(np.corrcoef(live_z, t)[0, 1]) if np.std(live_z) > 1e-9 and np.std(t) > 1e-9 else 0.0
+            corr = max(-1.0, min(1.0, corr))
+            corr_score = (corr + 1.0) * 50.0
+
+            # Shape error component
+            rmse = float(np.sqrt(np.mean((live_z - t) ** 2)))
+            rmse_score = 100.0 / (1.0 + rmse)
+
+            scores[state] = float(0.7 * corr_score + 0.3 * rmse_score)
+
+        if scores:
+            keys = [k for k in ['empty', 'occupied', 'multi'] if k in scores]
+            raw = np.asarray([scores[k] for k in keys], dtype=float)
+            z = raw - np.max(raw)
+            p = np.exp(z / 10.0)
+            p = p / (np.sum(p) + 1e-12)
+            norm_scores = {k: float(v * 100.0) for k, v in zip(keys, p)}
+            best_state = max(norm_scores, key=norm_scores.get)
+        else:
+            norm_scores = {}
+            best_state = None
+
+        return {
+            'scores': norm_scores,
+            'best_state': best_state,
+            'live_trace': [float(v) for v in live_z.tolist()],
+            'templates': {
+                k: [float(v) for v in np.asarray(t, dtype=float).tolist()]
+                for k, t in self.baseline_templates.items()
+            }
+        }
     
     def _extract_pattern(self, filepath):
         frame_signatures = []
@@ -483,6 +665,13 @@ class PatternDetector:
         snr_vals = []
         mcs_vals = []
         rate_vals = []
+        channel_vals = []
+        cwb_vals = []
+        sgi_vals = []
+        stbc_vals = []
+        len_vals = []
+        rx_error_count = 0
+        rx_total_count = 0
         for m in meta_window:
             if not isinstance(m, dict):
                 continue
@@ -499,6 +688,32 @@ class PatternDetector:
             if isinstance(rate, int):
                 rate_vals.append(rate)
 
+            ch = m.get('channel')
+            if isinstance(ch, int):
+                channel_vals.append(ch)
+
+            cwb = m.get('cwb')
+            if isinstance(cwb, int):
+                cwb_vals.append(cwb)
+
+            sgi = m.get('sgi')
+            if isinstance(sgi, int):
+                sgi_vals.append(sgi)
+
+            stbc = m.get('stbc')
+            if isinstance(stbc, int):
+                stbc_vals.append(stbc)
+
+            clen = m.get('len')
+            if isinstance(clen, int):
+                len_vals.append(clen)
+
+            rx_state = m.get('rx_state')
+            if isinstance(rx_state, int):
+                rx_total_count += 1
+                if rx_state != 0:
+                    rx_error_count += 1
+
         def _mean_std(xs):
             if not xs:
                 return 0.0, 0.0
@@ -509,6 +724,20 @@ class PatternDetector:
         snr_mean, snr_std = _mean_std(snr_vals)
         mcs_mean, _ = _mean_std(mcs_vals)
         rate_mean, _ = _mean_std(rate_vals)
+        channel_mean, _ = _mean_std(channel_vals)
+        cwb_mean, _ = _mean_std(cwb_vals)
+        sgi_mean, _ = _mean_std(sgi_vals)
+        stbc_mean, _ = _mean_std(stbc_vals)
+        len_mean, len_std = _mean_std(len_vals)
+
+        rx_error_ratio = float(rx_error_count / rx_total_count) if rx_total_count > 0 else 0.0
+        if snr_vals:
+            snr_arr = np.asarray(snr_vals, dtype=float)
+            snr_p10 = float(np.percentile(snr_arr, 10))
+            snr_p90 = float(np.percentile(snr_arr, 90))
+        else:
+            snr_p10 = 0.0
+            snr_p90 = 0.0
 
         vec = np.array([
             emean,
@@ -534,6 +763,15 @@ class PatternDetector:
             snr_std,
             mcs_mean,
             rate_mean,
+            channel_mean,
+            cwb_mean,
+            sgi_mean,
+            stbc_mean,
+            len_mean,
+            len_std,
+            rx_error_ratio,
+            snr_p10,
+            snr_p90,
         ], dtype=float)
 
         return vec
@@ -557,21 +795,51 @@ class PatternDetector:
             frame_meta = [{} for _ in range(min(len(frame_signatures), len(frame_energies)))]
 
         n = min(len(frame_signatures), len(frame_energies), len(frame_meta))
-        sig_win = frame_signatures[n - self.window_frames:n]
-        ene_win = frame_energies[n - self.window_frames:n]
-        meta_win = frame_meta[n - self.window_frames:n]
-        query = self._extract_feature_vector(sig_win, ene_win, meta_win)
-        if query is None:
+        if n < self.min_frames:
             return {
                 'status': 'INITIALIZING',
                 'confidence': 0.0,
                 'scores': {}
             }
-        
+
+        # Ensemble over multiple recent windows for stability.
+        queries = []
+        if n >= self.window_frames:
+            start = max(0, n - (self.window_frames * 3))
+            step = max(8, self.window_step)
+            for i in range(start, n - self.window_frames + 1, step):
+                sig_win = frame_signatures[i:i + self.window_frames]
+                ene_win = frame_energies[i:i + self.window_frames]
+                meta_win = frame_meta[i:i + self.window_frames]
+                q = self._extract_feature_vector(sig_win, ene_win, meta_win)
+                if q is not None:
+                    queries.append(q)
+
+        if not queries:
+            sig_win = frame_signatures[n - self.window_frames:n]
+            ene_win = frame_energies[n - self.window_frames:n]
+            meta_win = frame_meta[n - self.window_frames:n]
+            q = self._extract_feature_vector(sig_win, ene_win, meta_win)
+            if q is not None:
+                queries.append(q)
+
+        if not queries:
+            return {
+                'status': 'INITIALIZING',
+                'confidence': 0.0,
+                'scores': {}
+            }
+
+        score_runs = {state: [] for state in self.patterns.keys()}
+        for query in queries:
+            for state, pattern in self.patterns.items():
+                score_runs[state].append(self._calculate_similarity(query, pattern))
+
         scores = {}
-        for state, pattern in self.patterns.items():
-            score = self._calculate_similarity(query, pattern)
-            scores[state] = score
+        for state, vals in score_runs.items():
+            if vals:
+                # Median is robust to transient windows.
+                scores[state] = float(np.median(vals))
         
         if not scores:
             return {
@@ -580,7 +848,6 @@ class PatternDetector:
                 'scores': scores
             }
         
-        # Always use the best match (no uncertain state)
         best_state = max(scores, key=scores.get)
         best_score = float(scores[best_state])
 
@@ -588,51 +855,78 @@ class PatternDetector:
         second_score = float(ranked[1][1]) if len(ranked) > 1 else 0.0
         margin = float(best_score - second_score)
 
+        # Window stability boost: if recent windows agree, confidence improves.
+        majority_ratio = 1.0
+        if queries and len(queries) > 1:
+            winners = []
+            for query in queries:
+                query_scores = {state: self._calculate_similarity(query, self.patterns[state]) for state in self.patterns.keys()}
+                winners.append(max(query_scores, key=query_scores.get))
+            majority_ratio = float(sum(1 for w in winners if w == best_state) / len(winners))
+
+        # Convert raw matching scores into normalized class percentages.
+        # This yields directly comparable "empty/occupied/multi" probabilities.
+        cls_keys = [k for k in ['empty', 'occupied', 'multi'] if k in scores]
+        raw = np.asarray([scores[k] for k in cls_keys], dtype=float)
+        if raw.size > 0:
+            # Stable softmax with mild temperature to keep separation meaningful.
+            temp = 12.0
+            z = (raw - np.max(raw)) / temp
+            p = np.exp(z)
+            p = p / (np.sum(p) + 1e-12)
+            prob_scores = {k: float(v * 100.0) for k, v in zip(cls_keys, p)}
+        else:
+            prob_scores = {k: float(v) for k, v in scores.items()}
+
+        best_prob = float(prob_scores.get(best_state, 0.0))
+        adjusted_confidence = float(best_prob * (0.75 + 0.25 * majority_ratio))
+        adjusted_confidence = float(max(0.0, min(100.0, adjusted_confidence)))
+
+        ranked_probs = sorted(prob_scores.items(), key=lambda x: x[1], reverse=True)
+        second_score = float(ranked_probs[1][1]) if len(ranked_probs) > 1 else 0.0
+        margin = float(best_prob - second_score)
+
         # Binary classification: Empty vs Not-Empty (occupied or multiple people)
         binary_scores = {
-            'empty': scores.get('empty', 0.0),
-            'not_empty': max(scores.get('occupied', 0.0), scores.get('multi', 0.0))
+            'empty': prob_scores.get('empty', 0.0),
+            'not_empty': max(prob_scores.get('occupied', 0.0), prob_scores.get('multi', 0.0))
         }
         binary_margin = float(abs(binary_scores['empty'] - binary_scores['not_empty']))
-        
-        # IMPROVED LOGIC: Add stricter filtering to avoid false empty positives
-        # If 'empty' is best but margin to occupied is small, be more conservative
+
+        # Conservative correction against false-empty edge cases.
         if best_state == 'empty':
-            occupied_score = max(scores.get('occupied', 0.0), scores.get('multi', 0.0))
-            margin_to_occupied = best_score - occupied_score
-            
-            # If margin is too small (<5), occupied might be a stronger candidate
-            # Threshold: empty must be clearly better, or occupied must be weak
-            if margin_to_occupied < 5.0 and occupied_score > 35.0:
-                # Empty barely wins but occupied is moderately confident
-                # Boost occupied confidence as alternative
+            occupied_score = max(prob_scores.get('occupied', 0.0), prob_scores.get('multi', 0.0))
+            margin_to_occupied = best_prob - occupied_score
+            if margin_to_occupied < 3.0 and occupied_score > 45.0:
                 binary_state = 'not_empty'
-                best_state = 'occupied' if scores.get('occupied', 0.0) > scores.get('multi', 0.0) else 'multi'
+                best_state = 'occupied' if prob_scores.get('occupied', 0.0) > prob_scores.get('multi', 0.0) else 'multi'
             else:
                 binary_state = 'empty'
         else:
             binary_state = 'not_empty'
 
         final_state = best_state
-        
         status_map = {
             'empty': '🟢 EMPTY ROOM',
             'occupied': '🔵 PERSON DETECTED',
             'multi': '🔴 MULTIPLE PEOPLE'
         }
-        
+        status_value = status_map.get(final_state, 'UNKNOWN')
+
         return {
-            'status': status_map.get(final_state, 'UNKNOWN'),
+            'status': status_value,
             'state': final_state,
-            'confidence': float(best_score),
-            'scores': {k: float(v) for k, v in scores.items()},
+            'confidence': adjusted_confidence,
+            'scores': {k: float(v) for k, v in prob_scores.items()},
             'margin': margin,
             'binary_state': binary_state,
             'binary_scores': {k: float(v) for k, v in binary_scores.items()},
             'binary_margin': binary_margin,
             'raw_state': best_state,
             'is_uncertain': False,
-            'method': 'weighted_mahalanobis_matching'
+            'ensemble_windows': int(len(queries)),
+            'agreement': majority_ratio,
+            'method': 'weighted_mahalanobis_ensemble'
         }
     
     def _calculate_similarity(self, query_features, pattern):

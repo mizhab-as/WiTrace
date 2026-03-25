@@ -74,7 +74,8 @@
     .prog-wrap{height:5px;background:var(--border);border-radius:100px;overflow:hidden;margin-top:8px}
     .prog-bar{height:100%;border-radius:100px;transition:width .5s linear}
     .chart-wrap{position:relative;height:260px}
-    .score-chart-wrap{position:relative;height:360px}
+    .score-chart-wrap{position:relative;height:560px}
+    .mini-chart-wrap{position:relative;height:190px}
     .field{display:flex;flex-direction:column;gap:5px}
     .field label{font-size:.75em;color:var(--muted);font-weight:500}
     .field input{background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 11px;font-size:.85em;width:100%;font-family:inherit}
@@ -209,15 +210,13 @@
     <div class="ph-row">
       <div class="ph" style="margin-bottom:0"><h1>Live Detection</h1><p>Real-time WiFi CSI presence classification</p></div>
       <div class="row gap8 wrap">
-        <button class="btn btn-success" onclick="startDetection()">&#x25B6; Start</button>
-        <button class="btn btn-danger" onclick="stopDetection()">&#x23F9; Stop</button>
         <span id="detPill" class="det-pill" style="background:rgba(39,199,111,.12);color:var(--green)">&#x25CF; Active</span>
       </div>
     </div>
     <div id="dashModeMsg" class="alert al-info" style="display:none;margin-bottom:14px"></div>
 
     <div class="card" style="margin-bottom:16px">
-      <div class="card-title">Detection Baseline Mode</div>
+      <div class="card-title">1) Detection Source</div>
       <div style="color:var(--muted);font-size:.83em;margin-bottom:14px">Choose which saved dataset drives live detection</div>
       <div class="g2" style="gap:12px">
         <div style="padding:12px;background:var(--panel2);border-radius:9px;border:1px solid var(--border)">
@@ -227,8 +226,7 @@
           </div>
           <div style="color:var(--muted);font-size:.78em;margin-bottom:10px">Uses files from <b style="color:var(--text)">data2/realtime</b></div>
           <div class="row gap8">
-            <button class="btn btn-success" onclick="startDetectionMode('collected')" style="flex:1">▶ Start Detection</button>
-            <button class="btn btn-ghost" onclick="stopDetectionMode('collected')" style="flex:1">⏹ Stop</button>
+            <button class="btn btn-success" onclick="startDetectionMode('collected')" style="flex:1">Use This Baseline</button>
           </div>
         </div>
         <div style="padding:12px;background:var(--panel2);border-radius:9px;border:1px solid var(--border)">
@@ -238,10 +236,18 @@
           </div>
           <div style="color:var(--muted);font-size:.78em;margin-bottom:10px">Uses files from <b style="color:var(--text)">data2/myroom</b></div>
           <div class="row gap8">
-            <button class="btn btn-accent" onclick="startDetectionMode('calibrated')" style="flex:1">▶ Start Detection</button>
-            <button class="btn btn-ghost" onclick="stopDetectionMode('calibrated')" style="flex:1">⏹ Stop</button>
+            <button class="btn btn-accent" onclick="startDetectionMode('calibrated')" style="flex:1">Use This Baseline</button>
           </div>
         </div>
+      </div>
+      <div class="row gap8 wrap" style="margin-top:10px">
+        <button class="btn btn-danger btn-sm" onclick="stopDetectionMode(currentDetectionMode || 'calibrated')">⏹ Stop Detection</button>
+        <span style="font-size:.78em;color:var(--muted)">Select one baseline source above; detection uses that source only.</span>
+      </div>
+      <div class="g3" style="margin-top:10px;gap:8px">
+        <div class="score-chip" style="text-align:center">Active Mode<span class="sv" id="modeActive">--</span></div>
+        <div class="score-chip" style="text-align:center">Pattern Source<span class="sv" id="modeSource">--</span></div>
+        <div class="score-chip" style="text-align:center">Best Match<span class="sv" id="bestState">--</span></div>
       </div>
     </div>
 
@@ -283,12 +289,57 @@
             <span>Next: <b id="nextIn" style="color:var(--accent)">--</b></span>
           </div>
         </div>
+        <div class="card" style="padding:14px 16px">
+          <div style="font-size:.72em;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:10px">2) Detection Diagnostics</div>
+          <div class="g2" style="gap:8px">
+            <div class="score-chip" style="text-align:center">Binary<span class="sv" id="diagBinary">--</span></div>
+            <div class="score-chip" style="text-align:center">Agreement<span class="sv" id="diagAgreement">--</span></div>
+            <div class="score-chip" style="text-align:center">Margin<span class="sv" id="diagMargin">--</span></div>
+            <div class="score-chip" style="text-align:center">Windows<span class="sv" id="diagWins">--</span></div>
+          </div>
+          <div style="margin-top:8px;color:var(--muted);font-size:.76em">Method: <span id="diagMethod" style="color:var(--text)">--</span></div>
+        </div>
+        <div class="card" style="padding:14px 16px">
+          <div style="font-size:.72em;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:10px">3) Link Quality & Data Health</div>
+          <div class="g2" style="gap:8px">
+            <div class="score-chip" style="text-align:center">TX MAC<span class="sv" id="lqTx">--</span></div>
+            <div class="score-chip" style="text-align:center">Samples<span class="sv" id="lqSamples">--</span></div>
+            <div class="score-chip" style="text-align:center">RSSI<span class="sv" id="lqRssi">--</span></div>
+            <div class="score-chip" style="text-align:center">SNR<span class="sv" id="lqSnr">--</span></div>
+            <div class="score-chip" style="text-align:center">RX Errors<span class="sv" id="lqRxErr">--</span></div>
+            <div class="score-chip" style="text-align:center">MCS/Rate<span class="sv" id="lqRate">--</span></div>
+            <div class="score-chip" style="text-align:center">SNR P10/P90<span class="sv" id="lqSnrRange">--</span></div>
+            <div class="score-chip" style="text-align:center">Len Mean/Std<span class="sv" id="lqLen">--</span></div>
+          </div>
+          <div class="g2" style="gap:8px;margin-top:8px">
+            <div class="score-chip" style="text-align:center">Accepted<span class="sv" id="fqAccepted">--</span></div>
+            <div class="score-chip" style="text-align:center">Rejected<span class="sv" id="fqRejected">--</span></div>
+            <div class="score-chip" style="text-align:center">Reject: Source/SNR/Len<span class="sv" id="fqBreakdown">--</span></div>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="card" style="margin-bottom:16px">
-      <div class="card-title">CSI Variance &mdash; Live</div>
+      <div class="card-title">4) Live CSI Variance</div>
       <div class="chart-wrap"><canvas id="varChart"></canvas></div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">5) 5s Baseline Matching (Live vs Room Baselines)</div>
+      <div class="g3">
+        <div>
+          <div class="row between" style="margin-bottom:8px;font-size:.82em"><span>🟢 Empty Baseline</span><b id="bmEmpty">--</b></div>
+          <div class="mini-chart-wrap"><canvas id="matchChartEmpty"></canvas></div>
+        </div>
+        <div>
+          <div class="row between" style="margin-bottom:8px;font-size:.82em"><span>🔵 Occupied Baseline</span><b id="bmOccupied">--</b></div>
+          <div class="mini-chart-wrap"><canvas id="matchChartOccupied"></canvas></div>
+        </div>
+        <div>
+          <div class="row between" style="margin-bottom:8px;font-size:.82em"><span>🔴 Multiple Baseline</span><b id="bmMulti">--</b></div>
+          <div class="mini-chart-wrap"><canvas id="matchChartMulti"></canvas></div>
+        </div>
+      </div>
     </div>
     <div class="card" id="scoreCardEl" style="display:none">
       <div class="card-title">Pattern Match Scores &mdash; 5s History</div>
@@ -448,6 +499,7 @@
 
 <script>
 let varChart=null,scoreChart=null;
+let matchCharts={empty:null,occupied:null,multi:null};
 let activeCollLabel=null,collPollTimer=null;
 let currentFile=null;
 
@@ -495,6 +547,51 @@ function initScoreChart(){
       }
     }
   });
+}
+
+function createMiniMatchChart(canvasId, baselineColor){
+  const el=document.getElementById(canvasId);
+  if(!el) return null;
+  const ctx=el.getContext('2d');
+  return new Chart(ctx,{type:'line',data:{labels:[],datasets:[
+    {label:'Baseline',data:[],borderColor:baselineColor,borderWidth:2,pointRadius:0,tension:.25},
+    {label:'Live 5s',data:[],borderColor:'#ffffff',borderWidth:2,pointRadius:0,tension:.25,borderDash:[5,3]}
+  ]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{ticks:{display:false},grid:{color:'#1c2535'}}}}});
+}
+
+function initBaselineMatchCharts(){
+  if(!matchCharts.empty) matchCharts.empty=createMiniMatchChart('matchChartEmpty','#27c76f');
+  if(!matchCharts.occupied) matchCharts.occupied=createMiniMatchChart('matchChartOccupied','#3b8eff');
+  if(!matchCharts.multi) matchCharts.multi=createMiniMatchChart('matchChartMulti','#e0414f');
+}
+
+function updateBaselineMatchCharts(match){
+  if(!match||!match.templates||!match.live_trace) return;
+  initBaselineMatchCharts();
+  const live=match.live_trace||[];
+  if(!live.length) return;
+  const n=live.length;
+  const labels=Array.from({length:n},(_,i)=>i+1);
+
+  function setChart(chart, template){
+    if(!chart||!template||!template.length) return;
+    chart.data.labels=labels;
+    chart.data.datasets[0].data=template.slice(0,n);
+    chart.data.datasets[1].data=live;
+    chart.update('none');
+  }
+
+  setChart(matchCharts.empty, match.templates.empty||[]);
+  setChart(matchCharts.occupied, match.templates.occupied||[]);
+  setChart(matchCharts.multi, match.templates.multi||[]);
+
+  const s=match.scores||{};
+  const e=document.getElementById('bmEmpty');
+  const o=document.getElementById('bmOccupied');
+  const m=document.getElementById('bmMulti');
+  if(e) e.textContent=s.empty!=null?Number(s.empty).toFixed(1)+'%':'--';
+  if(o) o.textContent=s.occupied!=null?Number(s.occupied).toFixed(1)+'%':'--';
+  if(m) m.textContent=s.multi!=null?Number(s.multi).toFixed(1)+'%':'--';
 }
 
 function updateScoreChart(scoreHistory){
@@ -554,6 +651,8 @@ function updateScoreChart(scoreHistory){
 }
 
 function updateDashboard(d){
+  const f2=(v,suffix='')=>v==null?'--':(Number(v).toFixed(2)+suffix);
+  const f1=(v,suffix='')=>v==null?'--':(Number(v).toFixed(1)+suffix);
   const dot=document.getElementById('connDot'),ct=document.getElementById('connText');
   const serialConnected=!!d.serial_connected;
   const streamActive=!!d.is_connected;
@@ -575,11 +674,82 @@ function updateDashboard(d){
   pill.textContent=det?'\u25CF Active':'\u25CF Paused';
   pill.style.color=det?'var(--green)':'var(--red)';
   pill.style.background=det?'rgba(39,199,111,.1)':'rgba(224,65,79,.1)';
-  const ds=d.detection_scores||{};
-  document.getElementById('sEmpty').textContent=ds.empty!=null?ds.empty+'%':'--';
-  document.getElementById('sPerson').textContent=ds.occupied!=null?ds.occupied+'%':'--';
-  document.getElementById('sMulti').textContent=ds.multi!=null?ds.multi+'%':'--';
+  const bm=d.baseline_match||{};
+  const ds=(bm.scores&&Object.keys(bm.scores).length>0)?bm.scores:(d.detection_scores||{});
+  document.getElementById('sEmpty').textContent=ds.empty!=null?Number(ds.empty).toFixed(1)+'%':'--';
+  document.getElementById('sPerson').textContent=ds.occupied!=null?Number(ds.occupied).toFixed(1)+'%':'--';
+  document.getElementById('sMulti').textContent=ds.multi!=null?Number(ds.multi).toFixed(1)+'%':'--';
   document.getElementById('sConf').textContent=d.detection_confidence!=null?d.detection_confidence+'%':'--';
+  const modeActive=document.getElementById('modeActive');
+  const modeSource=document.getElementById('modeSource');
+  const bestState=document.getElementById('bestState');
+  if(modeActive) modeActive.textContent=currentDetectionMode||'--';
+  if(modeSource) modeSource.textContent=currentDetectionMode==='collected'?'realtime':(currentDetectionMode==='calibrated'?'myroom':'--');
+  if(bestState) bestState.textContent=bm.best_state||d.status||'--';
+
+  const diagBinary=document.getElementById('diagBinary');
+  const diagAgreement=document.getElementById('diagAgreement');
+  const diagMargin=document.getElementById('diagMargin');
+  const diagWins=document.getElementById('diagWins');
+  const diagMethod=document.getElementById('diagMethod');
+  if(diagBinary) diagBinary.textContent=(d.binary_state||'--');
+  if(diagAgreement) diagAgreement.textContent=d.detection_agreement!=null?Math.round(Number(d.detection_agreement)*100)+'%':'--';
+  if(diagMargin) diagMargin.textContent=d.detection_margin!=null?Number(d.detection_margin).toFixed(1):'--';
+  if(diagWins) diagWins.textContent=d.detection_ensemble_windows!=null?String(d.detection_ensemble_windows):'--';
+  if(diagMethod) diagMethod.textContent=d.detection_method||'--';
+
+  const lq=d.link_quality||{};
+  const fq=d.frame_quality||{};
+  const rej=(Number(fq.rejected_source||0)+Number(fq.rejected_snr||0)+Number(fq.rejected_len||0));
+  const lqTx=document.getElementById('lqTx');
+  const lqSamples=document.getElementById('lqSamples');
+  const lqRssi=document.getElementById('lqRssi');
+  const lqSnr=document.getElementById('lqSnr');
+  const lqRxErr=document.getElementById('lqRxErr');
+  const lqRate=document.getElementById('lqRate');
+  const lqSnrRange=document.getElementById('lqSnrRange');
+  const lqLen=document.getElementById('lqLen');
+  const fqAccepted=document.getElementById('fqAccepted');
+  const fqRejected=document.getElementById('fqRejected');
+  const fqBreakdown=document.getElementById('fqBreakdown');
+  if(lqTx) lqTx.textContent=lq.tx_mac||'--';
+  if(lqSamples) lqSamples.textContent=lq.samples!=null?String(lq.samples):'--';
+  if(lqRssi) lqRssi.textContent=lq.rssi_mean!=null?f1(lq.rssi_mean,' dBm'):'--';
+  if(lqSnr){
+    if(lq.snr_mean!=null){
+      lqSnr.textContent=f1(lq.snr_mean)+' dB';
+    }else{
+      lqSnr.textContent='--';
+    }
+  }
+  if(lqRxErr){
+    lqRxErr.textContent=lq.rx_error_ratio!=null?(Math.round(Number(lq.rx_error_ratio)*100)+'%'):'--';
+  }
+  if(lqRate){
+    const mcs=lq.mcs_mean!=null?Number(lq.mcs_mean).toFixed(1):'--';
+    const rate=lq.rate_mean!=null?Number(lq.rate_mean).toFixed(1):'--';
+    lqRate.textContent=mcs+'/'+rate;
+  }
+  if(lqSnrRange){
+    const p10=lq.snr_p10!=null?Number(lq.snr_p10).toFixed(1):'--';
+    const p90=lq.snr_p90!=null?Number(lq.snr_p90).toFixed(1):'--';
+    lqSnrRange.textContent=p10+'/'+p90;
+  }
+  if(lqLen){
+    const lm=lq.len_mean!=null?Number(lq.len_mean).toFixed(1):'--';
+    const ls=lq.len_std!=null?Number(lq.len_std).toFixed(1):'--';
+    lqLen.textContent=lm+'/'+ls;
+  }
+  if(fqAccepted) fqAccepted.textContent=fq.accepted!=null?String(fq.accepted):'--';
+  if(fqRejected) fqRejected.textContent=String(rej);
+  if(fqBreakdown){
+    const rs=Number(fq.rejected_source||0);
+    const rn=Number(fq.rejected_snr||0);
+    const rl=Number(fq.rejected_len||0);
+    fqBreakdown.textContent=`${rs}/${rn}/${rl}`;
+  }
+  updateBaselineMatchCharts(bm);
+
   if(d.variance&&d.variance.length>0){
     document.getElementById('stVar').textContent=d.variance[d.variance.length-1].toFixed(2);
     document.getElementById('stEnergy').textContent=(d.energy.reduce((a,b)=>a+b,0)/d.energy.length).toFixed(2);
@@ -734,9 +904,6 @@ function applyCalUI(cal){
 function poll(){
   fetch('/api/data').then(r=>r.json()).then(d=>updateDashboard(d)).catch(()=>{}).finally(()=>setTimeout(poll,600));
 }
-
-async function startDetection(){await fetch('/api/detection/start',{method:'POST'}).catch(()=>{});}
-async function stopDetection(){await fetch('/api/detection/stop',{method:'POST'}).catch(()=>{});}
 
 async function startCalibration(){
   const body={
