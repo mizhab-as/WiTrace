@@ -22,7 +22,7 @@
 - 🟢 **Empty Room** — No person present
 - 🔵 **Person Detected** — Occupant present
 - 🔴 **Multiple People** — High activity / multiple occupants
-- 🟡 **Uncertain** — insufficient/unstable evidence (shown in dashboard diagnostics)
+
 
 The system combines **ESP32 firmware** for raw CSI capture with a **Python live dashboard + detector** for feature extraction, classification, and visualization — all without any visual or acoustic surveillance.
 
@@ -60,9 +60,7 @@ WiTrace/
 ├── data/                          # Example CSI datasets (.txt)
 │   ├── empty.txt
 │   ├── occupied.txt
-│   ├── walking.txt
-│   ├── multi_occ.txt
-│   └── wall.txt
+│   └── multi_occ.txt
 │
 └── RUN_ONE_TERMINAL.sh             # One-command runner for venv + dashboard (optional)
 ```
